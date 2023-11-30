@@ -265,18 +265,44 @@ background: #C1B6AD;
  
  max-width: 1440px;
   width: 100%;
-  margin: 0 auto;  
+  margin: 0 auto; 
+  overflow: hidden; 
   /* 
   grid-template-columns:repeat(2, 1fr);
   grid-gap:0 2.5rem;
   
   display: grid; */
 /* gap:0 2.5rem; */
-display:grid;
+/* display:grid;
 
 grid-gap: 2.5rem;
-grid-auto-flow: column;
+grid-auto-flow: column; */
+display: flex;
+flex-wrap: wrap;
+gap: 2.5rem;
+
 }
+
+.about__wrapper_column {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  
+ 
+    
+  }
+
+.about__item:hover {transform:scale(1.2)}
+
+.about__item {
+    overflow: hidden;
+    border-radius: 1.25rem;
+
+    }
+    
+    
+
+
 
 .section__mobile {
     display: flex;
@@ -288,6 +314,63 @@ grid-auto-flow: column;
 
 }
 
+.section__name__mobile {
+    text-align: left;
+    margin-bottom: 2.5rem;
+}
+
+
+.btn__dwnld {
+    display: flex;
+    align-items: center;
+    gap: 0 8px;
+    text-decoration: none;
+    border: 1px solid #403f3d;
+    border-radius: 100px;
+    width: 200px;
+    height: 64px;
+    padding: 0 20px;
+    font-family: "Inter",sans-serif;
+    color: #403f3d;
+    transition: all .3s linear;
+    margin-top: 2.5rem;
+   
+}
+
+
+.mobile__tools {
+    display:flex
+}
+
+.dwnld_desc {
+color: var(--text-dark, #403F3D);
+font-feature-settings: 'clig' off, 'liga' off;
+/* Desktop/Body/medium */
+font-family: Inter;
+font-size: 1rem;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 1.5rem */
+}
+
+.btn__content__firstline {
+font-size: 0.625rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%;
+    display: block;
+    margin-block-start: 1rem;
+    
+}
+
+.btn__content__secondline {
+    display: block;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+    margin-block-end: 1em;
+}
 
 .footer {
     gap: 6.25rem;
@@ -305,10 +388,12 @@ grid-auto-flow: column;
 
 .footer__link:hover{border-bottom:2px solid #e1d4c9}
 
-.footer__info{display:inline-flex;
+.footer__info{
+    display:inline-flex;
     gap:0 8px;
     font-family:"Inter",sans-serif;
-    color:#e1d4c9;text-decoration:none;
+    color:#e1d4c9;
+    text-decoration:none;
     font-size:16px;
     font-style:normal;
     font-weight:600;
