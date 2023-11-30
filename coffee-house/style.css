@@ -64,7 +64,17 @@ img {
     justify-content: flex-end;
     align-items: center;
     gap: 0.5rem;
-}
+    transition: 0.6s;
+    border-bottom: 2px solid #E1D4C9;
+    padding: 2px 0;
+     
+  }
+  .header__link_menu:hover {
+    border-bottom: 2px solid #403F3D;
+  }
+  
+
+
 
 .header__link {
     color: var(--text-dark, #403F3D);
@@ -266,6 +276,34 @@ text-decoration: none;}
 .favourite__controls__item__selected {
    background: #665F55;
 } 
+
+.favourite__slider__left,
+.favourite__slider__right {
+  cursor: pointer;
+}
+
+.favourite__slider__left path, .favourite__slider__left svg, .favourite__slider__left rect,
+.favourite__slider__right, .favourite__slider__right svg, .favourite__slider__right rect {
+  transition-property: stroke, fill;
+  transition-duration: 0.4s;}
+
+
+.favourite__slider__left:hover path {
+    stroke: #E1D4C9;
+  }
+  
+  .favourite__slider__left:hover svg {
+    fill: #665F55;
+  }
+  
+  .favourite__slider__right:hover path {
+    stroke: #E1D4C9;
+  }
+  
+  .favourite__slider__right:hover svg {
+    fill: #665F55;
+  }
+
 
 .section__name__about {
   align-self: stretch;
@@ -489,6 +527,21 @@ margin-bottom: 6.25rem;
     gap: 2.5rem;
     flex: 1 0 0;
 }
+
+
+.btn__round__dark path, .btn__round__dark svg, .btn__round__dark rect {
+    transition-property: stroke, fill;
+    transition-duration: 0.4s;
+  }
+  
+  .btn__round__dark:hover path {
+    stroke: #665F55;
+    fill: transparent;
+  }
+  
+  .btn__round__dark:hover svg {
+    fill: #E1D4C9;
+  }
 
 
 .footer__contactUs__wrap {
