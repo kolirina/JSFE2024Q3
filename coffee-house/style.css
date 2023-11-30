@@ -393,14 +393,27 @@ font-size: 0.625rem;
     gap:0 8px;
     font-family:"Inter",sans-serif;
     color:#e1d4c9;
-    text-decoration:none;
+    text-decoration: none;
     font-size:16px;
     font-style:normal;
     font-weight:600;
     line-height:150%;
     padding-bottom:4px;
     border-bottom:2px solid rgba(0,0,0,0);
-    transition:all .3s linear}
+    transition:all .3s linear;}
+
+.footer__link {
+    text-decoration: none;
+    color: var(--text-light, #E1D4C9);
+font-feature-settings: 'clig' off, 'liga' off;
+
+/* Desktop/Action/link & button */
+font-family: Inter;
+font-size: 1rem;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 1.5rem */
+}
 
 
 .btn__round__dark {
@@ -511,6 +524,7 @@ border: 1px solid var(--border-dark, #665F55);
     justify-content:center;
     gap:0 1rem;
     list-style-type:none;
+    margin-top: 2.5rem;
     }
 
 .btn__category {
