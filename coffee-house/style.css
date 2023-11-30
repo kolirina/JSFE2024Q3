@@ -237,7 +237,9 @@ max-width: 1440px;
     display: flex;
     /* align-items: flex-start; */
     align-items: center;
+    justify-content: center;
     gap: 0.75rem;
+    margin-top: 2.5rem;
 }
 
 .favourite__controls__item {
@@ -247,9 +249,23 @@ border-radius: 6.25rem;
 background: #C1B6AD;
 }
 
-/* .favourite__control__selected {
+
+.btn__rectangular {
+color: var(--text-dark, #403F3D);
+text-align: center;
+font-feature-settings: 'clig' off, 'liga' off;
+
+/* Desktop/Action/link & button */
+font-family: Inter;
+font-size: 1rem;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 1.5rem */
+text-decoration: none;}
+
+.favourite__controls__item__selected {
    background: #665F55;
-} */
+} 
 
 .section__name__about {
   align-self: stretch;
