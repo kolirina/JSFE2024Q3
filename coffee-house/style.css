@@ -155,7 +155,6 @@ img {
     line-height: 150%; 
 }  */
 
-.btn__promo {color: pink;}
 
 
 .btn__promo {
@@ -952,24 +951,76 @@ line-height: 125%; /* 1.875rem */
 
 .btn__round:hover svg{stroke:#403f3d}
 
- 
-
-      
-
-@media (hover: hover){
-
-        .favourite__slider__left:hover {
-        pointer-events: none;
-        }
-          
-          .btn__promo:hover {
-            cursor: pointer;
-          }
-
-         }
 
 
 @media screen and (max-width: 768px) {
+
+
+
+  
+    .favourite__slider__left:hover {
+           background-color: initial;
+              
+  }
+
+  
+.btn__dwnld:hover {
+    background-color: initial;
+  }
+  
+  .btn__dwnld:hover path {
+    stroke: initial;
+    fill: initial;
+  }
+  
+  .btn__dwnld:hover svg {
+    fill: initial;
+  }
+  
+  .btn__dwnld:hover .btn__content__firstline,
+  .btn__dwnld:hover .btn__content__secondline {
+    color: initial;
+  }
+
+  .btn__round:hover svg{stroke: initial}
+
+  .btn__round:hover {
+    border-color: initial;
+    background: initial}
+
+    .btn__category:hover{background: initial;
+        color: initial; }
+    
+        .btn__category:hover .btn_smallCircle {background-color: initial;}
+
+
+
+
+          .favourite__slider__left:hover path {
+            stroke: rgb(64, 63, 61);;
+          }
+          
+          .favourite__slider__left:hover svg {
+            fill: #665F55;
+          }
+          
+          .favourite__slider__right:hover path {
+            stroke: rgb(64, 63, 61);;
+          }
+          
+          .favourite__slider__right:hover svg {
+               fill: #665F55;
+          }      
+          .btn__promo:hover .menu__button__text{
+            border-bottom: initial;}
+        
+       
+          
+          .btn__promo::after {
+            top: 27%;
+                   background-image: url(img/coffee-cup-for-button.svg);
+           
+          }
 
 
     .burger_icon_wrapper {
@@ -1054,6 +1105,21 @@ align-self: start;
 padding-bottom: 4.25rem;
 }
     
+
+
+.btn__round__dark:hover path {
+    stroke: #E1D4C9;
+    fill: transparent;
+  }
+  
+  .btn__round__dark:hover svg {
+    fill: #665F55;
+  }
+
+  .btn__round__dark:hover {border: 1px solid #C1B6AD;}
+
+  .footer__link:hover{border-bottom:none}
+
       
 .category__item_5, .category__item_6, .category__item_7, .category__item_8  {
     display: none;
