@@ -755,7 +755,7 @@ border: 1px solid var(--border-dark, #665F55);
     color: var(--text-light, #E1D4C9);
 }
 
-.btn_smallcircle__selected {
+.btn_smallCircle__selected {
    background-color: #E1D4C9;
 }
 
@@ -887,8 +887,10 @@ line-height: 125%;
 
 @media screen and (max-width: 768px) {
 
+    .header__link:hover {border-bottom: none;}
 
 
+.category__item:hover .category__item__photo{transform:none}
   
     .favourite__slider__left:hover {
            background-color: initial;
@@ -1054,6 +1056,26 @@ padding-bottom: 4.25rem;
 
   .footer__link:hover{border-bottom:none}
 
+
+
+
+.btn__category:hover{background: rgba(0,0,0,0);
+    color: #403f3d; }
+
+.btn__category:hover .btn_smallCircle {background-color:  #C1B6AD;}
+
+
+.btn__category__selected:hover {
+    background: var(--background-container, #665F55);
+    color: var(--text-light, #E1D4C9);
+    
+}
+
+.btn__category:hover .btn_smallCircle__selected {background-color: #E1D4C9;} 
+
+
+
+
       
 .category__item_5, .category__item_6, .category__item_7, .category__item_8  {
     display: none;
@@ -1086,6 +1108,25 @@ padding-bottom: 4.25rem;
  .category__wrapper {
     margin-bottom: 2.5rem;
 }
+
+.category__item__photo {
+
+    border: 1px solid  #C1B6AD;
+    display:block;
+    overflow: hidden;
+    border-radius: 2.5rem;
+    transition:all .3s linear;
+    transform:scale(1);
+    object-fit: cover; 
+    width: 19.375rem;
+    height: 19.375rem;
+    }
+    
+    
+    
+    
+    .category__item:hover .category__item__photo{transform:scale(1)}
+
 }
 
 
