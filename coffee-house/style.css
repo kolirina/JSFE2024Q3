@@ -901,17 +901,17 @@ line-height: 125%;
   }
   
   .btn__dwnld:hover path {
-    stroke: initial;
-    fill: initial;
+    /* stroke: rgb(64, 63, 61); */
+    fill: rgb(64, 63, 61);
   }
   
   .btn__dwnld:hover svg {
-    fill: initial;
+    fill: #665F55;;
   }
   
   .btn__dwnld:hover .btn__content__firstline,
   .btn__dwnld:hover .btn__content__secondline {
-    color: initial;
+    color: rgb(64, 63, 61);;
   }
 
   .btn__round:hover svg{stroke: initial}
@@ -1168,8 +1168,11 @@ padding-bottom: 4.25rem;
     padding: 0rem;
 }
 
-
-
+.about__img {
+background-repeat: no-repeat;
+background-position: center;
+background-size: cover;
+border-radius: 40px;}
 
 
   
@@ -1240,5 +1243,6 @@ padding-bottom: 4.25rem;
         /* .category__item_5, .category__item_6, .category__item_7, .category__item_8  {
             display: block;
         }  */
+
 
     }
