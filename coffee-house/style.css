@@ -190,7 +190,7 @@ border-radius: 6.25rem;
     margin-left: 8px;
     width: 20px;
     height: 20px;
-    background-image: url(..img/arrow-right.svg);
+    background-image: url(img/arrow-right.svg);
     background-repeat: no-repeat;
     background-position: center;
     transition: all 0.2s;
@@ -201,7 +201,7 @@ border-radius: 6.25rem;
 
   .btn__promo:hover::after {
     top: 27%;
-    background-image: url(..img/coffee-cup-for-button.svg);
+    background-image: url(img/coffee-cup-for-button.svg);
   }
 
 .promo__content {
@@ -952,13 +952,25 @@ line-height: 125%; /* 1.875rem */
 
 .btn__round:hover svg{stroke:#403f3d}
 
+ 
+
+      
+
+@media (hover: hover){
+
+        .favourite__slider__left:hover {
+        pointer-events: none;
+        }
+          
+          .btn__promo:hover {
+            cursor: pointer;
+          }
+
+         }
 
 
 @media screen and (max-width: 768px) {
 
-    .hover-effect {
-        pointer-events: none;
-        }
 
     .burger_icon_wrapper {
         display: block;
@@ -1138,6 +1150,7 @@ padding-bottom: 4.25rem;
     width: auto;
   }
 
+  
 
   .section__name {
     font-size: 2rem;
