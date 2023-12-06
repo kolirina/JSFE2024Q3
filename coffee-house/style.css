@@ -544,6 +544,8 @@ font-size: 0.625rem;
 }
 
 .footer__link:hover{border-bottom:2px solid #e1d4c9}
+.footer__link_hours:hover {border-bottom: none;
+cursor: none;}
 
 .footer__info{
     display:inline-flex;
