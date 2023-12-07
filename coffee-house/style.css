@@ -897,6 +897,12 @@ line-height: 125%;
               
   }
 
+  .favourite__slider__right:hover {
+    background-color: initial;
+       
+}
+.favourite__slider__right:hover svg {
+    background: #E1D4C9;}
   
 .btn__dwnld:hover {
     background-color: initial;
@@ -931,7 +937,7 @@ line-height: 125%;
 
 
           .favourite__slider__left:hover path {
-            stroke: rgb(64, 63, 61);;
+            stroke: rgb(64, 63, 61);
           }
           
           .favourite__slider__left:hover svg {
@@ -939,7 +945,7 @@ line-height: 125%;
           }
           
           .favourite__slider__right:hover path {
-            stroke: rgb(64, 63, 61);;
+            stroke: rgb(64, 63, 61);
           }
           
           .favourite__slider__right:hover svg {
@@ -1159,6 +1165,25 @@ padding-bottom: 4.25rem;
    .promo__description {
        font-size: 1rem;
    }
+
+   /* .about__img {display:none;}
+
+            .about__item_1 {
+                height: 45.375rem;
+                height: auto;
+                background: url(img/hero.png);
+                background-size: cover;
+                background-position: center;
+                       
+            }
+.about__item_2 {
+ 
+    background: url(img/about-2.png);
+    background-size: cover;
+    background-position: center;
+} */
+
+
 
 }
 
