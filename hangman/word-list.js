@@ -1,3 +1,5 @@
+
+export default wordList;
 const wordList = [
     {
         word: "silence",

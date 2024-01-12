@@ -1,43 +1,3 @@
-
-// Question: What can you break just by saying its name?
-// Answer: Silence.
-
-// Question: What always comes but never stays?
-// Answer: Tomorrow.
-
-// Question: What can you see with your eyes closed?
-// Answer: Dreams.
-// Question: What has a neck but no head?
-// Answer: Bottle.
-// If you have one, you want to share it. But once you share it, you do not have it. What is it?
-
-// A secret
-
-// What starts with “e” and ends with “e” but only has one letter in it?
-
-// An envelope
-
-// I start out tall, but the longer I stand, the shorter I grow. What am I?
-
-// A candle
-
-// Thanks to me, you can see straight through the wall. What am I?
-
-// A window
-
-// A little bit of dark humour. What do you call a woman who knows where her husband is all the time?
-
-// A widow
-
-// What can you make that no one—not even you—can see?
-
-// Noise
-
-// What has one eye but can’t see anything at all?
-
-// A needle
-
-
 const mainContainer = document.createElement('main');
 mainContainer.classList.add('main-container');
 document.body.appendChild(mainContainer);
@@ -67,7 +27,7 @@ const rightContainer = document.createElement('section');
 rightContainer.classList.add('right-container');
 mainContainer.append(rightContainer);
 
-const dashes = document.createElement('section');
+const dashes = document.createElement('ul');
 dashes.classList.add('dashes');
 rightContainer.appendChild(dashes);
 
@@ -81,20 +41,87 @@ incorrectGuesses.innerHTML = 'Incorrect guesses:'
 incorrectGuesses.classList.add('incorrect-guesses');
 rightContainer.appendChild(incorrectGuesses);
 
-const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+const wordList = [
+  {
+      word: "silence",
+      hint: "Hint: What can you break just by saying its name?"
+  }, 
+  {
+      word: "candle",
+      hint: "Hint: I start out tall, but the longer I stand, the shorter I grow. What am I?"
+  },
+  {
+      word: "needle",
+      hint: "Hint: What has one eye but cannot see anything at all?"
+  },
+  {
+      word: "noise",
+      hint: "Hint: What can you make that no one — not even you — can see?"
+  },
+  {
+      word: "widow",
+      hint: "Hint: A little bit of dark humour. What do you call a woman who knows where her husband is all the time?"
+  },
+  {
+      word: "window",
+      hint: "Hint: Thanks to me, you can see straight through the wall. What am I?"
+  },
+  {
+      word: "secret",
+      hint: "Hint: If you have one, you want to share it. But once you share it, you do not have it. What is it?"
+  },
+  {
+      word: "bottle",
+      hint: "Hint: What has a neck but no head?"
+  },
+  {
+      word: "dreams",
+      hint: "Hint: What can you see with your eyes closed?"
+  },
+  {
+      word: "tomorrow",
+      hint: "Hint: What always comes but never stays?"
+  }
+];
+
+let currentWord, wrongGuessCount = 0;
+const maxGuesses = 6;
+
+const getRandomWord = () => {
+  const { word, hint } = wordList[Math.floor(Math.random() * wordList.length)];
+  currentWord = word;
+  console.log(word);
+  document.querySelector(".hint").innerText = hint;
+  dashes.innerHTML = word.split("").map(() => `<li class="letter"></li>`).join("");
+}
+
+getRandomWord();
+
+
+const initGame = (letterButton, clickedLetter) => {
+  if (currentWord.includes(clickedLetter)) {
+    [...currentWord].forEach((letter, index) => {
+      if (letter === clickedLetter) {
+        dashes.querySelectorAll("li")[index].innerText = letter;
+        dashes.querySelectorAll("li")[index].classList.add("guessed");
+      }
+    })
+  }  else {
+    wrongGuessCount++;
+  }
+  incorrectGuesses.innerText = `Incorrect guesses: ${wrongGuessCount} / ${maxGuesses}`;
+}
+
 const keyboardContainer = document.createElement('div');
 keyboardContainer.classList.add('keyboard-container');
   
-    for (let letter of alphabet) {
+    for (let i = 97; i <= 122; i++) {
       const letterButton = document.createElement('button');
-      letterButton.id = letter.toLowerCase();
-      letterButton.textContent = letter;
-      letterButton.classList.add('letter-button');
-    //   button.addEventListener('click', function () {
-    //     handleGuess(letter);
-    //   });
-  
+      letterButton.innerText = String.fromCharCode(i);
+      letterButton.classList.add('letter-button'); 
       keyboardContainer.appendChild(letterButton);
+      letterButton.addEventListener('click', e => initGame(e.target, String.fromCharCode(i)));  
     }
   
 rightContainer.appendChild(keyboardContainer);
