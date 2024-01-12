@@ -6,16 +6,13 @@ const leftContainer = document.createElement('section');
 leftContainer.classList.add('left-container');
 mainContainer.prepend(leftContainer);
 
-const gallows = document.createElement('section');
+const gallows = document.createElement('div');
 gallows.classList.add('gallows');
-// Create an img element
-const gallowsImage = document.createElement('img');
 
-// Set the src attribute to the path of your PNG image
-gallowsImage.src = 'assets/gallows.png';
+const hangman0 = document.createElement('img');
+hangman0.src = 'assets/hangman-0.svg';
+gallows.appendChild(hangman0);
 
-// Append the img element to the gallows section
-gallows.appendChild(gallowsImage);
 leftContainer.appendChild(gallows);
 
 const title = document.createElement('h1');
@@ -99,6 +96,9 @@ const getRandomWord = () => {
 getRandomWord();
 
 
+
+
+
 const initGame = (letterButton, clickedLetter) => {
   if (currentWord.includes(clickedLetter)) {
     [...currentWord].forEach((letter, index) => {
@@ -109,9 +109,11 @@ const initGame = (letterButton, clickedLetter) => {
     })
   }  else {
     wrongGuessCount++;
+    hangman0.src = `assets/hangman-${wrongGuessCount}.svg`
   }
   incorrectGuesses.innerText = `Incorrect guesses: ${wrongGuessCount} / ${maxGuesses}`;
 }
+
 
 const keyboardContainer = document.createElement('div');
 keyboardContainer.classList.add('keyboard-container');
@@ -119,6 +121,7 @@ keyboardContainer.classList.add('keyboard-container');
     for (let i = 97; i <= 122; i++) {
       const letterButton = document.createElement('button');
       letterButton.innerText = String.fromCharCode(i);
+      letterButton.id = String.fromCharCode(i);
       letterButton.classList.add('letter-button'); 
       keyboardContainer.appendChild(letterButton);
       letterButton.addEventListener('click', e => initGame(e.target, String.fromCharCode(i)));  
@@ -126,23 +129,19 @@ keyboardContainer.classList.add('keyboard-container');
   
 rightContainer.appendChild(keyboardContainer);
 
-  
-//   // Function to handle letter guesses
-//   function handleGuess(letter) {
-//     // Implement your logic to check if the letter is correct or incorrect
-//     console.log(`Letter guessed: ${letter}`);
-//   }
-  
-//   // Call the function to create the virtual keyboard
-//   createVirtualKeyboard();
-  
-//   // Add event listener for physical keyboard input
-//   document.addEventListener('keydown', function (event) {
-//     // Check if the pressed key is a letter
-//     if (/^[a-zA-Z]$/.test(event.key)) {
-//       const letter = event.key.toUpperCase();
-//       handleGuess(letter);
-//     }
-//   });
+const handleKeyDown = (event) => {
+  // Check if the pressed key is an alphabetical key (keyCode 65 to 90)
+  if (event.keyCode >= 65 && event.keyCode <= 90) {
+    const letter = String.fromCharCode(event.keyCode);
+    const letterButton = document.getElementById(letter);
+    if (letterButton && !letterButton.disabled) {
+      // Call initGame with the clicked letter
+      initGame(letterButton, letter);
+    }
+  }
+};
 
-  console.log(keyboardContainer.children);
+// Add event listener for keydown events on the document
+document.addEventListener('keydown', handleKeyDown);
+
+
