@@ -91,12 +91,10 @@ popUpWrapper.appendChild(popUp);
 
 const popUpTop = document.createElement('p');
 popUpTop.classList.add('pop-up-top');
-// popUpTop.innerHTML = 'There is always another chance! 😉';
 popUp.appendChild(popUpTop);
 
 const popUpBottom = document.createElement('p');
 hint.classList.add('pop-up-bottom');
-// popUpBottom.innerHTML = 'Your word was';
 popUp.appendChild(popUpBottom);
 
 const playAgainButton = document.createElement('button');
@@ -112,26 +110,22 @@ keyboardContainer.classList.add('keyboard-container');
       letterButton.innerText = String.fromCharCode(i);
       letterButton.id = String.fromCharCode(i);
       letterButton.classList.add('letter-button'); 
+      letterButton.classList.add(`${String.fromCharCode(i)}`); 
       keyboardContainer.appendChild(letterButton);
       letterButton.addEventListener('click', e => initGame(e.target, String.fromCharCode(i)));  
     }
   
 rightContainer.appendChild(keyboardContainer);
 
+
 const handleKeyDown = (event) => {
-  // Check if the pressed key is an alphabetical key (keyCode 65 to 90)
-  if (event.keyCode >= 65 && event.keyCode <= 90) {
-    const letter = String.fromCharCode(event.keyCode);
-    const letterButton = document.getElementById(letter);
-    if (letterButton && !letterButton.disabled) {
-      // Call initGame with the clicked letter
-      initGame(letterButton, letter);
-    }
-  }
+    const clickedLetter = event.key.toLowerCase();
+    const letterButton = document.querySelector(`.${clickedLetter}`);
+    initGame(letterButton, clickedLetter); 
 };
 
-// Add event listener for keydown events on the document
 document.addEventListener('keydown', handleKeyDown);
+
 
 let currentWord, correctLetters, wrongGuessCount;
 const maxGuesses = 6;
@@ -179,17 +173,16 @@ const initGame = (letterButton, clickedLetter) => {
     wrongGuessCount++;
     hangman0.src = `assets/hangman-${wrongGuessCount}.svg`
   }
+  // if (letterButton) {
+  //   letterButton.disabled = true;
+  // }
+  // letterButton = document.querySelector(`${clickedLetter}`);
   letterButton.disabled = true;
   incorrectGuesses.innerHTML = `Incorrect guesses: <b>${wrongGuessCount} / ${maxGuesses}</b>`;
 
   if (wrongGuessCount === maxGuesses) return gameOver(false);
   if (correctLetters.length === currentWord.length) return gameOver(true);
 }
-
-
-
-
-
 
 
 playAgainButton.addEventListener('click', getRandomWord); 
