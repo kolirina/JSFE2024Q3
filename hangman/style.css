@@ -3,6 +3,7 @@
     margin: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
+    transition: ease;
   }
   body {
     background-color: #3376ad;
@@ -26,6 +27,8 @@
   width: 100%;
   margin: 0 auto;
   padding: 5px 5px 5px 5px; 
+  padding-left: 15px;
+  padding-right: 15px;
   display: flex;
   justify-content: center;
   gap: 0rem;
@@ -74,6 +77,11 @@
     align-items: center;
     justify-content: center;
     border: transparent;
+    }
+
+    .gallows {
+      display: flex;
+      justify-content: center;
     }
 
   .right-container {
@@ -172,8 +180,10 @@
 @media screen and (max-width: 1042px) {
   .main-container {
     flex-direction: column;
-    padding: 5px 5px 5px 5px; 
+    padding-top: 15px;
+    padding-bottom: 15px;
   }
+
   .right-container {
     padding-top: 1rem;
     border-radius: 0 0 10px 10px; 
@@ -187,21 +197,50 @@
   }
 }
 
+@media screen and (max-width: 484px) {
+img {
+  width: 75%;
+}
+.title {
+  font-size: x-large;
+}
+.hint {
+   font-size: large;
+   padding: 0 2rem;
+ }
+}
 
 @media screen and (max-width: 416px) {
 
+.main-container {
+  margin-top: 10px;
+}
+
+.left-container {
+  width: 100%;
+}
+
+
 img {
-  max-width: 280px;
+  width: 60%;
 }
 .keyboard-container {
   max-width: 300px;
 }
+
 .right-container {
   padding-top: 1rem;
+  gap: 5px;
 }
 
 .dashes {
   margin-top: 0.5rem;
+}
+.dashes .letter {
+  font-size: 2rem;
+}
+.dashes {
+  gap: 7px;
 }
 
 }
