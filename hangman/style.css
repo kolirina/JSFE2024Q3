@@ -41,16 +41,29 @@
     max-width: 650px;
   }
 
-  .letter-button {
+  :where(.keyboard-container, .pop-up) button {
     background-color:rgb(152, 209, 241);
     margin: 0.2rem;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 0.2rem;
+     border-radius: 0.2rem;
     border: none;
     font-size: large;
     color: rgb(63, 81, 151);
+     }
 
+  .letter-button {
+       width: 3rem;
+    height: 3rem;
+    text-transform: uppercase;
+  }
+
+  .letter-button[disabled] {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .play-again-button {
+    padding: 7px 15px;
+    margin-top: 15px;
   }
 
   .left-container {
@@ -90,20 +103,24 @@
 
 .dashes {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   list-style: none;
   text-align: center;
 }
 
 .dashes .letter {
   width: 28px;
-  border-bottom: 3px solid #0a3b63;
+  border-bottom: 3px solid #1a5b91;
+  text-transform: uppercase;
+  font-size: 2.5rem;
+  color:#0a3b63;
 }
 
-.guessed {
+.dashes .guessed {
   font-weight: bold;
-  font-size: 3rem;
-  color: #3376ad;
+   color: #3376ad;
+  border-bottom: transparent;
+  
 }
 
 .hint {
@@ -118,6 +135,42 @@
   color: #0a3b63;
   font-size: medium;
 }
+
+.pop-up-wrapper {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease;
+  }
+
+  .pop-up-wrapper.show {
+    opacity: 1;
+  pointer-events: auto;
+  }
+
+ .pop-up {
+  background: white;
+  max-width: 420px;
+  width: 100%;
+  text-align: center; 
+  border-radius: 10px;
+  padding: 30px;
+ } 
+
+.pop-up-top  {
+  font-size: large;
+  font-weight: 600;
+  }
+
 
 @media screen and (max-width: 1042px) {
   .main-container {
@@ -157,3 +210,6 @@ img {
 
 
 }
+
+
+

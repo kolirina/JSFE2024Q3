@@ -30,14 +30,12 @@ rightContainer.appendChild(dashes);
 
 const hint = document.createElement('p');
 hint.classList.add('hint');
-hint.innerHTML = 'What can you break just by saying its name?'
 rightContainer.appendChild(hint);
 
 const incorrectGuesses = document.createElement('p');
 incorrectGuesses.innerHTML = 'Incorrect guesses:'
 incorrectGuesses.classList.add('incorrect-guesses');
 rightContainer.appendChild(incorrectGuesses);
-
 
 const wordList = [
   {
@@ -82,38 +80,29 @@ const wordList = [
   }
 ];
 
-let currentWord, wrongGuessCount = 0;
-const maxGuesses = 6;
 
-const getRandomWord = () => {
-  const { word, hint } = wordList[Math.floor(Math.random() * wordList.length)];
-  currentWord = word;
-  console.log(word);
-  document.querySelector(".hint").innerText = hint;
-  dashes.innerHTML = word.split("").map(() => `<li class="letter"></li>`).join("");
-}
+const popUpWrapper = document.createElement('div');
+popUpWrapper.classList.add('pop-up-wrapper');
+document.body.appendChild(popUpWrapper);
 
-getRandomWord();
+const popUp = document.createElement('div');
+popUp.classList.add('pop-up');
+popUpWrapper.appendChild(popUp);
 
+const popUpTop = document.createElement('p');
+popUpTop.classList.add('pop-up-top');
+// popUpTop.innerHTML = 'There is always another chance! 😉';
+popUp.appendChild(popUpTop);
 
+const popUpBottom = document.createElement('p');
+hint.classList.add('pop-up-bottom');
+// popUpBottom.innerHTML = 'Your word was';
+popUp.appendChild(popUpBottom);
 
-
-
-const initGame = (letterButton, clickedLetter) => {
-  if (currentWord.includes(clickedLetter)) {
-    [...currentWord].forEach((letter, index) => {
-      if (letter === clickedLetter) {
-        dashes.querySelectorAll("li")[index].innerText = letter;
-        dashes.querySelectorAll("li")[index].classList.add("guessed");
-      }
-    })
-  }  else {
-    wrongGuessCount++;
-    hangman0.src = `assets/hangman-${wrongGuessCount}.svg`
-  }
-  incorrectGuesses.innerText = `Incorrect guesses: ${wrongGuessCount} / ${maxGuesses}`;
-}
-
+const playAgainButton = document.createElement('button');
+playAgainButton.classList.add('play-again-button');
+playAgainButton.innerText = 'Play Again'
+popUp.appendChild(playAgainButton);
 
 const keyboardContainer = document.createElement('div');
 keyboardContainer.classList.add('keyboard-container');
@@ -144,4 +133,63 @@ const handleKeyDown = (event) => {
 // Add event listener for keydown events on the document
 document.addEventListener('keydown', handleKeyDown);
 
+let currentWord, correctLetters, wrongGuessCount;
+const maxGuesses = 6;
 
+const resetGame = () => {
+  correctLetters = [], 
+  wrongGuessCount = 0;
+  dashes.innerHTML = currentWord.split("").map(() => `<li class="letter"></li>`).join("");
+  incorrectGuesses.innerHTML = `Incorrect guesses: <b>${wrongGuessCount} / ${maxGuesses}</b>`;
+  hangman0.src = `assets/hangman-${wrongGuessCount}.svg`
+  keyboardContainer.querySelectorAll('button').forEach(btn => btn.disabled = false);
+  popUpWrapper.classList.remove('show');
+}
+
+const getRandomWord = () => {
+  const { word, hint } = wordList[Math.floor(Math.random() * wordList.length)];
+  currentWord = word;
+  console.log(word);
+  document.querySelector(".hint").innerText = hint;
+  resetGame();
+}
+
+getRandomWord();
+
+
+const gameOver = (isVictory) => {
+  setTimeout(() => {
+    popUpTop.innerText = isVictory ? `Wow! Great job! 🎉` : `There is always another chance! 😉`;
+    popUpBottom.innerHTML = isVictory ? `You found the word: <b>${currentWord}</b>` : `The word was: <b>${currentWord}</b>`;
+    popUpWrapper.classList.add('show');
+  }, 300);
+}
+
+
+const initGame = (letterButton, clickedLetter) => {
+  if (currentWord.includes(clickedLetter)) {
+    [...currentWord].forEach((letter, index) => {
+      if (letter === clickedLetter) {
+        correctLetters.push(letter);
+        dashes.querySelectorAll("li")[index].innerText = letter;
+        dashes.querySelectorAll("li")[index].classList.add("guessed");
+      }
+    })
+  }  else {
+    wrongGuessCount++;
+    hangman0.src = `assets/hangman-${wrongGuessCount}.svg`
+  }
+  letterButton.disabled = true;
+  incorrectGuesses.innerHTML = `Incorrect guesses: <b>${wrongGuessCount} / ${maxGuesses}</b>`;
+
+  if (wrongGuessCount === maxGuesses) return gameOver(false);
+  if (correctLetters.length === currentWord.length) return gameOver(true);
+}
+
+
+
+
+
+
+
+playAgainButton.addEventListener('click', getRandomWord); 
