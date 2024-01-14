@@ -26,6 +26,8 @@
   width: 100%;
   margin: 0 auto;
   padding: 5px 5px 5px 5px; 
+  padding-left: 15px;
+  padding-right: 15px;
   display: flex;
   justify-content: center;
   gap: 0rem;
@@ -172,8 +174,10 @@
 @media screen and (max-width: 1042px) {
   .main-container {
     flex-direction: column;
-    padding: 5px 5px 5px 5px; 
+    padding-top: 15px;
+    padding-bottom: 15px;
   }
+
   .right-container {
     padding-top: 1rem;
     border-radius: 0 0 10px 10px; 
