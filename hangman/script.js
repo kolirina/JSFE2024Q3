@@ -56,7 +56,7 @@ const wordList = [
   },
   {
       word: "widow",
-      hint: "Hint: A little bit of dark humour. What do you call a woman who knows where her husband is all the time?"
+      hint: "Hint: What do you call a woman who knows where her husband is all the time?"
   },
   {
       word: "window",

@@ -226,6 +226,13 @@ img {
 }
 .keyboard-container {
   max-width: 300px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.letter-button {
+  width: 2rem;
+height: 2rem;
 }
 
 .right-container {
