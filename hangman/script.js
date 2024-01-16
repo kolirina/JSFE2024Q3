@@ -121,17 +121,18 @@ rightContainer.appendChild(keyboardContainer);
 const handleKeyDown = (event) => {
     const clickedLetter = event.key.toLowerCase();
     const letterButton = document.querySelector(`.${clickedLetter}`);
-    if ('abcdefghigklmnopqrstuvwxyz'.includes(clickedLetter)) {
+    if ('abcdefghigklmnopqrstuvwxyz'.includes(clickedLetter.toLowerCase())) {
       initGame(letterButton, clickedLetter)}; 
 };
 
-document.addEventListener('keydown', handleKeyDown);
+
 
 
 let currentWord, correctLetters, wrongGuessCount;
 const maxGuesses = 6;
 
 const resetGame = () => {
+  document.addEventListener('keydown', handleKeyDown);
   correctLetters = [], 
   wrongGuessCount = 0;
   dashes.innerHTML = currentWord.split("").map(() => `<li class="letter"></li>`).join("");
@@ -153,8 +154,9 @@ getRandomWord();
 
 
 const gameOver = (isVictory) => {
+  document.removeEventListener('keydown', handleKeyDown);
   setTimeout(() => {
-    popUpTop.innerText = isVictory ? `Wow! Great job! 🎉` : `There is always another chance! 😉`;
+     popUpTop.innerText = isVictory ? `Wow! Great job! 🎉` : `There is always another chance! 😉`;
     popUpBottom.innerHTML = isVictory ? `You found the word: <b>${currentWord}</b>` : `The word was: <b>${currentWord}</b>`;
     popUpWrapper.classList.add('show');
   }, 300);
