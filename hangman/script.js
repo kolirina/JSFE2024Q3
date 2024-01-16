@@ -122,8 +122,22 @@ const handleKeyDown = (event) => {
     const clickedLetter = event.key.toLowerCase();
     const letterButton = document.querySelector(`.${clickedLetter}`);
     if ('abcdefghigklmnopqrstuvwxyz'.includes(clickedLetter.toLowerCase())) {
-      initGame(letterButton, clickedLetter)}; 
+      if (letterButton.disabled != true) {
+          letterButton.disabled = true;
+          initGame(letterButton, clickedLetter);
+        // if (!letterButton.classList.contains('letter-button[disabled]')) {
+        //   letterButton.classList.add('letter-button[disabled]');
+        //   letterButton.disabled = true;
+        //   initGame(letterButton, clickedLetter);
+        }
+      }   
 };
+
+document.addEventListener('keydown', handleKeyDown);
+
+
+
+
 
 
 
@@ -132,7 +146,6 @@ let currentWord, correctLetters, wrongGuessCount;
 const maxGuesses = 6;
 
 const resetGame = () => {
-  document.addEventListener('keydown', handleKeyDown);
   correctLetters = [], 
   wrongGuessCount = 0;
   dashes.innerHTML = currentWord.split("").map(() => `<li class="letter"></li>`).join("");
@@ -154,17 +167,17 @@ getRandomWord();
 
 
 const gameOver = (isVictory) => {
-  document.removeEventListener('keydown', handleKeyDown);
+  
   setTimeout(() => {
      popUpTop.innerText = isVictory ? `Wow! Great job! 🎉` : `There is always another chance! 😉`;
     popUpBottom.innerHTML = isVictory ? `You found the word: <b>${currentWord}</b>` : `The word was: <b>${currentWord}</b>`;
     popUpWrapper.classList.add('show');
-  }, 300);
+  }, 0);
 }
 
 
 const initGame = (letterButton, clickedLetter) => {
-  if (currentWord.includes(clickedLetter)) {
+  if (currentWord.includes(clickedLetter) ) {
     [...currentWord].forEach((letter, index) => {
       if (letter === clickedLetter) {
         correctLetters.push(letter);
@@ -176,10 +189,7 @@ const initGame = (letterButton, clickedLetter) => {
     wrongGuessCount++;
     hangman0.src = `assets/hangman-${wrongGuessCount}.svg`
   }
-  // if (letterButton) {
-  //   letterButton.disabled = true;
-  // }
-  // letterButton = document.querySelector(`${clickedLetter}`);
+
   letterButton.disabled = true;
   incorrectGuesses.innerHTML = `Incorrect guesses: <b>${wrongGuessCount} / ${maxGuesses}</b>`;
 
