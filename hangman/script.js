@@ -121,7 +121,8 @@ rightContainer.appendChild(keyboardContainer);
 const handleKeyDown = (event) => {
     const clickedLetter = event.key.toLowerCase();
     const letterButton = document.querySelector(`.${clickedLetter}`);
-    initGame(letterButton, clickedLetter); 
+    if ('abcdefghigklmnopqrstuvwxyz'.includes(clickedLetter)) {
+      initGame(letterButton, clickedLetter)}; 
 };
 
 document.addEventListener('keydown', handleKeyDown);
