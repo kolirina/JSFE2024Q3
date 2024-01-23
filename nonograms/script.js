@@ -1,3 +1,22 @@
+
+const gameArr = [
+    [0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]
+];
+
+const gameArr1 = [
+    [0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 1, 0],
+    [0, 1, 0, 0, 1, 1],
+    [0, 1, 0, 0, 1, 1],
+    [0, 1, 0, 0, 1, 0],
+    [0, 0, 1, 1, 0, 0]
+];
+
 const wrapper = document.createElement('wrapper');
 wrapper.classList.add('wrapper');
 document.body.appendChild(wrapper);
@@ -58,6 +77,9 @@ levels.appendChild(crazyButton);
 
 // timer
 
+let minutes = 0;
+let seconds = 0;
+
 const timer = document.createElement('div');
 timer.classList.add('timer');
 timer.textContent = '⏰ 00:00';
@@ -66,23 +88,81 @@ let startTime;
 function updateTimer() {
   const currentTime = new Date().getTime();
   const elapsedTime = (currentTime - startTime) / 1000;
-  const minutes = Math.floor(elapsedTime / 60);
-  const seconds = Math.floor(elapsedTime % 60);
+  minutes = Math.floor(elapsedTime / 60);
+  seconds = Math.floor(elapsedTime % 60);
   timer.textContent = `⏰   ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
 }
 
-    // Example: Call clearInterval when the game is completed
-    // This could be triggered by completing the nonogram
-    // Replace this with the actual condition that indicates game completion
-    // setTimeout(() => {
-    //   clearInterval(timerInterval);
-    //   alert('Game completed!');
-    // }, 60000);
+//pop-up
+
+const popUpWrapper = document.createElement('div');
+popUpWrapper.classList.add('pop-up-wrapper');
+document.body.appendChild(popUpWrapper);
+
+const popUp = document.createElement('div');
+popUp.classList.add('pop-up');
+popUpWrapper.appendChild(popUp);
+
+const popUpTop = document.createElement('p');
+popUpTop.classList.add('pop-up-top');
+popUpTop.innerText = 'Great! 🎉'
+popUp.appendChild(popUpTop);
+
+const popUpBottom = document.createElement('p');
+popUpBottom.classList.add('pop-up-bottom');
+popUp.appendChild(popUpBottom);
+
+const playAgainButton = document.createElement('button');
+playAgainButton.classList.add('button');
+playAgainButton.innerText = 'Play Again'
+popUp.appendChild(playAgainButton);
 
 
+
+
+
+
+
+    function deepArrayCompare(arr1, arr2) {
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+    
+        for (let i = 0; i < arr1.length; i++) {
+            if (Array.isArray(arr1[i]) && Array.isArray(arr2[i])) {
+                // Recursively compare nested arrays
+                if (!deepArrayCompare(arr1[i], arr2[i])) {
+                    return false;
+                }
+            } else if (arr1[i] !== arr2[i]) {
+                return false;
+            }
+        }
+    
+        return true;
+    }
 
 // game canvas
+let timesClicked = [
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]
+];
 
+let chosenOrNotCell = [
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]
+];
+
+let winConditionMet = false;
 // Loop to create rows
 for (let i = 0; i < 6; i++) {
     const row = document.createElement("tr");
@@ -94,7 +174,25 @@ for (let i = 0; i < 6; i++) {
         
         cell.addEventListener("click", function () {
            cell.classList.toggle('clickedCell'); 
+           timesClicked[i][j] += 1;
+           chosenOrNotCell[i][j] = timesClicked[i][j] % 2;
+           console.log(timesClicked);
+           console.log(chosenOrNotCell);
+
+        if (!winConditionMet && deepArrayCompare(chosenOrNotCell, gameArr1)) {
+            console.log('win!');
             if (!startTime) {
+                startTime = new Date().getTime();
+                setInterval(updateTimer, 1000);
+            }
+            updateTimer()
+            popUpWrapper.classList.add('show');
+            winConditionMet = true; // Set the flag to avoid repetitive logging
+            popUpBottom.innerHTML = `You have solved the nonogram in ${minutes} minutes ${seconds} seconds!`;
+        }
+      
+            if (!startTime) {
+            
             startTime = new Date().getTime(); // Set startTime only once on the first click
             setInterval(updateTimer, 1000); // Start the timer interval
         }
@@ -107,115 +205,7 @@ for (let i = 0; i < 6; i++) {
 
     table.appendChild(row);
 }
-
-// Append the table to a container in your HTML (e.g., document.body)
-// canvas.appendChild(table);
-
-// const canvasContent = [];
-
-// const gameSize = 5;
-// const cellSize = canvas.width / 6;
-// canvas.width = 300;
-// canvas.height = 300;
-
-// // Initialize canvasContent array
-// for (let i = 0; i <= gameSize; i++) {
-//     canvasContent[i] = [];
-// }
-
-// function draw() {
-//     if (canvas.getContext) {
-//         const canvasContext = canvas.getContext("2d");
-
-//         for (let i = 0; i <= gameSize; i++) {
-//             for (let j = 0; j <= gameSize; j++) {
-//                 canvasContext.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
-//                 const cell = document.createElement("div");
-//                 cell.classList.add("canvas-cell");
-
-//                 // Assign unique IDs to each cell
-//                 const cellId = `cell_${i}_${j}`;
-//                 cell.id = cellId;
-
-//                 // Add click event listener to change color and start the timer
-//                 cell.addEventListener("click", function () {
-//                     cell.style.backgroundColor = "blue"; // Change the color as needed
-//                     updateTimer();
-//                 });
-
-//                 canvasContent[i][j] = cell;
-//                 mainContainer.appendChild(cell); // Append the cell to the main container
-//             }
-//         }
-//     }
-// }
-// draw();
-
-
-
-// const canvasContent = [];
-
-// const gameSize = 5;
-// const cellSize = canvas.width / 6;
-// canvas.width = 300;
-// canvas.height = 300;
-
-// // Initialize canvasContent array
-// for (let i = 0; i <= gameSize; i++) {
-//     canvasContent[i] = [];
-// }
-
-// function draw() {
-//     if (canvas.getContext) {
-//         const canvasContext = canvas.getContext("2d");
-
-//         for (let i = 0; i <= gameSize; i++) {
-//             for (let j = 0; j <= gameSize; j++) {
-//                 canvasContext.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
-//                 const cell = document.createElement("div");
-//                 cell.classList.add("canvas-cell");
-
-//                 // Add click event listener to change color and start the timer
-//                 cell.addEventListener("click", function () {
-//                     cell.style.backgroundColor = "blue"; // Change the color as needed
-//                     updateTimer();
-//                 });-+
-
-//                 canvasContent[i][j] = cell;
-//                 canvas.appendChild(cell); // Append the cell to the 
-//             }
-//         }
-//     }
-// }
-// draw();
-
-
-// const gameSize = 5;
-// const cellSize = canvas.width / 6;
-// canvas.width = 300;
-// canvas.height = 300;
-
-
-// function draw() {
-//     if (canvas.getContext) {
-//       const canvasContext = canvas.getContext("2d");
-
-    
-//     for (let i = 0; i <= gameSize; i++) {
-//         for (let j = 0; j <= gameSize; j++) {
-//             canvasContext.strokeRect(i * cellSize,  j * cellSize, cellSize, cellSize);
-//         };
-//     };
-
-//     };
-// }
-// draw();
-
-
-
-
-
-
+console.log(timesClicked);
 
 
 // footer buttons
@@ -245,4 +235,7 @@ const darkMode = document.createElement('button');
 darkMode.classList.add('button');
 darkMode.innerText = '🌙🌞';
 footer.appendChild(darkMode);
+
+
+
 
