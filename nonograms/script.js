@@ -47,8 +47,178 @@ const lama = [
 
 
 
+const ship = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+    [0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0],
+    [0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],    
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0], 
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0]
+];
 
-gameArrs = [arrow, cup, car, tree, lama];
+const giraffes = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0],    
+    [0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1],
+    [0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0], 
+    [0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0]
+];
+
+const cat = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+    [0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1],
+    [0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+    [0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1],    
+    [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0], 
+    [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0]
+];
+
+const cherries = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0],
+    [0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0],
+    [0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0],
+    [0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1],    
+    [0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1],
+    [0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1], 
+    [0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0]
+];
+
+const doggie = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0],
+    [0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0],
+    [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0],    
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0], 
+    [0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0]
+];
+
+const castle = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1],
+    [0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0],
+    [0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0],
+    [0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0],
+    [0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0],
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0],
+    [0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0],
+    [0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1]
+];
+
+const dining = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+    [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+    [0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1],
+    [0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1]
+];
+
+const duck = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0]
+];
+
+const moose = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1],
+    [0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1],
+    [0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1],
+    [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1],
+    [0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+    [0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+    [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
+];
+
+const stairs = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+];
+
+
+
+
+gameArrs = [arrow, cup, car, tree, lama, ship, ship, giraffes, cat, cherries, doggie, castle, dining, duck, moose, stairs];
+// gameArrs = [cherries];
+
+
 
 
 const getRandomArr = () => {
@@ -177,14 +347,30 @@ timer.classList.add('timer');
 timer.textContent = '⏰ 00:00';
 mainLeft.appendChild(timer);
 let startTime;
+
+let timerInterval;// Переменная для хранения интервала таймера
+let isTimerRunning = false; 
+
 function updateTimer() {
+    if (!isTimerRunning) return;
   const currentTime = new Date().getTime();
   const elapsedTime = (currentTime - startTime) / 1000;
   minutes = Math.floor(elapsedTime / 60);
   seconds = Math.floor(elapsedTime % 60);
   timer.textContent = `⏰   ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
 }
+
+function startTimer() {
+    isTimerRunning = true;
+  startTime = new Date().getTime();
+  timerInterval = setInterval(updateTimer, 1000); // Обновление таймера каждую секунду
+}
+
+function stopTimer() {
+    isTimerRunning = false; 
+  clearInterval(timerInterval); // Остановка интервала
+}
+
 
 
 //audio
@@ -338,31 +524,34 @@ footer.appendChild(darkMode);
     }
 
 // game canvas
-let timesClicked = [
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0]
-];
 
-let chosenOrNotCell = [
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0]
-];
+
+function generateNestedArray(size) {
+    const nestedArray = [];
+    
+    for (let i = 0; i < size; i += 1) {
+        const row = [];
+        for (let j = 0; j < size; j++) {
+            row.push(0);
+        }
+        nestedArray.push(row);
+    }
+
+    return nestedArray;
+}
+
+let timesClicked = generateNestedArray(gameArr.length);
+
+let chosenOrNotCell = generateNestedArray(gameArr.length);
+
 
 let winConditionMet = false;
 // Loop to create rows
-for (let i = 0; i < 6; i++) {
+for (let i = 0; i < gameArr.length; i++) {
     const row = document.createElement("tr");
 
     // Loop to create cells in each row
-    for (let j = 0; j < 6; j++) {
+    for (let j = 0; j < gameArr.length; j++) {
         const cell = document.createElement("td");
         row.appendChild(cell);
 
@@ -375,77 +564,57 @@ if (i === 0) {
 }
 
 
-        cell.addEventListener("click", function () {
-            audioClickLeft.play()
-           cell.classList.toggle('clickedCell'); 
-           timesClicked[i][j] += 1;
-           chosenOrNotCell[i][j] = timesClicked[i][j] % 2;
-        
-
-        if (!winConditionMet && deepArrayCompare(chosenOrNotCell, gameArr)) {
-            console.log('win!');
-            if (!startTime) {
-                startTime = new Date().getTime();
-                setInterval(updateTimer, 1000);
+cell.addEventListener("click", function () {
+      if (!startTime) {
+            startTimer();
+           
             }
-            updateTimer()
-            popUpWrapper.classList.add('show');
-            winConditionMet = true; // Set the flag to avoid repetitive logging
-            popUpBottom.innerHTML = `You have solved the nonogram in ${minutes * 60 + seconds} seconds!`;
-            audioVictory.play();
+    audioClickLeft.play()
+    cell.classList.toggle('clickedCell'); 
+    timesClicked[i][j] += 1;
+    chosenOrNotCell[i][j] = timesClicked[i][j] % 2;
+        
+    if (!winConditionMet && deepArrayCompare(chosenOrNotCell, gameArr)) {
+      
+        popUpWrapper.classList.add('show');
+        winConditionMet = true; // Set the flag to avoid repetitive logging
+        popUpBottom.innerHTML = `You have solved the nonogram in ${minutes * 60 + seconds} seconds!`;
+        audioVictory.play();
+            
         }
       
-            if (!startTime) {
-            
-            startTime = new Date().getTime(); // Set startTime only once on the first click
-            setInterval(updateTimer, 1000); // Start the timer interval
-        }
+
         });
         cell.addEventListener("contextmenu", function (event) {
             audioClickRight.play();
+            // cell.innerHTML = '';
             event.preventDefault(); 
             cell.classList.toggle('crossedCell');
+            if (!startTime) {
+                startTimer();
+                }
                   });
-
-                //   reset.addEventListener("click", function () {
-                //     cell.classList.remove('clickedCell');
-                //     cell.classList.remove('crossedCell');
-                // })
     }
 
     table.appendChild(row);
 }
-// console.log(timesClicked);
 
 
 reset.addEventListener("click", function () {
-    // Iterate over all cells and remove the classes
-    for (let i = 0; i < 6; i++) {
-        for (let j = 0; j < 6; j++) {
+    timesClicked = generateNestedArray(gameArr.length);
+    chosenOrNotCell = generateNestedArray(gameArr.length);
+    startTime = null;
+    stopTimer(); 
+    timer.textContent = '⏰ 00:00';
+
+    // Итерация по всем ячейкам и удаление классов
+    for (let i = 0; i < gameArr.length; i++) {
+        for (let j = 0; j < gameArr.length; j++) {
             const cell = table.rows[i].cells[j];
             cell.classList.remove('clickedCell');
             cell.classList.remove('crossedCell');
-            timesClicked = [
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0]
-            ];
-            
-            chosenOrNotCell = [
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0]
-            ];
         }
     }
 });
-
-
 
 
