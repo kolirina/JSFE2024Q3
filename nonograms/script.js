@@ -1,4 +1,4 @@
-let gameArr;
+let gameArr = [];
 
 const arrow = [
     [0, 0, 0, 0, 0, 0],
@@ -216,66 +216,13 @@ const stairs = [
 
 
 gameArrs = [arrow, cup, car, tree, lama, ship, ship, giraffes, cat, cherries, doggie, castle, dining, duck, moose, stairs];
-// gameArrs = [cherries];
 
 
 
 
-const getRandomArr = () => {
-    gameArr = gameArrs[Math.floor(Math.random() * gameArrs.length)];
-    console.log(gameArr);
-  }
-  
-  getRandomArr();
 
 
 
-cluesSide = [];
- 
-function calculateCluesSide(gameArr) {
-let clue = 0; 
-for (i = 0; i < gameArr.length; i += 1) {
-    let clues = [];
-    let clue = 0;
-for (j = 0; j < gameArr.length; j += 1) {
-        if (gameArr[i][j] !== 0) {
-            clue += 1;
-                } else if (clue !== 0) {
-                    clues.push(clue);
-                    clue = 0; // Reset clue after pushing the clue
-                }   
-            }
-        if (clue !== 0) {
-            clues.push(clue);
-        }
-        cluesSide.push(clues);
-    }
-}
-calculateCluesSide (gameArr);
-
-
-cluesTop = [];
- 
-function calculateCluesTop (gameArr) {
-let clue = 0; 
-for (i = 0; i < gameArr.length; i += 1) {
-    let clues = [];
-    let clue = 0;
-for (j = 0; j < gameArr.length; j += 1) {
-        if (gameArr[j][i] !== 0) {
-            clue += 1;
-                } else if (clue !== 0) {
-                    clues.push(clue);
-                    clue = 0; // Reset clue after pushing the clue
-                }   
-            }
-        if (clue !== 0) {
-            clues.push(clue);
-        }
-        cluesTop.push(clues);
-    }
-}
-calculateCluesTop (gameArr);
 
 
 
@@ -322,20 +269,96 @@ const levels = document.createElement('section');
 levels.classList.add('levels');
 levChoiceWrapper.appendChild(levels);
 
-const easyButton = document.createElement('button');
+
+let levelName;
+const easyLevelNames = [arrow, car, cup, tree, lama];
+const notSoEasyLevelNames = [ship, giraffes, cat, cherries, doggie];
+const bananasLevelNames = [doggie, castle, dining, duck, moose, stairs];
+ 
+const easyButton = document.createElement('select');
 easyButton.classList.add('button');
-easyButton.innerText = 'Easy 🛴'
 levels.appendChild(easyButton);
+
+
+  
+// Set the label of the first option as the button text
+easyButton.options.add(new Option('Easy 🛴', 'easy-label', true, true));
+
+// Create options and append them to the select element
+const optionArrow = document.createElement('option');
+optionArrow.value = 0;
+optionArrow.text = 'Arrow';
+easyButton.appendChild(optionArrow);
+
+const optionCar = document.createElement('option');
+optionCar.value = 1;
+optionCar.text = 'Car';
+easyButton.appendChild(optionCar);
+
+const optionCup = document.createElement('option');
+optionCup.value = 2;
+optionCup.text = 'Cup';
+easyButton.appendChild(optionCup);
+
+const optionTree = document.createElement('option');
+optionTree.value = 3;
+optionTree.text = 'Tree';
+easyButton.appendChild(optionTree);
+
+const optionLama = document.createElement('option');
+optionLama.value = 4;
+optionLama.text = 'Lama';
+easyButton.appendChild(optionLama);
+
+
+  easyButton.addEventListener('change', function () {
+    // Get the selected option index
+    const selectedOptionValue = easyButton.value;
+  
+    // Check if a valid option is selected
+    if (selectedOptionValue >= 0) {
+      // Set gameArr based on the selected index
+      gameArr = easyLevelNames[selectedOptionValue];
+      console.log('Selected gameArr:', gameArr);
+      console.log(selectedOptionValue, optionCup.text);
+      
+      // Call a function to regenerate the game based on the new gameArr
+      regenerateGame();
+    }
+  });
+  
+  // Function to regenerate the game based on the current gameArr
+  function regenerateGame() {
+    table.innerHTML = '';
+    initGame(gameArr);
+
+    // Add your game regeneration logic here
+    // For example, clear the table, generate a new game based on gameArr, and update clues
+    // ...
+  
+    // Once you have regenerated the game, you can update the game canvas
+  }
+
 
 const notSoEasyButton = document.createElement('button');
 notSoEasyButton.classList.add('button');
 notSoEasyButton.innerText = 'Not So Easy 🚀'
 levels.appendChild(notSoEasyButton);
 
-const crazyButton = document.createElement('button');
-crazyButton.classList.add('button');
-crazyButton.innerText = 'BANANAS 🍌'
-levels.appendChild(crazyButton);
+const bananasButton = document.createElement('button');
+bananasButton.classList.add('button');
+bananasButton.innerText = 'BANANAS 🍌🍌'
+levels.appendChild(bananasButton);
+
+const randomButton = document.createElement('button');
+randomButton.classList.add('button');
+randomButton.innerText = 'Random 🎲';
+levels.appendChild(randomButton);
+randomButton.addEventListener('click', function() {
+    table.innerHTML = '';
+    gameArr = gameArrs[Math.floor(Math.random() * gameArrs.length)];
+    initGame(gameArr);
+});
 
 // timer
 
@@ -462,13 +485,6 @@ const popUpBottom = document.createElement('p');
 popUpBottom.classList.add('pop-up-bottom');
 popUp.appendChild(popUpBottom);
 
-// const playAgainButton = document.createElement('button');
-// playAgainButton.classList.add('button');
-// playAgainButton.innerText = 'Play Again'
-// popUp.appendChild(playAgainButton);
-
-
-
 // footer buttons
 
 const showAnswers = document.createElement('button');
@@ -540,14 +556,68 @@ function generateNestedArray(size) {
     return nestedArray;
 }
 
+function initGame(gameArr) {
+
+
 let timesClicked = generateNestedArray(gameArr.length);
 
 let chosenOrNotCell = generateNestedArray(gameArr.length);
 
 
+    cluesSide = [];
+ 
+    function calculateCluesSide(gameArr) {
+    let clue = 0; 
+    for (i = 0; i < gameArr.length; i += 1) {
+        let clues = [];
+        let clue = 0;
+    for (j = 0; j < gameArr.length; j += 1) {
+            if (gameArr[i][j] !== 0) {
+                clue += 1;
+                    } else if (clue !== 0) {
+                        clues.push(clue);
+                        clue = 0; // Reset clue after pushing the clue
+                    }   
+                }
+            if (clue !== 0) {
+                clues.push(clue);
+            }
+            cluesSide.push(clues);
+        }
+    }
+    calculateCluesSide (gameArr);
+    
+    
+    cluesTop = [];
+     
+    function calculateCluesTop (gameArr) {
+    let clue = 0; 
+    for (i = 0; i < gameArr.length; i += 1) {
+        let clues = [];
+        let clue = 0;
+    for (j = 0; j < gameArr.length; j += 1) {
+            if (gameArr[j][i] !== 0) {
+                clue += 1;
+                    } else if (clue !== 0) {
+                        clues.push(clue);
+                        clue = 0; // Reset clue after pushing the clue
+                    }   
+                }
+            if (clue !== 0) {
+                clues.push(clue);
+            }
+            cluesTop.push(clues);
+        }
+    }
+    calculateCluesTop (gameArr);
+
+
+
+
 let winConditionMet = false;
 // Loop to create rows
-for (let i = 0; i < gameArr.length; i++) {
+
+for (let i = 0; i < gameArr.length; i++) { 
     const row = document.createElement("tr");
 
     // Loop to create cells in each row
@@ -580,6 +650,13 @@ cell.addEventListener("click", function () {
         winConditionMet = true; // Set the flag to avoid repetitive logging
         popUpBottom.innerHTML = `You have solved the nonogram in ${minutes * 60 + seconds} seconds!`;
         audioVictory.play();
+        popUpWrapper.addEventListener('click', function (event) {
+            if (popUpWrapper.classList.contains('show')) {
+                popUpWrapper.classList.remove('show');
+                audioVictory.pause();
+                stopTimer();
+            };
+        });
             
         }
       
@@ -597,6 +674,7 @@ cell.addEventListener("click", function () {
     }
 
     table.appendChild(row);
+}
 }
 
 
@@ -617,4 +695,13 @@ reset.addEventListener("click", function () {
     }
 });
 
+
+console.log(gameArr);
+
+
+const getRandomEasyArr = () => {
+    gameArr = easyLevelNames[Math.floor(Math.random() * easyLevelNames.length)];
+    initGame(gameArr)  }
+  
+  getRandomEasyArr();
 
