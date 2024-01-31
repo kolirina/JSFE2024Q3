@@ -9,13 +9,13 @@ const arrow = [
     [0, 1, 0, 0, 0, 0]
 ];
 
-const cup = [
+const batman = [
     [0, 0, 0, 0, 0, 0],
-    [0, 1, 0, 0, 1, 0],
-    [0, 1, 0, 0, 1, 1],
-    [0, 1, 0, 0, 1, 1],
-    [0, 1, 1, 1, 1, 0],
-    [0, 0, 1, 1, 0, 0]
+    [0, 1, 0, 0, 0, 1],
+    [0, 1, 1, 1, 1, 1],
+    [0, 1, 0, 0, 0, 1],
+    [0, 1, 1, 0, 1, 1],
+    [0, 0, 1, 1, 1, 0]
 ];
 
 const car = [
@@ -213,17 +213,9 @@ const stairs = [
 ];
 
 
-
-
-gameArrs = [arrow, cup, car, tree, lama, ship, ship, giraffes, cat, cherries, doggie, castle, dining, duck, moose, stairs];
-
-
-
-
-
-
-
-
+gameArrs = [arrow, batman, car, tree, lama, ship, giraffes, cat, cherries, doggie, castle, dining, duck, moose, stairs];
+gameArrNameString = ['Arrow', 'Batman', 'Car', 'Tree', 'Lama', 'Ship', 'Giraffes', 'Cat', 'Cherries', 'Doggie', 'Castle', 'Dining', 'Duck', 'Moose', 'Stairs'];
+gameArrLevel = ['🛴', '🛴', '🛴', '🛴', '🛴', '🚀', '🚀', '🚀', '🚀', '🚀', '🍌🍌', '🍌🍌', '🍌🍌', '🍌🍌', '🍌🍌']
 
 
 const wrapper = document.createElement('wrapper');
@@ -270,95 +262,6 @@ levels.classList.add('levels');
 levChoiceWrapper.appendChild(levels);
 
 
-let levelName;
-const easyLevelNames = [arrow, car, cup, tree, lama];
-const notSoEasyLevelNames = [ship, giraffes, cat, cherries, doggie];
-const bananasLevelNames = [doggie, castle, dining, duck, moose, stairs];
- 
-const easyButton = document.createElement('select');
-easyButton.classList.add('button');
-levels.appendChild(easyButton);
-
-
-  
-// Set the label of the first option as the button text
-easyButton.options.add(new Option('Easy 🛴', 'easy-label', true, true));
-
-// Create options and append them to the select element
-const optionArrow = document.createElement('option');
-optionArrow.value = 0;
-optionArrow.text = 'Arrow';
-easyButton.appendChild(optionArrow);
-
-const optionCar = document.createElement('option');
-optionCar.value = 1;
-optionCar.text = 'Car';
-easyButton.appendChild(optionCar);
-
-const optionCup = document.createElement('option');
-optionCup.value = 2;
-optionCup.text = 'Cup';
-easyButton.appendChild(optionCup);
-
-const optionTree = document.createElement('option');
-optionTree.value = 3;
-optionTree.text = 'Tree';
-easyButton.appendChild(optionTree);
-
-const optionLama = document.createElement('option');
-optionLama.value = 4;
-optionLama.text = 'Lama';
-easyButton.appendChild(optionLama);
-
-
-  easyButton.addEventListener('change', function () {
-    // Get the selected option index
-    const selectedOptionValue = easyButton.value;
-  
-    // Check if a valid option is selected
-    if (selectedOptionValue >= 0) {
-      // Set gameArr based on the selected index
-      gameArr = easyLevelNames[selectedOptionValue];
-      console.log('Selected gameArr:', gameArr);
-      console.log(selectedOptionValue, optionCup.text);
-      
-      // Call a function to regenerate the game based on the new gameArr
-      regenerateGame();
-    }
-  });
-  
-  // Function to regenerate the game based on the current gameArr
-  function regenerateGame() {
-    table.innerHTML = '';
-    initGame(gameArr);
-
-    // Add your game regeneration logic here
-    // For example, clear the table, generate a new game based on gameArr, and update clues
-    // ...
-  
-    // Once you have regenerated the game, you can update the game canvas
-  }
-
-
-const notSoEasyButton = document.createElement('button');
-notSoEasyButton.classList.add('button');
-notSoEasyButton.innerText = 'Not So Easy 🚀'
-levels.appendChild(notSoEasyButton);
-
-const bananasButton = document.createElement('button');
-bananasButton.classList.add('button');
-bananasButton.innerText = 'BANANAS 🍌🍌'
-levels.appendChild(bananasButton);
-
-const randomButton = document.createElement('button');
-randomButton.classList.add('button');
-randomButton.innerText = 'Random 🎲';
-levels.appendChild(randomButton);
-randomButton.addEventListener('click', function() {
-    table.innerHTML = '';
-    gameArr = gameArrs[Math.floor(Math.random() * gameArrs.length)];
-    initGame(gameArr);
-});
 
 // timer
 
@@ -394,6 +297,161 @@ function stopTimer() {
   clearInterval(timerInterval); // Остановка интервала
 }
 
+
+
+let levelName;
+const easyLevelNames = [arrow, car, batman, tree, lama];
+
+ 
+const easyButton = document.createElement('select');
+easyButton.classList.add('button');
+levels.appendChild(easyButton);
+// Set the label of the first option as the button text
+easyButton.options.add(new Option('Easy 🛴', 'easy-label', true, true));
+
+// Create options and append them to the select element
+const optionArrow = document.createElement('option');
+optionArrow.value = 0;
+optionArrow.text = 'Arrow';
+easyButton.appendChild(optionArrow);
+
+const optionCar = document.createElement('option');
+optionCar.value = 1;
+optionCar.text = 'Car';
+easyButton.appendChild(optionCar);
+
+const optionBatman = document.createElement('option');
+optionBatman.value = 2;
+optionBatman.text = 'Batman';
+easyButton.appendChild(optionBatman);
+
+const optionTree = document.createElement('option');
+optionTree.value = 3;
+optionTree.text = 'Tree';
+easyButton.appendChild(optionTree);
+
+const optionLama = document.createElement('option');
+optionLama.value = 4;
+optionLama.text = 'Lama';
+easyButton.appendChild(optionLama);
+
+
+
+
+  easyButton.addEventListener('change', function () {
+    const selectedOptionValue = easyButton.value;
+    if (selectedOptionValue >= 0) {
+      gameArr = easyLevelNames[selectedOptionValue];
+      regenerateGame();
+    }
+  });
+
+  function regenerateGame() {
+    table.innerHTML = '';
+    stopTimer();
+    startTime = null;
+    timer.textContent = '⏰ 00:00';
+    initGame(gameArr);
+}
+
+
+const notSoEasyLevelNames = [ship, giraffes, cat, cherries, doggie];  
+
+const notSoEasyButton = document.createElement('select');
+notSoEasyButton.classList.add('button');
+levels.appendChild(notSoEasyButton);
+notSoEasyButton.options.add(new Option('Not So Easy 🚀', 'not-so-easy-label', true, true));
+
+const optionShip = document.createElement('option');
+optionShip.value = 0;
+optionShip.text = 'Ship';
+notSoEasyButton.appendChild(optionShip);
+
+const optionGiraffes = document.createElement('option');
+optionGiraffes.value = 1;
+optionGiraffes.text = 'Giraffes';
+notSoEasyButton.appendChild(optionGiraffes);
+
+const optionCat = document.createElement('option');
+optionCat.value = 2;
+optionCat.text = 'Cat';
+notSoEasyButton.appendChild(optionCat);
+
+const optionCherries = document.createElement('option');
+optionCherries.value = 3;
+optionCherries.text = 'Cherries';
+notSoEasyButton.appendChild(optionCherries);
+
+const optionDoggie = document.createElement('option');
+optionDoggie.value = 4;
+optionDoggie.text = 'Doggie';
+notSoEasyButton.appendChild(optionDoggie);
+
+notSoEasyButton.addEventListener('change', function () {
+    const selectedOptionValue = notSoEasyButton.value;
+    if (selectedOptionValue >= 0) {
+      gameArr = notSoEasyLevelNames[selectedOptionValue];
+      regenerateGame();
+    }
+  });
+
+
+
+const bananasLevelNames = [castle, dining, duck, moose, stairs];
+
+const bananasButton = document.createElement('select');
+bananasButton.classList.add('button');
+levels.appendChild(bananasButton);
+bananasButton.options.add(new Option('BANANAS 🍌🍌', 'bananas-label', true, true));
+
+const optionCastle = document.createElement('option');
+optionCastle.value = 0;
+optionCastle.text = 'Castle';
+bananasButton.appendChild(optionCastle);
+
+const optionDining = document.createElement('option');
+optionDining.value = 1;
+optionDining.text = 'Dining';
+bananasButton.appendChild(optionDining);
+
+const optionDuck = document.createElement('option');
+optionDuck.value = 2;
+optionDuck.text = 'Duck';
+bananasButton.appendChild(optionDuck);
+
+const optionMoose = document.createElement('option');
+optionMoose.value = 3;
+optionMoose.text = 'Moose';
+bananasButton.appendChild(optionMoose);
+
+const optionStairs = document.createElement('option');
+optionStairs.value = 4;
+optionStairs.text = 'Stairs';
+bananasButton.appendChild(optionStairs);
+
+bananasButton.addEventListener('change', function () {
+    const selectedOptionValue = bananasButton.value;
+    if (selectedOptionValue >= 0) {
+      gameArr = bananasLevelNames[selectedOptionValue];
+      regenerateGame();
+    }
+  });
+
+
+
+const randomButton = document.createElement('button');
+randomButton.classList.add('button');
+randomButton.innerText = 'Random 🎲';
+levels.appendChild(randomButton);
+randomButton.addEventListener('click', function() {
+    table.innerHTML = '';
+    gameArr = gameArrs[Math.floor(Math.random() * gameArrs.length)];
+    isTimerRunning = false; 
+    startTime = null;
+    stopTimer(); 
+    timer.textContent = '⏰ 00:00';
+    initGame(gameArr);
+});
 
 
 //audio
@@ -494,8 +552,13 @@ footer.appendChild(showAnswers);
 
 const save = document.createElement('button');
 save.classList.add('button');
-save.innerText = 'Save';
+save.innerText = 'Save Game';
 footer.appendChild(save);
+
+const continueGame = document.createElement('button');
+continueGame.classList.add('button');
+continueGame.innerText = 'Continue Last Game';
+footer.appendChild(continueGame);
 
 const reset = document.createElement('button');
 reset.classList.add('button');
@@ -556,17 +619,9 @@ function generateNestedArray(size) {
     return nestedArray;
 }
 
-function initGame(gameArr) {
+cluesSide = [];
 
-
-let timesClicked = generateNestedArray(gameArr.length);
-
-let chosenOrNotCell = generateNestedArray(gameArr.length);
-
-
-    cluesSide = [];
- 
-    function calculateCluesSide(gameArr) {
+function calculateCluesSide(gameArr) {
     let clue = 0; 
     for (i = 0; i < gameArr.length; i += 1) {
         let clues = [];
@@ -584,13 +639,11 @@ let chosenOrNotCell = generateNestedArray(gameArr.length);
             }
             cluesSide.push(clues);
         }
-    }
-    calculateCluesSide (gameArr);
+    };
+
+cluesTop = [];  
     
-    
-    cluesTop = [];
-     
-    function calculateCluesTop (gameArr) {
+function calculateCluesTop (gameArr) {
     let clue = 0; 
     for (i = 0; i < gameArr.length; i += 1) {
         let clues = [];
@@ -608,37 +661,37 @@ let chosenOrNotCell = generateNestedArray(gameArr.length);
             }
             cluesTop.push(clues);
         }
-    }
+    }    
+
+
+function initGame(gameArr) {
+    let timesClicked = generateNestedArray(gameArr.length);
+    let chosenOrNotCell = generateNestedArray(gameArr.length);
+    let timesCrossed = generateNestedArray(gameArr.length);
+    let crossedOrNotCell = generateNestedArray(gameArr.length);
+    cluesSide = [];
+    calculateCluesSide (gameArr);
+    cluesTop = [];   
     calculateCluesTop (gameArr);
-
-
-
-
-let winConditionMet = false;
-// Loop to create rows
-
-for (let i = 0; i < gameArr.length; i++) { 
-    const row = document.createElement("tr");
-
+    let winConditionMet = false;
+    // Loop to create rows
+    for (let i = 0; i < gameArr.length; i++) { 
+        const row = document.createElement("tr");
     // Loop to create cells in each row
     for (let j = 0; j < gameArr.length; j++) {
         const cell = document.createElement("td");
         row.appendChild(cell);
-
-
         if (j === 0) {
-    cell.innerHTML = cluesSide[i].join('    ');  
-}
-if (i === 0) {
-    cell.innerHTML = cluesTop[j].join('<br>');
-}
+            cell.innerHTML = cluesSide[i].join('    ');  
+            };
+        if (i === 0) {
+            cell.innerHTML = cluesTop[j].join('<br>');
+        };
 
-
-cell.addEventListener("click", function () {
-      if (!startTime) {
+    cell.addEventListener("click", function () {
+        if (!startTime) {
             startTimer();
-           
-            }
+         }
     audioClickLeft.play()
     cell.classList.toggle('clickedCell'); 
     timesClicked[i][j] += 1;
@@ -650,32 +703,160 @@ cell.addEventListener("click", function () {
         winConditionMet = true; // Set the flag to avoid repetitive logging
         popUpBottom.innerHTML = `You have solved the nonogram in ${minutes * 60 + seconds} seconds!`;
         audioVictory.play();
+        stopTimer();
+        currentTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        currentSeconds = minutes * 60 + seconds;
+        currentGameArrName = gameArrNameString[gameArrs.indexOf(gameArr)];
+        currentLevel = gameArrLevel[gameArrs.indexOf(gameArr)];
+        saveWin(currentTime, currentSeconds, currentGameArrName, currentLevel);
+        displayLastFiveWins();
+
         popUpWrapper.addEventListener('click', function (event) {
             if (popUpWrapper.classList.contains('show')) {
                 popUpWrapper.classList.remove('show');
                 audioVictory.pause();
-                stopTimer();
-            };
+                };
         });
             
         }
       
 
         });
-        cell.addEventListener("contextmenu", function (event) {
-            audioClickRight.play();
-            // cell.innerHTML = '';
-            event.preventDefault(); 
-            cell.classList.toggle('crossedCell');
+cell.addEventListener("contextmenu", function (event) {
+    audioClickRight.play();
+    // cell.innerHTML = '';
+    event.preventDefault(); 
+    cell.classList.toggle('crossedCell');
+    timesCrossed[i][j] += 1;
+    crossedOrNotCell[i][j] = timesCrossed[i][j] % 2;
             if (!startTime) {
                 startTimer();
                 }
                   });
+
     }
 
     table.appendChild(row);
 }
-}
+    save.addEventListener('click', function () {
+        const savedData = {
+            gameArr: gameArr,
+            chosenOrNotCell: chosenOrNotCell,
+            crossedOrNotCell: crossedOrNotCell,
+            minutes: minutes,
+            seconds: seconds,
+            timesClicked: timesClicked,
+            timesCrossed: timesCrossed,
+        };
+        // stopTimer();
+        localStorage.setItem('savedGame', JSON.stringify(savedData));
+        console.log(savedData);
+    });
+};
+
+continueGame.addEventListener('click', function () {
+    const savedDataString = localStorage.getItem('savedGame');
+
+    if (savedDataString) {
+        const savedData = JSON.parse(savedDataString);
+
+        gameArr = savedData.gameArr;
+        chosenOrNotCell = savedData.chosenOrNotCell;
+        minutes = savedData.minutes;
+        seconds = savedData.seconds;
+        timesClicked = savedData.timesClicked;
+        timesCrossed = savedData.timesCrossed;
+        crossedOrNotCell = savedData.crossedOrNotCell;
+        cluesSide = [];
+        calculateCluesSide (gameArr);
+        cluesTop = [];   
+        calculateCluesTop (gameArr);
+        let winConditionMet = false;
+        if (table.hasChildNodes()) {
+            table.innerHTML = '';
+        }
+        for (let i = 0; i < gameArr.length; i++) { 
+            const row = document.createElement("tr");
+           for (let j = 0; j < gameArr.length; j++) {
+            const cell = document.createElement("td");
+            row.appendChild(cell);
+            if (chosenOrNotCell[i][j] === 1) {
+                cell.classList.add('clickedCell')
+            };
+            if (crossedOrNotCell[i][j] === 1) {
+                cell.classList.add('crossedCell')
+            };
+            if (j === 0) {
+                cell.innerHTML = cluesSide[i].join('    ');  
+                };
+            if (i === 0) {
+                cell.innerHTML = cluesTop[j].join('<br>');
+            };
+
+            cell.addEventListener("click", function () {
+                if (!startTime) {
+                    startTimer();
+                 }
+            audioClickLeft.play()
+            cell.classList.toggle('clickedCell'); 
+            timesClicked[i][j] += 1;
+            chosenOrNotCell[i][j] = timesClicked[i][j] % 2;
+         
+        if (!winConditionMet && deepArrayCompare(chosenOrNotCell, gameArr)) {
+          
+            popUpWrapper.classList.add('show');
+            winConditionMet = true; // Set the flag to avoid repetitive logging
+            popUpBottom.innerHTML = `You have solved the nonogram in ${minutes * 60 + seconds} seconds!`;
+            audioVictory.play();
+            stopTimer();
+            currentTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            currentSeconds = minutes * 60 + seconds;
+            currentGameArrName = gameArrNameString[gameArrs.indexOf(gameArr)];
+            currentLevel = gameArrLevel[gameArrs.indexOf(gameArr)];
+            saveWin(currentTime, currentSeconds, currentGameArrName, currentLevel);
+            displayLastFiveWins();
+    
+            popUpWrapper.addEventListener('click', function (event) {
+                if (popUpWrapper.classList.contains('show')) {
+                    popUpWrapper.classList.remove('show');
+                    audioVictory.pause();
+                    };
+            });
+                
+            }
+                });
+    
+//             });
+    cell.addEventListener("contextmenu", function (event) {
+        audioClickRight.play();
+        // cell.innerHTML = '';
+        event.preventDefault(); 
+        cell.classList.toggle('crossedCell');
+        timesCrossed[i][j] += 1;
+        crossedOrNotCell[i][j] = timesCrossed[i][j] % 2;
+                if (!startTime) {
+                    startTimer();
+                    }
+                      });
+    
+        };
+    
+        table.appendChild(row);
+    }
+//         save.addEventListener('click', function () {
+//             const savedData = {
+//                 gameArr: gameArr,
+//                 chosenOrNotCell: chosenOrNotCell,
+//                 crossedOrNotCell: crossedOrNotCell,
+//                 minutes: minutes,
+//                 seconds: seconds,
+//             };
+// //             // stopTimer();
+//             localStorage.setItem('savedGame', JSON.stringify(savedData));
+//             console.log(savedData);
+//         });
+    };
+   });
 
 
 reset.addEventListener("click", function () {
@@ -685,7 +866,6 @@ reset.addEventListener("click", function () {
     stopTimer(); 
     timer.textContent = '⏰ 00:00';
 
-    // Итерация по всем ячейкам и удаление классов
     for (let i = 0; i < gameArr.length; i++) {
         for (let j = 0; j < gameArr.length; j++) {
             const cell = table.rows[i].cells[j];
@@ -695,8 +875,25 @@ reset.addEventListener("click", function () {
     }
 });
 
+showAnswers.addEventListener('click', function () {
+    startTime = null;
+    stopTimer(); 
+    timer.textContent = '⏰ 00:00';
+    console.log('hi');
+    for (let i = 0; i < gameArr.length; i++) {
+        for (let j = 0; j < gameArr.length; j++) {
+            const cell = table.rows[i].cells[j];
+            if (gameArr[i][j] === 1) {
+                cell.classList.add('clickedCell');
+            } else {
+                cell.classList.remove('clickedCell');
+                cell.classList.remove('crossedCell');
+            }            
+        }
+    }
+});
 
-console.log(gameArr);
+
 
 
 const getRandomEasyArr = () => {
@@ -705,3 +902,58 @@ const getRandomEasyArr = () => {
   
   getRandomEasyArr();
 
+function saveWin(time, seconds, gameArrName, level) {
+    let wins = JSON.parse(localStorage.getItem('wins')) || [];
+    wins.push({ time, seconds, gameArrName, level });
+    if (wins.length > 5) {
+        wins = wins.slice(-5);
+    }
+    localStorage.setItem('wins', JSON.stringify(wins));
+};
+
+function getLastFiveWins() {
+    return JSON.parse(localStorage.getItem('wins')) || [];
+};
+const lastFiveWins = getLastFiveWins();
+
+const winTableWrapper = document.createElement('div');
+winTableWrapper.classList.add('win-table-wrapper');
+mainLeft.appendChild(winTableWrapper);
+
+const winTableTitle = document.createElement('div');
+winTableTitle.classList.add('lev-choice-text');
+winTableWrapper.appendChild(winTableTitle);
+winTableTitle.innerText = 'Latest Wins:';
+
+const winTable = document.createElement('table');
+winTable.classList.add('win-table');
+winTableWrapper.appendChild(winTable);
+
+
+function displayLastFiveWins() {
+    const lastFiveWins = getLastFiveWins();
+    lastFiveWins.sort((a, b) => a.seconds - b.seconds);
+    winTable.innerHTML = '';
+    const headerRow = winTable.insertRow(0);
+    const headerCell1 = headerRow.insertCell(0);
+    const headerCell2 = headerRow.insertCell(1);
+    const headerCell3 = headerRow.insertCell(2);
+
+    headerCell1.textContent = 'Time';
+    headerCell2.textContent = 'Game Name';
+    headerCell3.textContent = 'Difficulty';
+
+    lastFiveWins.forEach((win, index) => {
+        const row = winTable.insertRow(index + 1); // Start from index 1 for data rows
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        const cell3 = row.insertCell(2);
+
+        cell1.textContent = win.time;
+        cell2.textContent = win.gameArrName; 
+        cell3.textContent = win.level;
+    });
+}
+
+
+displayLastFiveWins();

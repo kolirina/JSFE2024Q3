@@ -49,6 +49,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    justify-content: center;
+    align-items: center;
 }
 
 .lev-choice-text {
@@ -65,6 +67,7 @@ body {
     border-radius: 0.5rem;
     text-align: center;
     padding-bottom: 7px;
+    width: 300px;
 }
 
 
@@ -77,6 +80,12 @@ body {
     height: 450px;
     border-spacing: 0;
 } 
+
+.win-table {
+    width: 300px;
+    height: 100px;
+}
+
 
 td {
     border: 1px solid rgb(190, 161, 161);
@@ -101,6 +110,12 @@ td:first-child {
     border-right: solid rgb(136, 76, 76);
     padding: 0px;
   }
+
+/* .winTable tr:first-child {
+    padding-left: 10px;
+    padding-right: 10px;
+} */
+
 
 
 /* Add styling for the first column cells (table headers) */
@@ -153,6 +168,14 @@ tr:last-child td {
     width: 100%;
     height: 100%;
    }
+
+
+.win-table-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
 
 
