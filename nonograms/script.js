@@ -222,10 +222,33 @@ const wrapper = document.createElement('wrapper');
 wrapper.classList.add('wrapper');
 document.body.appendChild(wrapper);
 
+const headerWrapper = document.createElement('div');
+headerWrapper.classList.add('headerWrapper');
+wrapper.appendChild(headerWrapper);
+
 const header = document.createElement('h1');
 header.classList.add('header');
 header.innerText = 'Welcome To The Nonogram Game😺';
-wrapper.appendChild(header);
+headerWrapper.appendChild(header);
+
+const burger = document.createElement('div');
+burger.classList.add('burger');
+headerWrapper.appendChild(burger);
+
+const burgerLine1 = document.createElement('span');
+burgerLine1.classList.add('burger__line');
+burgerLine1.classList.add('burger__line_first');
+burger.appendChild(burgerLine1);
+
+const burgerLine2 = document.createElement('span');
+burgerLine2.classList.add('burger__line');
+burgerLine2.classList.add('burger__line_second');
+burger.appendChild(burgerLine2);
+
+const burgerLine3 = document.createElement('span');
+burgerLine3.classList.add('burger__line');
+burgerLine3.classList.add('burger__line_third');
+burger.appendChild(burgerLine3);
 
 const mainContainer = document.createElement('main');
 mainContainer.classList.add('main-container');
@@ -267,6 +290,7 @@ levChoiceWrapper.appendChild(levels);
 
 let minutes = 0;
 let seconds = 0;
+let elapsedTime = 0;
 
 const timer = document.createElement('div');
 timer.classList.add('timer');
@@ -339,6 +363,7 @@ easyButton.appendChild(optionLama);
 
 
   easyButton.addEventListener('change', function () {
+    audioClickLeft.play();
     const selectedOptionValue = easyButton.value;
     if (selectedOptionValue >= 0) {
       gameArr = easyLevelNames[selectedOptionValue];
@@ -388,6 +413,7 @@ optionDoggie.text = 'Doggie';
 notSoEasyButton.appendChild(optionDoggie);
 
 notSoEasyButton.addEventListener('change', function () {
+    audioClickLeft.play();
     const selectedOptionValue = notSoEasyButton.value;
     if (selectedOptionValue >= 0) {
       gameArr = notSoEasyLevelNames[selectedOptionValue];
@@ -431,6 +457,7 @@ bananasButton.appendChild(optionStairs);
 
 bananasButton.addEventListener('change', function () {
     const selectedOptionValue = bananasButton.value;
+    audioClickLeft.play();
     if (selectedOptionValue >= 0) {
       gameArr = bananasLevelNames[selectedOptionValue];
       regenerateGame();
@@ -444,6 +471,7 @@ randomButton.classList.add('button');
 randomButton.innerText = 'Random 🎲';
 levels.appendChild(randomButton);
 randomButton.addEventListener('click', function() {
+    audioClickLeft.play();
     table.innerHTML = '';
     gameArr = gameArrs[Math.floor(Math.random() * gameArrs.length)];
     isTimerRunning = false; 
@@ -547,34 +575,43 @@ popUp.appendChild(popUpBottom);
 
 const showAnswers = document.createElement('button');
 showAnswers.classList.add('button');
+showAnswers.classList.add('footerButton');
 showAnswers.innerText = 'Show answers';
 footer.appendChild(showAnswers);
 
 const save = document.createElement('button');
 save.classList.add('button');
+save.classList.add('footerButton');
 save.innerText = 'Save Game';
 footer.appendChild(save);
 
 const continueGame = document.createElement('button');
 continueGame.classList.add('button');
+continueGame.classList.add('footerButton');
 continueGame.innerText = 'Continue Last Game';
 footer.appendChild(continueGame);
 
 const reset = document.createElement('button');
 reset.classList.add('button');
+reset.classList.add('footerButton');
 reset.innerText = 'Reset';
 footer.appendChild(reset);
 
 const soundOff = document.createElement('button');
 soundOff.classList.add('button');
+soundOff.classList.add('footerButton');
 soundOff.classList.add('sound-off');
 soundOff.innerText = 'Sound Off 🔈';
 footer.appendChild(soundOff);
-soundOff.addEventListener('click', toggleMute); 
+soundOff.addEventListener('click', function() {
+    toggleMute();
+    audioClickLeft.play();
+});
 
 
 const darkMode = document.createElement('button');
 darkMode.classList.add('button');
+darkMode.classList.add('footerButton');
 darkMode.innerText = '🌙🌞';
 footer.appendChild(darkMode);
 
@@ -692,7 +729,7 @@ function initGame(gameArr) {
         if (!startTime) {
             startTimer();
          }
-    audioClickLeft.play()
+    audioClickLeft.play();
     cell.classList.toggle('clickedCell'); 
     timesClicked[i][j] += 1;
     chosenOrNotCell[i][j] = timesClicked[i][j] % 2;
@@ -712,6 +749,7 @@ function initGame(gameArr) {
         displayLastFiveWins();
 
         popUpWrapper.addEventListener('click', function (event) {
+                audioClickLeft.play();
             if (popUpWrapper.classList.contains('show')) {
                 popUpWrapper.classList.remove('show');
                 audioVictory.pause();
@@ -739,34 +777,56 @@ cell.addEventListener("contextmenu", function (event) {
     table.appendChild(row);
 }
     save.addEventListener('click', function () {
+        audioClickLeft.play();
         const savedData = {
+
             gameArr: gameArr,
+            gameArrName: gameArrNameString[gameArrs.indexOf(gameArr)],
+            level: gameArrLevel[gameArrs.indexOf(gameArr)],
             chosenOrNotCell: chosenOrNotCell,
             crossedOrNotCell: crossedOrNotCell,
+            // startTime: startTime,
             minutes: minutes,
             seconds: seconds,
+            gameDuration: elapsedTime * 1000,
             timesClicked: timesClicked,
             timesCrossed: timesCrossed,
-        };
-        // stopTimer();
+       };
+        stopTimer();
+        startTime = null;
         localStorage.setItem('savedGame', JSON.stringify(savedData));
-        console.log(savedData);
     });
+
 };
 
 continueGame.addEventListener('click', function () {
+    audioClickLeft.play();
+    stopTimer();
     const savedDataString = localStorage.getItem('savedGame');
 
     if (savedDataString) {
         const savedData = JSON.parse(savedDataString);
-
         gameArr = savedData.gameArr;
+        gameArrName = savedData.gameArrName;
+        level = savedData.level;
         chosenOrNotCell = savedData.chosenOrNotCell;
+        // startTime = savedData.startTime;
         minutes = savedData.minutes;
         seconds = savedData.seconds;
+    
+        gameDuration = savedData.gameDuration;
         timesClicked = savedData.timesClicked;
         timesCrossed = savedData.timesCrossed;
         crossedOrNotCell = savedData.crossedOrNotCell;
+
+        
+       
+        console.log(startTime);
+        console.log(seconds);
+        
+        timer.textContent = `⏰   ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    
+
         cluesSide = [];
         calculateCluesSide (gameArr);
         cluesTop = [];   
@@ -795,7 +855,10 @@ continueGame.addEventListener('click', function () {
 
             cell.addEventListener("click", function () {
                 if (!startTime) {
-                    startTimer();
+                    let currentTime = new Date().getTime();
+        startTime = currentTime - minutes * 60 * 1000 - seconds * 1000;
+        isTimerRunning = true;
+   timerInterval = setInterval(updateTimer, 1000);
                  }
             audioClickLeft.play()
             cell.classList.toggle('clickedCell'); 
@@ -811,12 +874,15 @@ continueGame.addEventListener('click', function () {
             stopTimer();
             currentTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
             currentSeconds = minutes * 60 + seconds;
-            currentGameArrName = gameArrNameString[gameArrs.indexOf(gameArr)];
-            currentLevel = gameArrLevel[gameArrs.indexOf(gameArr)];
+            currentGameArrName = gameArrName;
+            currentLevel = level;
+
             saveWin(currentTime, currentSeconds, currentGameArrName, currentLevel);
             displayLastFiveWins();
+            console.log(currentGameArrName);
     
             popUpWrapper.addEventListener('click', function (event) {
+                audioClickLeft.play();
                 if (popUpWrapper.classList.contains('show')) {
                     popUpWrapper.classList.remove('show');
                     audioVictory.pause();
@@ -825,41 +891,31 @@ continueGame.addEventListener('click', function () {
                 
             }
                 });
-    
-//             });
+
     cell.addEventListener("contextmenu", function (event) {
         audioClickRight.play();
-        // cell.innerHTML = '';
         event.preventDefault(); 
         cell.classList.toggle('crossedCell');
         timesCrossed[i][j] += 1;
         crossedOrNotCell[i][j] = timesCrossed[i][j] % 2;
-                if (!startTime) {
-                    startTimer();
-                    }
+        if (!isTimerRunning) {
+            let currentTime = new Date().getTime();
+startTime = currentTime - minutes * 60 * 1000 - seconds * 1000;
+isTimerRunning = true;
+timerInterval = setInterval(updateTimer, 1000);
+         }
                       });
     
         };
     
         table.appendChild(row);
     }
-//         save.addEventListener('click', function () {
-//             const savedData = {
-//                 gameArr: gameArr,
-//                 chosenOrNotCell: chosenOrNotCell,
-//                 crossedOrNotCell: crossedOrNotCell,
-//                 minutes: minutes,
-//                 seconds: seconds,
-//             };
-// //             // stopTimer();
-//             localStorage.setItem('savedGame', JSON.stringify(savedData));
-//             console.log(savedData);
-//         });
     };
    });
 
 
 reset.addEventListener("click", function () {
+    audioClickLeft.play();
     timesClicked = generateNestedArray(gameArr.length);
     chosenOrNotCell = generateNestedArray(gameArr.length);
     startTime = null;
@@ -876,10 +932,10 @@ reset.addEventListener("click", function () {
 });
 
 showAnswers.addEventListener('click', function () {
+    audioClickLeft.play();
     startTime = null;
     stopTimer(); 
     timer.textContent = '⏰ 00:00';
-    console.log('hi');
     for (let i = 0; i < gameArr.length; i++) {
         for (let j = 0; j < gameArr.length; j++) {
             const cell = table.rows[i].cells[j];
@@ -957,3 +1013,34 @@ function displayLastFiveWins() {
 
 
 displayLastFiveWins();
+
+
+
+
+//Burger handler
+
+
+
+
+const footerButtons = document.querySelectorAll('.footerButton');
+console.log(footerButtons);
+
+
+// (function () {
+//     const burgerItem = document.querySelector('.burger');
+//     const menu = document.querySelector('.header__nav');
+//     const menuCloseItem = document.querySelector('.header__nav-close');
+//     const menuLinks = document.querySelectorAll('.header__link');
+//     burgerItem.addEventListener('click', () => {
+//         menu.classList.add('header__nav_active');
+//     });
+//     menuCloseItem.addEventListener('click', () => {
+//         menu.classList.remove('header__nav_active');
+//     });
+//     for (let i = 0; i <= menuLinks.length; i += 1) {
+//         menuLinks[i].addEventListener('click', () => {
+//             menu.classList.remove('header__nav_active');
+//         })
+//     }
+
+// }());
