@@ -250,6 +250,20 @@ burgerLine3.classList.add('burger__line');
 burgerLine3.classList.add('burger__line_third');
 burger.appendChild(burgerLine3);
 
+const burgerClose = document.createElement('div');
+burgerClose.classList.add('burger__close');
+headerWrapper.appendChild(burgerClose);
+
+const burgerCloseLine1 = document.createElement('span');
+burgerCloseLine1.classList.add('burger__close_line');
+burgerCloseLine1.classList.add('burger__close_line_first');
+burgerClose.appendChild(burgerCloseLine1);
+
+const burgerCloseLine2 = document.createElement('span');
+burgerCloseLine2.classList.add('burger__close_line');
+burgerCloseLine2.classList.add('burger__close_line_second');
+burgerClose.appendChild(burgerCloseLine2);
+
 const mainContainer = document.createElement('main');
 mainContainer.classList.add('main-container');
 wrapper.appendChild(mainContainer);
@@ -983,6 +997,7 @@ winTableTitle.innerText = 'Latest Wins:';
 
 const winTable = document.createElement('table');
 winTable.classList.add('win-table');
+winTable.classList.add('table');
 winTableWrapper.appendChild(winTable);
 
 
@@ -1020,27 +1035,39 @@ displayLastFiveWins();
 //Burger handler
 
 
+burger.addEventListener('click', function () {
+    footer.classList.add('footer_active');
+});
 
+burgerClose.addEventListener('click', function () {
+    footer.classList.remove('footer_active');
+});
 
 const footerButtons = document.querySelectorAll('.footerButton');
-console.log(footerButtons);
+for (let i = 0; i < footerButtons.length; i += 1) {
+    footerButtons[i].addEventListener('click', function () {
+        footer.classList.remove('footer_active');
+    });
+}
 
 
-// (function () {
-//     const burgerItem = document.querySelector('.burger');
-//     const menu = document.querySelector('.header__nav');
-//     const menuCloseItem = document.querySelector('.header__nav-close');
-//     const menuLinks = document.querySelectorAll('.header__link');
-//     burgerItem.addEventListener('click', () => {
-//         menu.classList.add('header__nav_active');
-//     });
-//     menuCloseItem.addEventListener('click', () => {
-//         menu.classList.remove('header__nav_active');
-//     });
-//     for (let i = 0; i <= menuLinks.length; i += 1) {
-//         menuLinks[i].addEventListener('click', () => {
-//             menu.classList.remove('header__nav_active');
-//         })
-//     }
+darkMode.addEventListener('click', function () {
+    wrapper.classList.toggle('wrapper_darkMode');
+    header.classList.toggle('header_darkMode');
+    timer.classList.toggle('timer_darkMode');
+    table.classList.toggle('table_darkMode');
 
-// }());
+    const firstColumnCells = document.querySelectorAll('td:first-child');
+
+    // Добавляем или переключаем класс _darkMode для каждого найденного элемента
+    firstColumnCells.forEach(function (cell) {
+        cell.classList.toggle('_darkMode');
+    });
+
+    // clickedCell.classList.toggle('clickedCell_darkMode');
+    table.classList.toggle('table_darkMode');
+    table.classList.toggle('table_darkMode');
+    table.classList.toggle('table_darkMode');
+    table.classList.toggle('table_darkMode');
+    table.classList.toggle('table_darkMode');
+});
