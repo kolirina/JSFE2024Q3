@@ -626,7 +626,7 @@ soundOff.addEventListener('click', function() {
 const darkMode = document.createElement('button');
 darkMode.classList.add('button');
 darkMode.classList.add('footerButton');
-darkMode.innerText = '🌙🌞';
+darkMode.innerText = 'Dark Mode🌙🌞';
 footer.appendChild(darkMode);
 
 
@@ -743,12 +743,18 @@ function initGame(gameArr) {
         if (!startTime) {
             startTimer();
          }
-    audioClickLeft.play();
-    cell.classList.toggle('clickedCell'); 
-    timesClicked[i][j] += 1;
-    chosenOrNotCell[i][j] = timesClicked[i][j] % 2;
+        audioClickLeft.play();
+        if (wrapper.classList.contains('wrapper_darkMode')) {
+            cell.classList.toggle('clickedCell')
+            cell.classList.toggle('clickedCell_darkMode')
+        } else {
+        cell.classList.toggle('clickedCell')
+        };
+     
+        timesClicked[i][j] += 1;
+        chosenOrNotCell[i][j] = timesClicked[i][j] % 2;
         
-    if (!winConditionMet && deepArrayCompare(chosenOrNotCell, gameArr)) {
+        if (!winConditionMet && deepArrayCompare(chosenOrNotCell, gameArr)) {
       
         popUpWrapper.classList.add('show');
         winConditionMet = true; // Set the flag to avoid repetitive logging
@@ -771,35 +777,38 @@ function initGame(gameArr) {
         });
             
         }
-      
-
         });
-cell.addEventListener("contextmenu", function (event) {
-    audioClickRight.play();
-    // cell.innerHTML = '';
-    event.preventDefault(); 
-    cell.classList.toggle('crossedCell');
-    timesCrossed[i][j] += 1;
-    crossedOrNotCell[i][j] = timesCrossed[i][j] % 2;
+
+
+    cell.addEventListener("contextmenu", function (event) {
+        audioClickRight.play();
+        event.preventDefault(); 
+        if (wrapper.classList.contains('wrapper_darkMode')) {
+            cell.classList.toggle('crossedCell')
+            cell.classList.toggle('crossedCell_darkMode')
+        } else {
+        cell.classList.toggle('crossedCell')
+        };
+        timesCrossed[i][j] += 1;
+         crossedOrNotCell[i][j] = timesCrossed[i][j] % 2;
             if (!startTime) {
                 startTimer();
                 }
-                  });
+        });
 
     }
 
     table.appendChild(row);
 }
+
     save.addEventListener('click', function () {
         audioClickLeft.play();
         const savedData = {
-
             gameArr: gameArr,
             gameArrName: gameArrNameString[gameArrs.indexOf(gameArr)],
             level: gameArrLevel[gameArrs.indexOf(gameArr)],
             chosenOrNotCell: chosenOrNotCell,
             crossedOrNotCell: crossedOrNotCell,
-            // startTime: startTime,
             minutes: minutes,
             seconds: seconds,
             gameDuration: elapsedTime * 1000,
@@ -811,9 +820,36 @@ cell.addEventListener("contextmenu", function (event) {
         localStorage.setItem('savedGame', JSON.stringify(savedData));
     });
 
+    darkMode.addEventListener('click', function () {
+        for (let i = 0; i < gameArr.length; i++) {
+            for (let j = 0; j < gameArr.length; j++) {
+                const cell = table.rows[i].cells[j];
+                if (chosenOrNotCell[i][j] === 1) {
+                    cell.classList.toggle ('clickedCell_darkMode');
+                } 
+                if (crossedOrNotCell[i][j] === 1) {
+                    cell.classList.toggle ('crossedCell_darkMode');
+                } 
+            }
+        }
+    });
+
 };
 
 continueGame.addEventListener('click', function () {
+    darkMode.addEventListener('click', function () {
+        for (let i = 0; i < gameArr.length; i++) {
+            for (let j = 0; j < gameArr.length; j++) {
+                const cell = table.rows[i].cells[j];
+                if (chosenOrNotCell[i][j] === 1) {
+                    cell.classList.toggle ('clickedCell_darkMode');
+                } 
+                if (crossedOrNotCell[i][j] === 1) {
+                    cell.classList.toggle ('crossedCell_darkMode');
+                } 
+            }
+        }
+    });
     audioClickLeft.play();
     stopTimer();
     const savedDataString = localStorage.getItem('savedGame');
@@ -832,20 +868,18 @@ continueGame.addEventListener('click', function () {
         timesClicked = savedData.timesClicked;
         timesCrossed = savedData.timesCrossed;
         crossedOrNotCell = savedData.crossedOrNotCell;
-
-        
-       
-        console.log(startTime);
-        console.log(seconds);
         
         timer.textContent = `⏰   ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     
-
         cluesSide = [];
         calculateCluesSide (gameArr);
         cluesTop = [];   
         calculateCluesTop (gameArr);
         let winConditionMet = false;
+
+
+
+
         if (table.hasChildNodes()) {
             table.innerHTML = '';
         }
@@ -855,10 +889,18 @@ continueGame.addEventListener('click', function () {
             const cell = document.createElement("td");
             row.appendChild(cell);
             if (chosenOrNotCell[i][j] === 1) {
-                cell.classList.add('clickedCell')
+                if (wrapper.classList.contains('wrapper_darkMode')) {
+                    cell.classList.add('clickedCell_darkMode')
+                } else {
+                      cell.classList.add('clickedCell')
+                }
             };
             if (crossedOrNotCell[i][j] === 1) {
-                cell.classList.add('crossedCell')
+                if (wrapper.classList.contains('wrapper_darkMode')) {
+                    cell.classList.add('crossedCell_darkMode')
+                } else {
+                      cell.classList.add('crossedCell')
+                }
             };
             if (j === 0) {
                 cell.innerHTML = cluesSide[i].join('    ');  
@@ -867,64 +909,79 @@ continueGame.addEventListener('click', function () {
                 cell.innerHTML = cluesTop[j].join('<br>');
             };
 
-            cell.addEventListener("click", function () {
-                if (!startTime) {
-                    let currentTime = new Date().getTime();
-        startTime = currentTime - minutes * 60 * 1000 - seconds * 1000;
-        isTimerRunning = true;
-   timerInterval = setInterval(updateTimer, 1000);
+        cell.addEventListener("click", function () {
+            if (!startTime) {
+                let currentTime = new Date().getTime();
+                startTime = currentTime - minutes * 60 * 1000 - seconds * 1000;
+                isTimerRunning = true;
+                timerInterval = setInterval(updateTimer, 1000);
                  }
             audioClickLeft.play()
-            cell.classList.toggle('clickedCell'); 
+
+            if (wrapper.classList.contains('wrapper_darkMode')) {
+                cell.classList.toggle('clickedCell')
+                cell.classList.toggle('clickedCell_darkMode')
+            } else {
+            cell.classList.toggle('clickedCell')
+            };
+
             timesClicked[i][j] += 1;
             chosenOrNotCell[i][j] = timesClicked[i][j] % 2;
          
-        if (!winConditionMet && deepArrayCompare(chosenOrNotCell, gameArr)) {
+            if (!winConditionMet && deepArrayCompare(chosenOrNotCell, gameArr)) {
           
-            popUpWrapper.classList.add('show');
-            winConditionMet = true; // Set the flag to avoid repetitive logging
-            popUpBottom.innerHTML = `You have solved the nonogram in ${minutes * 60 + seconds} seconds!`;
-            audioVictory.play();
-            stopTimer();
-            currentTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            currentSeconds = minutes * 60 + seconds;
-            currentGameArrName = gameArrName;
-            currentLevel = level;
+                popUpWrapper.classList.add('show');
+                winConditionMet = true; // Set the flag to avoid repetitive logging
+                popUpBottom.innerHTML = `You have solved the nonogram in ${minutes * 60 + seconds} seconds!`;
+                audioVictory.play();
+                stopTimer();
+                currentTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                currentSeconds = minutes * 60 + seconds;
+                currentGameArrName = gameArrName;
+                currentLevel = level;
 
-            saveWin(currentTime, currentSeconds, currentGameArrName, currentLevel);
-            displayLastFiveWins();
-            console.log(currentGameArrName);
+                saveWin(currentTime, currentSeconds, currentGameArrName, currentLevel);
+                displayLastFiveWins();
+                console.log(currentGameArrName);
     
-            popUpWrapper.addEventListener('click', function (event) {
-                audioClickLeft.play();
-                if (popUpWrapper.classList.contains('show')) {
-                    popUpWrapper.classList.remove('show');
-                    audioVictory.pause();
-                    };
-            });
+                popUpWrapper.addEventListener('click', function (event) {
+                    audioClickLeft.play();
+                    if (popUpWrapper.classList.contains('show')) {
+                      popUpWrapper.classList.remove('show');
+                      audioVictory.pause();
+                      };
+                 });
                 
-            }
+             }
                 });
 
     cell.addEventListener("contextmenu", function (event) {
         audioClickRight.play();
         event.preventDefault(); 
-        cell.classList.toggle('crossedCell');
+        if (wrapper.classList.contains('wrapper_darkMode')) {
+            cell.classList.toggle('crossedCell')
+            cell.classList.toggle('crossedCell_darkMode')
+        } else {
+            cell.classList.toggle('crossedCell')
+        };
         timesCrossed[i][j] += 1;
         crossedOrNotCell[i][j] = timesCrossed[i][j] % 2;
         if (!isTimerRunning) {
             let currentTime = new Date().getTime();
-startTime = currentTime - minutes * 60 * 1000 - seconds * 1000;
-isTimerRunning = true;
-timerInterval = setInterval(updateTimer, 1000);
+            startTime = currentTime - minutes * 60 * 1000 - seconds * 1000;
+            isTimerRunning = true;
+            timerInterval = setInterval(updateTimer, 1000);
          }
-                      });
+    });
     
         };
     
         table.appendChild(row);
     }
+    
     };
+
+    
    });
 
 
@@ -935,14 +992,8 @@ reset.addEventListener("click", function () {
     startTime = null;
     stopTimer(); 
     timer.textContent = '⏰ 00:00';
-
-    for (let i = 0; i < gameArr.length; i++) {
-        for (let j = 0; j < gameArr.length; j++) {
-            const cell = table.rows[i].cells[j];
-            cell.classList.remove('clickedCell');
-            cell.classList.remove('crossedCell');
-        }
-    }
+    table.innerHTML = '';
+    initGame (gameArr);
 });
 
 showAnswers.addEventListener('click', function () {
@@ -954,13 +1005,35 @@ showAnswers.addEventListener('click', function () {
         for (let j = 0; j < gameArr.length; j++) {
             const cell = table.rows[i].cells[j];
             if (gameArr[i][j] === 1) {
-                cell.classList.add('clickedCell');
+                if (wrapper.classList.contains('wrapper_darkMode')) {
+                    cell.classList.add('clickedCell_darkMode');
+                } else {
+                    cell.classList.add('clickedCell')
+                };
+                
             } else {
-                cell.classList.remove('clickedCell');
-                cell.classList.remove('crossedCell');
+                if (wrapper.classList.contains('wrapper_darkMode')) {
+                    cell.classList.remove('clickedCell_darkMode');
+                    cell.classList.remove('crossedCell_darkMode');
+                } else {
+                    cell.classList.remove('clickedCell');
+                }
             }            
         }
     }
+    darkMode.addEventListener('click', function () {
+        for (let i = 0; i < gameArr.length; i++) {
+            for (let j = 0; j < gameArr.length; j++) {
+                const cell = table.rows[i].cells[j];
+                if (gameArr[i][j] === 1) {
+                    cell.classList.toggle ('clickedCell_darkMode')
+                } else {
+                    cell.classList.toggle('cell_darkMode')
+                };
+
+            }
+        }
+    });
 });
 
 
@@ -1052,22 +1125,39 @@ for (let i = 0; i < footerButtons.length; i += 1) {
 
 
 darkMode.addEventListener('click', function () {
+    document.body.classList.toggle('darkMode');
     wrapper.classList.toggle('wrapper_darkMode');
     header.classList.toggle('header_darkMode');
     timer.classList.toggle('timer_darkMode');
     table.classList.toggle('table_darkMode');
-
+    table.classList.toggle('darkMode');
+    winTable.classList.toggle('win-table_darkMode');
     const firstColumnCells = document.querySelectorAll('td:first-child');
-
-    // Добавляем или переключаем класс _darkMode для каждого найденного элемента
     firstColumnCells.forEach(function (cell) {
         cell.classList.toggle('_darkMode');
     });
 
-    // clickedCell.classList.toggle('clickedCell_darkMode');
-    table.classList.toggle('table_darkMode');
-    table.classList.toggle('table_darkMode');
-    table.classList.toggle('table_darkMode');
+    const firstRowCells = document.querySelectorAll('tr:first-child td');
+    firstRowCells.forEach(function (cell) {
+        cell.classList.toggle('_darkMode');
+    });
+
+     const sixthColumns = document.querySelectorAll('td:nth-child(5n + 1)');
+     sixthColumns.forEach(function (cell) {
+         cell.classList.toggle('darkMode');
+    });
+    const sixthRows = document.querySelectorAll('tr:nth-child(5n + 1)');
+    sixthRows.forEach(function (cell) {
+        cell.classList.toggle('darkMode');
+   });
+
+
+    burgerCloseLine1.classList.toggle('burger__close_line_darkMode');
+    burgerCloseLine2.classList.toggle('burger__close_line_darkMode');
+    levChoiceText.classList.toggle('lev-choice-text_darkMode');
+    winTableTitle.classList.toggle('lev-choice-text_darkMode');
+
+
     table.classList.toggle('table_darkMode');
     table.classList.toggle('table_darkMode');
 });
