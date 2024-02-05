@@ -1,0 +1,445 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    transition: ease;
+  }
+
+.text {
+    font-size: medium;
+}
+
+.lev-choice-text_darkMode {
+    color: rgb(235, 207, 224);
+}
+
+body {
+    background-color: rgb(235, 207, 224);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0; 
+}
+
+body.darkMode {
+    background-color: rgb(136, 76, 76);
+}
+
+.hidden {
+    display: none;
+  }
+
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    background-color: rgb(235, 207, 224);
+    padding: 15px;
+    max-width: 1440px;
+    margin: auto;
+    border-radius: 1rem;
+}
+
+.wrapper_darkMode {
+    background-color: rgb(136, 76, 76);
+}
+
+.header {
+    text-align: center;
+ color: rgb(37, 17, 17);
+}
+
+.header_darkMode {
+    color: rgb(235, 207, 224);
+}
+
+.main-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+}
+
+.main-left {
+    padding-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 2rem;
+    justify-content: stretch;
+    align-items: center;
+}
+
+.lev-choice-text {
+    padding-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+    font-style: italic;
+}
+
+.levels {
+    display: flex;
+    justify-content: center;
+}
+
+.timer {
+    font-size: 45px;
+    padding-top: 10px;
+    background-color: rgb(235, 207, 224);
+    border-radius: 0.5rem;
+    text-align: center;
+    padding-bottom: 7px;
+    width: 300px;
+}
+
+.timer_darkMode {
+    background-color: rgb(136, 76, 76);
+    color: rgb(235, 207, 224);
+}
+
+
+
+  .table {
+    border: solid rgb(136, 76, 76);
+    border-radius: 10px;
+    margin: 10px;
+    width: 450px;
+    height: 450px;
+    border-spacing: 0;
+} 
+
+.table_darkMode {
+border: solid rgb(235, 207, 224);
+color: rgb(235, 207, 224);
+}
+
+.win-table {
+    width: 300px;
+    height: 100px;
+}
+
+.win-table_darkMode {
+    border: solid rgb(235, 207, 224);
+    color: rgb(235, 207, 224);
+    }
+
+
+td {
+    border: 1px solid rgb(190, 161, 161);
+    padding: 8px;
+    text-align: center;
+    font-size: small;
+    font-weight: bolder;
+}
+
+/* Remove individual cell borders */
+/* td {
+    border-right: none;
+    border-bottom: none;
+ } */
+
+td:first-child, tr:first-child {
+    pointer-events: none;
+    /* background-color: rgb(228, 200, 217); */
+}
+
+
+td:first-child {
+    border-right: solid rgb(136, 76, 76);
+    padding: 0px;
+  }
+
+._darkMode td:first-child {
+    border-right: solid rgb(228, 200, 217);   
+}  
+
+.__darkMode tr:first-child td {
+    border-right: 2px solid rgb(228, 200, 217);
+}
+
+tr:first-child td {
+    /* border-bottom: 2px solid rgb(136, 76, 76); */
+    padding: 0px; /* Add padding to match the cell padding */
+    text-align: center; /* Center the text */
+}
+
+/* ._darkMode {
+    border-bottom: 2px solid rgb(228, 200, 217);
+} */
+
+td:nth-child(5n + 1) {
+    border-right: 2px solid rgb(136, 76, 76);
+}
+
+.darkMode td:nth-child(5n + 1) {
+    border-right: 2px solid rgb(228, 200, 217);
+}
+
+td:last-child {
+    border-right: none;
+}
+
+/* .darkModeSixthRows {
+    border-bottom: 2px solid rgb(228, 200, 217);
+}  */
+
+/* tr:nth-child(5n + 1) td { */
+.lightModeSixthRows {    
+    border-bottom: 2px solid rgb(136, 76, 76);
+}
+
+.darkModeSixthRows {
+    border-bottom: 2px solid rgb(228, 200, 217);
+} 
+
+
+/* .darkMode tr:nth-child(5n + 1) {
+    border-bottom: 2px solid rgb(228, 200, 217);
+} */
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+.cell_darkMode {
+    background-color: rgb(136, 76, 76);
+}
+
+.clickedCell {
+    background-color: rgb(136, 76, 76);
+}
+
+.clickedCell_darkMode {
+    background-color: rgb(228, 200, 217);
+}
+
+
+
+.crossedCell {
+    position: relative; /* Set position to relative for pseudo-element positioning */
+}
+.crossedCell::before {
+   
+    content: '\2716'; /*  Unicode character for cross symbol (❌)*/
+    display: block;    /* Ensure it behaves like a block-level element */
+    font-size: 1.5em;   /* Adjust the font size */
+    text-align: center; /* Center the content horizontally */
+    line-height: 100%;  /* Center the content vertically */
+    position: absolute; /* Position the pseudo-element relative to the parent */
+    top: 79%;           /* Center vertically */
+    left: 50%;          /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center the pseudo-element precisely */
+       /* Adjust the font size */
+    color: rgb(136, 76, 76);
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+   }
+
+   .crossedCell_darkMode::before {
+    color: rgb(228, 200, 217);
+   }
+
+.win-table-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.button {
+    background-color:rgb(136, 76, 76);
+    margin: 0.2rem;
+    border-radius: 0.2rem;
+    border: none;
+    font-size: medium;
+    color: rgb(245, 217, 234);
+    padding: 5px;
+}
+
+.button[disabled] {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3rem;
+  }
+
+
+  .pop-up-wrapper {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    /* opacity: 1; */
+    pointer-events: none;
+    z-index: 999;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+   
+    align-items: center;
+    justify-content: center;
+    /* transition: opacity 0.4s ease; */
+    }
+  
+    .pop-up-wrapper.show {
+      opacity: 1;
+    pointer-events: auto;
+    }
+  
+   .pop-up {
+    background: rgb(201, 170, 189);
+    max-width: 320px;
+    width: 100%;
+    text-align: center; 
+    justify-content: center;
+    border-radius: 10px;
+    padding: 15px;
+   } 
+  
+  .pop-up-top  {
+    font-size: x-large;
+    font-weight: 600;
+    }
+
+    .pop-up-bottom {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        font-size: larger;
+        color: rgb(43, 24, 27);
+    } 
+
+    .burger {
+        margin-top: 10px;        
+        width: 40px;
+        height: 28px;
+        position: relative;
+        display: none;
+    }
+
+    .headerWrapper {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .burger__line {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: rgb(136, 76, 76);
+        position: absolute;
+        left: 0;
+    }
+
+    .burger__line_first {
+        top: 0;
+    }
+
+    .burger__line_third {
+        bottom: 0;
+    }
+
+    .burger__line_second {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .burger__close {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        z-index: 11;
+        /* display: none; */
+    }
+
+    .burger__close_line {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: rgb(235, 207, 224);
+        position: absolute;
+        top: 50%;
+        
+    }
+
+    .burger__close_line_darkMode {
+        background-color: rgb(136, 76, 76);
+    }
+    
+    .burger__close_line_first {
+        transform: translateY(-50%) rotate(45deg)
+    }
+
+    .burger__close_line_second {
+        transform: translateY(-50%) rotate(-45deg)
+    }
+
+
+
+
+    @media screen and (max-width: 1004px) {
+        .main-container {
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: center;
+        }
+
+        .table {
+            align-self: center;
+        }
+
+        .burger {
+         display: block;
+     }
+
+     .footer_active .burger__close {
+        display: block;
+    }
+
+     .footer {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgb(136, 76, 76);
+        z-index: 10;
+        padding: 75px;
+        display: flex;
+        flex-direction: column;
+        transform: translateX(100%);
+        transition: .2s all linear;
+     }
+
+    .footer_active {
+        transform: translateX(0);
+    }
+
+     .footerButton {
+        font-size: 32px;
+     }
+
+    }
+
+
+
+
+
+
