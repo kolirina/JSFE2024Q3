@@ -716,6 +716,7 @@ function calculateCluesTop (gameArr) {
 
 
 function initGame(gameArr) {
+
     let timesClicked = generateNestedArray(gameArr.length);
     let chosenOrNotCell = generateNestedArray(gameArr.length);
     let timesCrossed = generateNestedArray(gameArr.length);
@@ -798,7 +799,15 @@ function initGame(gameArr) {
 
     }
 
+
     table.appendChild(row);
+        const sixthRows = document.querySelectorAll('tr:nth-child(5n + 1) td');
+    sixthRows.forEach(function (cell) {cell.classList.add('lightModeSixthRows');
+        if (wrapper.classList.contains('wrapper_darkMode')) {
+cell.classList.add('darkModeSixthRows')
+       
+        } 
+    });
 }
 
     save.addEventListener('click', function () {
@@ -993,6 +1002,9 @@ reset.addEventListener("click", function () {
     stopTimer(); 
     timer.textContent = '⏰ 00:00';
     table.innerHTML = '';
+
+
+             
     initGame (gameArr);
 });
 
@@ -1012,28 +1024,37 @@ showAnswers.addEventListener('click', function () {
                 };
                 
             } else {
-                if (wrapper.classList.contains('wrapper_darkMode')) {
-                    cell.classList.remove('clickedCell_darkMode');
-                    cell.classList.remove('crossedCell_darkMode');
-                } else {
-                    cell.classList.remove('clickedCell');
-                }
+                cell.classList.remove('clickedCell_darkMode');
+                cell.classList.remove('clickedCell');
             }            
         }
     }
-    darkMode.addEventListener('click', function () {
-        for (let i = 0; i < gameArr.length; i++) {
-            for (let j = 0; j < gameArr.length; j++) {
-                const cell = table.rows[i].cells[j];
-                if (gameArr[i][j] === 1) {
-                    cell.classList.toggle ('clickedCell_darkMode')
-                } else {
-                    cell.classList.toggle('cell_darkMode')
-                };
+    // darkMode.addEventListener('click', function () {
+    //     for (let i = 0; i < gameArr.length; i++) {
+    //         for (let j = 0; j < gameArr.length; j++) {
+    //             const cell = table.rows[i].cells[j];
+    //             if (gameArr[i][j] === 1) {
 
-            }
-        }
-    });
+    //                 if (wrapper.classList.contains('wrapper_darkMode')) {
+    //                     cell.classList.add('clickedCell_darkMode');
+    //                 } else {
+    //                     cell.classList.remove('clickedCell_darkMode');
+    //                     cell.classList.add('clickedCell')
+    //                 };
+
+    //             } else {
+    //                 if (wrapper.classList.contains('wrapper_darkMode')) {
+    //                     cell.classList.remove('clickedCell_darkMode');
+    //                 } else {
+    //                     cell.classList.remove('clickedCell_darkMode');
+    //                     cell.classList.remove('clickedCell')
+    //                 };
+
+    //             };
+
+    //         }
+    //     }
+    // });
 });
 
 
@@ -1123,6 +1144,10 @@ for (let i = 0; i < footerButtons.length; i += 1) {
     });
 }
 
+// const sixthRows = document.querySelectorAll('tr:nth-child(5n + 1) td');
+//     sixthRows.forEach(function (cell) {
+//         cell.classList.add('lightModeSixthRows');
+//    });
 
 darkMode.addEventListener('click', function () {
     document.body.classList.toggle('darkMode');
@@ -1132,13 +1157,9 @@ darkMode.addEventListener('click', function () {
     table.classList.toggle('table_darkMode');
     table.classList.toggle('darkMode');
     winTable.classList.toggle('win-table_darkMode');
+
     const firstColumnCells = document.querySelectorAll('td:first-child');
     firstColumnCells.forEach(function (cell) {
-        cell.classList.toggle('_darkMode');
-    });
-
-    const firstRowCells = document.querySelectorAll('tr:first-child td');
-    firstRowCells.forEach(function (cell) {
         cell.classList.toggle('_darkMode');
     });
 
@@ -1146,9 +1167,17 @@ darkMode.addEventListener('click', function () {
      sixthColumns.forEach(function (cell) {
          cell.classList.toggle('darkMode');
     });
-    const sixthRows = document.querySelectorAll('tr:nth-child(5n + 1)');
+
+
+    const firstRowCells = document.querySelectorAll('tr:first-child td');
+    firstRowCells.forEach(function (cell) {
+        cell.classList.toggle('__darkMode');
+       
+    }); 
+  
+    const sixthRows = document.querySelectorAll('tr:nth-child(5n + 1) td');
     sixthRows.forEach(function (cell) {
-        cell.classList.toggle('darkMode');
+        cell.classList.toggle('darkModeSixthRows');
    });
 
 
