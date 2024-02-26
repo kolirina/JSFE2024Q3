@@ -27,8 +27,8 @@ interface SourcesData {
 }
 
 export class AppView {
-    private news: News;
-    private sources: Sources;
+    news: News;
+    sources: Sources;
 
     constructor() {
         this.news = new News();
@@ -46,4 +46,4 @@ export class AppView {
     }
 }
 
-export default AppView;
+export { SourcesData, NewsData };

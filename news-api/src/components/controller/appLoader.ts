@@ -1,4 +1,4 @@
-import Loader from './loader';
+import { Loader } from './loader';
 
 interface Environment {
     API_URL: string;

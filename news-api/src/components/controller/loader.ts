@@ -4,6 +4,9 @@ interface RequestOptions {
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
+
+type Callback<T> = (data?: T) => void;
+
 class Loader {
 
     baseLink: string;
@@ -17,7 +20,7 @@ class Loader {
 
     getResp<T>(
         { endpoint, options = {} }: { endpoint: string, options?: RequestOptions },
-        callback = () => {
+        callback: Callback<T> = () => {
             console.error('No callback for GET response');
         }
     ) {
@@ -54,4 +57,5 @@ class Loader {
     }
 }
 
-export default Loader;
+export { Loader, Callback };
+
