@@ -35,13 +35,13 @@ export class AppView {
         this.sources = new Sources();
     }
 
-    drawNews(data: NewsData): void {
-        const values = data?.articles ? data?.articles : [];
+    drawNews(data?: NewsData): void {
+        const values = data?.articles ?? [];
         this.news.draw(values);
     }
 
-    drawSources(data: SourcesData): void {
-        const values = data?.sources ? data?.sources : [];
+    drawSources(data?: SourcesData): void {
+        const values = data?.sources ?? [];
         this.sources.draw(values);
     }
 }
