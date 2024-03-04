@@ -2,6 +2,11 @@ interface RequestOptions {
     [key: string]: string;
 }
 
+enum HttpStatus {
+    Unauthorized = 401,
+    NotFound = 404,
+}
+
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
 
@@ -29,7 +34,7 @@ class Loader {
 
     errorHandler(res: Response): Response {
         if (!res.ok) {
-            if (res.status === 401 || res.status === 404)
+            if (res.status === HttpStatus.Unauthorized || res.status === HttpStatus.NotFound)
                 console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
             throw Error(res.statusText);
         }
