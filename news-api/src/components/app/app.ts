@@ -1,25 +1,19 @@
 import AppController from '../controller/controller';
 import { AppView, SourcesData, NewsData } from '../view/appView';
-import { Callback } from '../controller/loader';
-
 
 class App {
     private controller: AppController;
     private view: AppView;
 
-    private showMoreButton: HTMLElement; 
-    private counter: number = 10; 
+    private showMoreButton: HTMLElement;
+    private counter: number = 10;
 
     constructor() {
         this.controller = new AppController();
         this.view = new AppView();
-        this.showMoreButton = document.getElementById('show-more')!; 
-        this.showMoreButton.addEventListener('click', () => this.showMoreItems()); 
-        window.addEventListener('load', () => {
-            this.showFirstTen();
-        });
+        this.showMoreButton = document.getElementById('show-more')!;
+        this.showMoreButton.addEventListener('click', () => this.showMoreItems());
     }
-
 
     private showFirstTen(): void {
         const items = document.querySelectorAll('.source__item');
@@ -28,9 +22,9 @@ class App {
             if (items[i]) {
                 console.log(items[i]);
                 items[i].classList.add('source__item_shown');
-        } 
-}
-}
+            }
+        }
+    }
 
     start(): void {
         const sourcesElement = document.querySelector('.sources');
@@ -40,13 +34,12 @@ class App {
             });
         }
 
-        
-
         this.controller.getSources((data: SourcesData | undefined) => {
             if (data) {
                 this.view.drawSources(data);
+                this.showFirstTen();
             } else {
-                console.error("No data received from getSources");
+                console.error('No data received from getSources');
             }
         });
     }
@@ -57,24 +50,22 @@ class App {
             if (data) {
                 this.view.drawNews(data);
             } else {
-                console.error("No data received from getNews");
+                console.error('No data received from getNews');
             }
-    });
-}
-
-
-
-private showMoreItems(): void {
-    const items = document.querySelectorAll('.source__item');
-    for (let i = this.counter; i < this.counter + 10; i++) {
-        if (items[i]) {
-            items[i].classList.add('source__item_shown');
-        } else {
-            this.showMoreButton.style.display = 'none';
-            break;
-        }
+        });
     }
-    this.counter += 10;
-}
+
+    private showMoreItems(): void {
+        const items = document.querySelectorAll('.source__item');
+        for (let i = this.counter; i < this.counter + 10; i++) {
+            if (items[i]) {
+                items[i].classList.add('source__item_shown');
+            } else {
+                this.showMoreButton.style.display = 'none';
+                break;
+            }
+        }
+        this.counter += 10;
+    }
 }
 export default App;
