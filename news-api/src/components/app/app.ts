@@ -34,7 +34,7 @@ class App {
             });
         }
 
-        this.controller.getSources((data: SourcesData | undefined) => {
+        this.controller.getSources((data?: SourcesData) => {
             if (data) {
                 this.view.drawSources(data);
                 this.showFirstTen();
@@ -45,8 +45,7 @@ class App {
     }
 
     private handleSourceClick(event: Event): void {
-        const mouseEvent = event as MouseEvent;
-        this.controller.getNews(mouseEvent, (data: NewsData | undefined) => {
+        this.controller.getNews(event, (data?: NewsData) => {
             if (data) {
                 this.view.drawNews(data);
             } else {
