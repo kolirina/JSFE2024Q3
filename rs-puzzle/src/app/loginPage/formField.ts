@@ -1,28 +1,33 @@
 export default class FormField {
   private input: HTMLInputElement;
 
-  private label: HTMLLabelElement;
+  private errorMessage: HTMLDivElement;
 
-  private wrapper: HTMLDivElement;
-
-  constructor(labelText: string, inputType: string, inputName: string, required: boolean) {
-    this.wrapper = document.createElement('div');
-    this.label = document.createElement('label');
-    this.label.textContent = `${labelText}:`;
+  constructor(type: string, id: string, placeholder: string, required: boolean) {
     this.input = document.createElement('input');
-    this.input.type = inputType;
-    this.input.name = inputName;
+    this.input.type = type;
+    this.input.id = id;
+    this.input.placeholder = placeholder;
     this.input.required = required;
-
-    this.wrapper.appendChild(this.label);
-    this.wrapper.appendChild(this.input);
+    this.errorMessage = document.createElement('div');
+    this.errorMessage.className = 'error-message';
   }
 
-  public getElement(): HTMLDivElement {
-    return this.wrapper;
+  public getElement(): HTMLInputElement {
+    return this.input;
   }
 
-  getValue(): string {
+  public getValue(): string {
     return this.input.value.trim();
+  }
+
+  public validateEnglishAlphabet(): boolean {
+    const regex = /^[a-zA-Z\-]+$/;
+    return regex.test(this.getValue());
+  }
+
+  public validateFirstLetterUppercase(minLength: number): boolean {
+    const value = this.getValue();
+    return value.length >= minLength && value[0] === value[0].toUpperCase();
   }
 }
