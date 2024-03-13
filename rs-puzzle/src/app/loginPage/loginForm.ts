@@ -2,6 +2,8 @@ import FormField from './formField';
 import { IUser } from './user';
 import { validateForm } from './validation';
 import { storeUserData, retrieveUserData } from './localStorageUtil';
+import WelcomePage from '../WelcomePage';
+
 
 type ValidationErrors = {
   [key: string]: string[];
@@ -134,7 +136,6 @@ export default class LoginForm {
   //   this.updateUI();
   //   console.log('Stored user data:', localStorage.getItem('userData'));
   // }
-
 
   public getUser(): IUser {
     return {

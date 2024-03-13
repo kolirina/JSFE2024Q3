@@ -24,7 +24,8 @@ export default class WelcomePage {
 
     const userData = retrieveUserData();
     if (userData) {
-      this.welcome.innerHTML = `Welcome, ${userData.firstName} ${userData.surname}!<br>Improve your English with the interactive puzzle game.<br>Enjoy the learning process!`;
+      this.welcome.innerHTML = `Welcome, ${userData.firstName} ${userData.surname}!<br>Improve your English with the interactive puzzle game.<br>You are going to do a puzzle with English words forming sentences<br>and bit by bit reveal a work of art.<br>Enjoy the learning process!`;
+
     }
 
     this.wrapper.appendChild(this.title);

@@ -29,7 +29,6 @@ input, button {
 
 button {
     background-color: rgb(82, 102, 158);
-
     color: rgb(243, 239, 239);
     font-size: x-large;
 }
@@ -40,5 +39,4 @@ button {
 
 .hidden {
     display: none;
-
 }
