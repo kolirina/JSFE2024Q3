@@ -1,6 +1,7 @@
 import FormField from './formField';
 import { IUser } from './user';
 import { validateForm } from './validation';
+import { storeUserData, retrieveUserData } from './localStorageUtil';
 
 type ValidationErrors = {
   [key: string]: string[];
@@ -50,22 +51,26 @@ export default class LoginForm {
       this.loginButton.disabled = false;
     });
     this.form.addEventListener('submit', (event) => {
-      console.log('🐪');
       event.preventDefault();
       this.removeErrorMessages();
       this.firstNameField.getElement().classList.remove('wrongInput');
       this.surnameField.getElement().classList.remove('wrongInput');
-      console.log('🐐');
       this.validateForm();
     });
   }
 
   private validateForm(): void {
-    const errors = validateForm(this.firstNameField, this.surnameField);
+    const errors: ValidationErrors = validateForm(this.firstNameField, this.surnameField);
 
     this.displayErrorMessages(errors);
 
     this.loginButton.disabled = Object.keys(errors).length > 0;
+    if (errors.firstName.length === 0 && errors.surname.length === 0) {
+      const firstName = this.firstNameField.getValue();
+      const surname = this.surnameField.getValue();
+      storeUserData(firstName, surname);
+      console.log('Stored user data:', localStorage.getItem('userData'));
+    }
   }
 
   private displayErrorMessages(errors: ValidationErrors): void {
@@ -73,11 +78,6 @@ export default class LoginForm {
     for (const fieldName in errors) {
       const field = fieldName === 'firstName' ? this.firstNameField : this.surnameField;
       const messages = errors[fieldName];
-      // if (messages.length > 0) {
-      //   fieldElement.classList.add('wrongInput');
-      // } else {
-      //   fieldElement.classList.remove('wrongInput');
-      // }
       messages.forEach((message) => {
         const errorMessageElement = document.createElement('div');
         errorMessageElement.className = 'error-message';
@@ -91,7 +91,6 @@ export default class LoginForm {
   private removeErrorMessages(): void {
     const errorMessages = this.form.querySelectorAll('.error-message');
     errorMessages.forEach((errorMessage) => errorMessage.remove());
-
   }
 
   public getUser(): IUser {
