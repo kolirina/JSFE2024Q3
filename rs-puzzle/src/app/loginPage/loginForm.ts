@@ -4,7 +4,6 @@ import { validateForm } from './validation';
 import { storeUserData, retrieveUserData } from './localStorageUtil';
 import WelcomePage from '../WelcomePage';
 
-
 type ValidationErrors = {
   [key: string]: string[];
   firstName: string[];
@@ -34,17 +33,14 @@ export default class LoginForm {
     this.loginButton.type = 'submit';
     this.loginButton.textContent = 'Log in';
     this.form.appendChild(this.loginButton);
-
-    // this.logoutButton = document.createElement('button');
-    // this.logoutButton.type = 'button';
-    // this.logoutButton.textContent = 'Logout';
-    // this.logoutButton.classList.add('hidden');
-
-    // this.form.appendChild(this.logoutButton);
-
     document.body.appendChild(this.form);
 
     this.setupListeners();
+    const userData = retrieveUserData();
+    if (userData) {
+      this.hide();
+      const welcomePage = new WelcomePage();
+    }
   }
 
   private setupListeners(): void {
@@ -67,10 +63,6 @@ export default class LoginForm {
       this.surnameField.getElement().classList.remove('wrongInput');
       this.validateForm();
     });
-
-    // this.logoutButton.addEventListener('click', () => {
-    //   this.logout();
-    // });
   }
 
   private updateUI(): void {
@@ -79,12 +71,10 @@ export default class LoginForm {
       this.loginButton.classList.add('hidden');
       this.firstNameField.getElement().classList.add('hidden');
       this.surnameField.getElement().classList.add('hidden');
-      // this.logoutButton.classList.remove('hidden');
     } else {
       this.loginButton.classList.remove('hidden');
       this.firstNameField.getElement().classList.remove('hidden');
       this.surnameField.getElement().classList.remove('hidden');
-      // this.logoutButton.classList.add('hidden');
     }
   }
 
@@ -130,12 +120,6 @@ export default class LoginForm {
     (this.firstNameField.getElement() as HTMLInputElement).value = '';
     (this.surnameField.getElement() as HTMLInputElement).value = '';
   }
-
-  // private logout(): void {
-  //   localStorage.removeItem('userData');
-  //   this.updateUI();
-  //   console.log('Stored user data:', localStorage.getItem('userData'));
-  // }
 
   public getUser(): IUser {
     return {

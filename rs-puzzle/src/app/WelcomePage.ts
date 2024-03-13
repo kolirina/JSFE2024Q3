@@ -12,6 +12,10 @@ export default class WelcomePage {
   constructor() {
     this.wrapper = document.createElement('div');
     this.wrapper.id = 'welcome-wrapper';
+    this.wrapper.classList.add('fade-in');
+    setTimeout(() => {
+      this.wrapper.classList.add('active');
+    }, 500);
 
     this.title = document.createElement('div');
     this.title.id = 'title';
@@ -25,7 +29,6 @@ export default class WelcomePage {
     const userData = retrieveUserData();
     if (userData) {
       this.welcome.innerHTML = `Welcome, ${userData.firstName} ${userData.surname}!<br>Improve your English with the interactive puzzle game.<br>You are going to do a puzzle with English words forming sentences<br>and bit by bit reveal a work of art.<br>Enjoy the learning process!`;
-
     }
 
     this.wrapper.appendChild(this.title);

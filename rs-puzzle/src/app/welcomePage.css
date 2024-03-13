@@ -12,6 +12,15 @@
     max-width: 750px;
     }
 
+.fade-in {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    }
+      
+.fade-in.active {
+    opacity: 1;
+    }    
+
 .welcome {
     display: flex;
     justify-content: center;
