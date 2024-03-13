@@ -1,5 +1,5 @@
 import LoginForm from './app/loginPage/loginForm';
-// import './main.css'; // Import general styles
 import './app/loginPage/loginPage.css';
+import './app/welcomePage.css';
 
 const loginForm = new LoginForm();

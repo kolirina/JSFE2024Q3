@@ -30,8 +30,15 @@ export default class LoginForm {
 
     this.loginButton = document.createElement('button');
     this.loginButton.type = 'submit';
-    this.loginButton.textContent = 'Start';
+    this.loginButton.textContent = 'Log in';
     this.form.appendChild(this.loginButton);
+
+    // this.logoutButton = document.createElement('button');
+    // this.logoutButton.type = 'button';
+    // this.logoutButton.textContent = 'Logout';
+    // this.logoutButton.classList.add('hidden');
+
+    // this.form.appendChild(this.logoutButton);
 
     document.body.appendChild(this.form);
 
@@ -50,6 +57,7 @@ export default class LoginForm {
       this.surnameField.getElement().classList.remove('wrongInput');
       this.loginButton.disabled = false;
     });
+
     this.form.addEventListener('submit', (event) => {
       event.preventDefault();
       this.removeErrorMessages();
@@ -57,6 +65,25 @@ export default class LoginForm {
       this.surnameField.getElement().classList.remove('wrongInput');
       this.validateForm();
     });
+
+    // this.logoutButton.addEventListener('click', () => {
+    //   this.logout();
+    // });
+  }
+
+  private updateUI(): void {
+    const userData = retrieveUserData();
+    if (userData) {
+      this.loginButton.classList.add('hidden');
+      this.firstNameField.getElement().classList.add('hidden');
+      this.surnameField.getElement().classList.add('hidden');
+      // this.logoutButton.classList.remove('hidden');
+    } else {
+      this.loginButton.classList.remove('hidden');
+      this.firstNameField.getElement().classList.remove('hidden');
+      this.surnameField.getElement().classList.remove('hidden');
+      // this.logoutButton.classList.add('hidden');
+    }
   }
 
   private validateForm(): void {
@@ -70,6 +97,10 @@ export default class LoginForm {
       const surname = this.surnameField.getValue();
       storeUserData(firstName, surname);
       console.log('Stored user data:', localStorage.getItem('userData'));
+      this.clearInputFields();
+      this.updateUI();
+      this.hide();
+      const welcomePage = new WelcomePage();
     }
   }
 
@@ -93,10 +124,31 @@ export default class LoginForm {
     errorMessages.forEach((errorMessage) => errorMessage.remove());
   }
 
+  private clearInputFields(): void {
+    (this.firstNameField.getElement() as HTMLInputElement).value = '';
+    (this.surnameField.getElement() as HTMLInputElement).value = '';
+  }
+
+  // private logout(): void {
+  //   localStorage.removeItem('userData');
+  //   this.updateUI();
+  //   console.log('Stored user data:', localStorage.getItem('userData'));
+  // }
+
+
   public getUser(): IUser {
     return {
       firstName: this.firstNameField.getValue(),
       surname: this.surnameField.getValue(),
     };
   }
+
+  public show(): void {
+    this.form.style.display = 'block';
+  }
+
+  public hide(): void {
+    this.form.style.display = 'none';
+  }
+
 }
