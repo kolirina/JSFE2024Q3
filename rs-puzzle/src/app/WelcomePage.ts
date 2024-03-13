@@ -1,6 +1,8 @@
 import { IUser } from './loginPage/user';
 import { retrieveUserData } from './loginPage/localStorageUtil';
 import LoginForm from './loginPage/loginForm';
+import GamePage from './gamePage/gamePage';
+
 
 export default class WelcomePage {
   private wrapper: HTMLDivElement;
@@ -43,9 +45,7 @@ export default class WelcomePage {
     this.logoutButton.type = 'button';
     this.logoutButton.textContent = 'Logout';
     this.wrapper.appendChild(this.logoutButton);
-
-    document.body.appendChild(this.wrapper); // Append wrapper to body
-
+    document.body.appendChild(this.wrapper);
     this.setupListeners();
   }
 
@@ -53,6 +53,11 @@ export default class WelcomePage {
     this.logoutButton.addEventListener('click', () => {
       this.logout();
       this.hide();
+    });
+
+    this.startButton.addEventListener('click', () => {
+      this.hide();
+      const gamePage = new GamePage();
     });
   }
 

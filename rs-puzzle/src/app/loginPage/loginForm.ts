@@ -135,5 +135,4 @@ export default class LoginForm {
   public hide(): void {
     this.form.style.display = 'none';
   }
-
 }
