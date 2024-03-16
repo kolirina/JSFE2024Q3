@@ -1,0 +1,54 @@
+.word-element {
+    display: inline-block;
+    padding: 10px; 
+    height: 40px; /* Задайте высоту вашего элемента */
+    line-height: 40px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  
+    background-color: rgb(124, 16, 97);;
+    border-radius: 5px;
+    color: rgb(251, 251, 252);
+    font-size: large;
+  }
+  .word-element:hover {
+    background-color: #1f2191;
+  }
+
+  #word-container {
+    width: 700px;
+    height: 300px;
+  }
+
+#new-container {
+  width: 700px;
+  height: 300px;
+  display: flex;
+  gap: 5px;
+}
+
+.new-container-element {
+  display: inline-block;
+  height: 40px; /* Задайте высоту вашего элемента */
+  line-height: 40px;
+  text-align: center;
+  width: 80px;
+    background-color: rgb(124, 16, 97);
+  color: rgb(251, 251, 252);
+  font-size: large;
+  border-radius: 5px;
+}
+
+  /* CSS for animation */
+  @keyframes moveCard {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  .result-block .word-element {
+    animation: moveCard 0.5s ease;
+  }

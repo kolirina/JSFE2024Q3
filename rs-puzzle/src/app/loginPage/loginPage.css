@@ -15,7 +15,7 @@ form {
     font-size: medium;
     color: rgb(70, 189, 41);
     margin: 0 auto;
-    gap: 20px;
+    gap: 10px;
 }
 
 input, button {
@@ -25,6 +25,7 @@ input, button {
     text-align: center;
     border-color: transparent;
     width: 400px;
+    margin-top: 15px;
 }
 
 button {

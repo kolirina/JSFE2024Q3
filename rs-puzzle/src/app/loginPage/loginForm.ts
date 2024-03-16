@@ -1,5 +1,5 @@
 import FormField from './formField';
-import { IUser } from './user';
+import { IUser, Round, GameData } from '../interfaces';
 import { validateForm } from './validation';
 import { storeUserData, retrieveUserData } from './localStorageUtil';
 import WelcomePage from '../WelcomePage';
@@ -12,14 +12,13 @@ type ValidationErrors = {
 
 export default class LoginForm {
   private firstNameField: FormField;
-
   private surnameField: FormField;
-
   private loginButton: HTMLButtonElement;
-
   private form: HTMLFormElement;
+  private GameData: GameData[];
 
-  constructor() {
+  constructor(GameData: GameData[]) {
+    this.GameData = GameData;
     this.form = document.createElement('form');
     this.form.id = 'loginForm';
 
@@ -36,63 +35,42 @@ export default class LoginForm {
     document.body.appendChild(this.form);
 
     this.setupListeners();
+
     const userData = retrieveUserData();
     if (userData) {
       this.hide();
-      const welcomePage = new WelcomePage();
+      const welcomePage = new WelcomePage(userData, GameData);
+      welcomePage.show();
     }
   }
 
   private setupListeners(): void {
-    this.firstNameField.getElement().addEventListener('input', () => {
-      this.removeErrorMessages();
-      this.firstNameField.getElement().classList.remove('wrongInput');
-      this.loginButton.disabled = false;
-    });
-
-    this.surnameField.getElement().addEventListener('input', () => {
-      this.removeErrorMessages();
-      this.surnameField.getElement().classList.remove('wrongInput');
-      this.loginButton.disabled = false;
-    });
-
-    this.form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      this.removeErrorMessages();
-      this.firstNameField.getElement().classList.remove('wrongInput');
-      this.surnameField.getElement().classList.remove('wrongInput');
-      this.validateForm();
-    });
+    this.firstNameField.getElement().addEventListener('input', this.handleInput.bind(this));
+    this.surnameField.getElement().addEventListener('input', this.handleInput.bind(this));
+    this.form.addEventListener('submit', this.handleSubmit.bind(this));
   }
 
-  private updateUI(): void {
-    const userData = retrieveUserData();
-    if (userData) {
-      this.loginButton.classList.add('hidden');
-      this.firstNameField.getElement().classList.add('hidden');
-      this.surnameField.getElement().classList.add('hidden');
-    } else {
-      this.loginButton.classList.remove('hidden');
-      this.firstNameField.getElement().classList.remove('hidden');
-      this.surnameField.getElement().classList.remove('hidden');
-    }
+  private handleInput(): void {
+    this.removeErrorMessages();
+    this.loginButton.disabled = false;
   }
 
-  private validateForm(): void {
+  private handleSubmit(event: Event): void {
+    event.preventDefault();
     const errors: ValidationErrors = validateForm(this.firstNameField, this.surnameField);
-
     this.displayErrorMessages(errors);
 
     this.loginButton.disabled = Object.keys(errors).length > 0;
     if (errors.firstName.length === 0 && errors.surname.length === 0) {
-      const firstName = this.firstNameField.getValue();
-      const surname = this.surnameField.getValue();
-      storeUserData(firstName, surname);
-      console.log('Stored user data:', localStorage.getItem('userData'));
+      const userData: IUser = {
+        firstName: this.firstNameField.getValue(),
+        surname: this.surnameField.getValue(),
+      };
+      storeUserData(userData.firstName, userData.surname);
       this.clearInputFields();
-      this.updateUI();
       this.hide();
-      const welcomePage = new WelcomePage();
+      const welcomePage = new WelcomePage(userData, this.GameData);
+      welcomePage.show();
     }
   }
 
@@ -119,13 +97,6 @@ export default class LoginForm {
   private clearInputFields(): void {
     (this.firstNameField.getElement() as HTMLInputElement).value = '';
     (this.surnameField.getElement() as HTMLInputElement).value = '';
-  }
-
-  public getUser(): IUser {
-    return {
-      firstName: this.firstNameField.getValue(),
-      surname: this.surnameField.getValue(),
-    };
   }
 
   public show(): void {
