@@ -51,6 +51,8 @@ export class GamePage {
       wordElement.textContent = word;
       wordElement.classList.add('word-element');
       wordElement.draggable = true;
+      const wordWidth = Math.max(50, word.length * 10);
+      wordElement.style.width = wordWidth + 'px';
       wordElement.addEventListener('click', this.handleWordCardClick.bind(this));
       container.appendChild(wordElement);
 
@@ -87,34 +89,69 @@ export class GamePage {
         newDiv.textContent = draggedElement.textContent;
         newDiv.classList.add('new-container-element');
         this.newContainer.appendChild(newDiv);
+        if (draggedElement.textContent) {
+          const wordWidth = Math.max(50, draggedElement.textContent.length * 10);
+          newDiv.style.width = wordWidth + 'px';
+        }
+
         draggedElement.remove();
         this.checkOrder();
       }
     }
   }
 
+  // private handleWordCardClick(event: MouseEvent): void {
+  //   const clickedCard = event.target as HTMLElement;
+  //   if (!clickedCard.classList.contains('word-element')) return;
+
+  //   const clickedWord = clickedCard.textContent?.trim();
+  //   if (!clickedWord) return;
+
+  //   if (this.newContainer) {
+  //     const newDiv = document.createElement('div');
+  //     newDiv.textContent = clickedWord;
+  //     newDiv.classList.add('new-container-element');
+  //     this.newContainer.appendChild(newDiv);
+  //     console.log(this.newContainer);
+  //   }
+
+  //   clickedCard.remove();
+  //   this.checkOrder();
+  // }
+
   private handleWordCardClick(event: MouseEvent): void {
     const clickedCard = event.target as HTMLElement;
-    if (!clickedCard.classList.contains('word-element')) return;
+    if (!clickedCard.classList.contains('word-element')) return; // Ensure the clicked element is a word card
 
     const clickedWord = clickedCard.textContent?.trim();
-    if (!clickedWord) return;
+    if (!clickedWord) return; // Ensure the clicked word is not empty
 
-    if (this.newContainer) {
-      const newDiv = document.createElement('div');
-      newDiv.textContent = clickedWord;
-      newDiv.classList.add('new-container-element');
-      this.newContainer.appendChild(newDiv);
-      console.log(this.newContainer);
+    const sourceContainer = document.getElementById('word-container');
+    const resultContainer = document.getElementById('new-container');
+
+    // Check if the clicked card is in the source container
+    if (sourceContainer && clickedCard.parentElement === sourceContainer) {
+      // Move the clicked card to the result container
+      if (resultContainer) {
+        clickedCard.classList.add('new-container-element');
+        resultContainer.appendChild(clickedCard);
+      }
+    } else if (resultContainer && clickedCard.parentElement === resultContainer) {
+      // Move the clicked card back to the source container
+      if (sourceContainer) {
+        sourceContainer.appendChild(clickedCard);
+        clickedCard.classList.remove('new-container-element');
+      }
     }
 
-    clickedCard.remove();
-    this.checkOrder();
+    this.checkOrder(); // Check the order after moving the word card
   }
+
   private checkOrder(): boolean {
-    const newContainerElements = Array.from(this.newContainer.querySelectorAll('.new-container-element'));
-    const wordsInContainer = newContainerElements.map((element) => element.textContent?.trim() || '');
-    console.log(newContainerElements);
+    const resultContainerElements = Array.from(this.newContainer.querySelectorAll('.new-container-element'));
+    const wordsInContainer = resultContainerElements.map((element) => element.textContent?.trim() || '');
+    console.log(resultContainerElements);
+
     console.log(wordsInContainer);
     console.log(this.originalOrder);
 

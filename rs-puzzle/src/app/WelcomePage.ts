@@ -67,11 +67,7 @@ export default class WelcomePage {
     this.startButton.addEventListener('click', () => {
       this.hide();
       const gamePage = new GamePage();
-    });
 
-    this.startButton.addEventListener('click', () => {
-      this.hide();
-      const gamePage = new GamePage();
     });
   }
 
