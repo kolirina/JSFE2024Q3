@@ -46,6 +46,7 @@ module.exports = {
           to: path.resolve(__dirname, 'dist/images'),
         },
       ],
-    }),
-  ],
+  }),
+],
+devtool: 'source-map',
 };

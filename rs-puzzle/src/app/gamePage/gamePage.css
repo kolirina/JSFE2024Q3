@@ -22,7 +22,7 @@
   }
 
 #new-container {
-  width: 700px;
+  width: 750px;
   height: 300px;
   display: flex;
   gap: 5px;
@@ -39,4 +39,6 @@
   }
   .result-block .word-element {
     animation: moveCard 0.5s ease;
+
   }
+
