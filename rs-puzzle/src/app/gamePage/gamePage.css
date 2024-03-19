@@ -17,15 +17,41 @@
   }
 
   #word-container {
-    width: 700px;
-    height: 300px;
+    width: 850px;
+    height: 50px;
+    display: flex;
+    justify-content: stretch;
+    align-items: stretch;
   }
 
-#new-container {
-  width: 750px;
+.new-container {
+  width: 850px;
   height: 300px;
   display: flex;
   gap: 5px;
+  height: 60px;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 850px;
+  height: 750px;
+  align-items: stretch;
+  justify-content: stretch;
+  background-color: rgba(14, 44, 100, 0.5);
+  border-radius: 20px;
+  padding: 15px;
+}
+
+.painting-container {
+  width: 850px;
+  height: 700px;
+}
+
+.continue-button {
+  margin: 30px;
+  width: 200px;
 }
 
   /* CSS for animation */
