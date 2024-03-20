@@ -25,10 +25,16 @@ export default class GamePage {
     try {
       this.gameData = await fetchRoundsData();
       this.rounds = this.gameData.rounds;
+      const mainWrapper = document.createElement('div');
+      mainWrapper.id = 'main-wrapper';
+      mainWrapper.classList.add('main-wrapper');
+      document.body.appendChild(mainWrapper);
+
+      mainWrapper.appendChild(this.continueButton);
       const gameContainer = document.createElement('div');
       gameContainer.id = 'game-container';
       gameContainer.classList.add('game-container');
-      document.body.appendChild(gameContainer);
+      mainWrapper.appendChild(gameContainer);
       if (this.rounds.length > 0) {
         this.container = document.createElement('div');
         this.container.id = 'word-container';
@@ -79,7 +85,6 @@ export default class GamePage {
     this.continueButton.textContent = 'Continue';
     this.continueButton.classList.add('continue-button');
     this.continueButton.disabled = true;
-    document.body.appendChild(this.continueButton);
   }
 
   private handleContinue(): void {
@@ -209,7 +214,6 @@ export default class GamePage {
     }
     this.continueButton.disabled = false;
     console.log('🎉');
-
   }
 
   private getTextExamplesForLevels(): Record<string, string[]> {

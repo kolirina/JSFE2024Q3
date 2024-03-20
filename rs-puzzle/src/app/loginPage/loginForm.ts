@@ -92,6 +92,8 @@ export default class LoginForm {
   private removeErrorMessages(): void {
     const errorMessages = this.form.querySelectorAll('.error-message');
     errorMessages.forEach((errorMessage) => errorMessage.remove());
+    this.firstNameField.getElement().classList.remove('wrongInput');
+    this.surnameField.getElement().classList.remove('wrongInput');
   }
 
   private clearInputFields(): void {

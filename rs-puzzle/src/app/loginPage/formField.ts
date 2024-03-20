@@ -28,6 +28,6 @@ export default class FormField {
 
   public validateFirstLetterUppercase(minLength: number): boolean {
     const value = this.getValue();
-    return value.length >= minLength && value[0] === value[0].toUpperCase();
+    return value.length >= minLength && value[0] === value[0].toUpperCase() && !(value[0] === '-');
   }
 }
