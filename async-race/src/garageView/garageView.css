@@ -1,6 +1,58 @@
+.racing-container {
+    margin-top: 25px;
+}
+
 .car-bottom-wrapper {
     display: flex;
     flex-direction: row;
     border-bottom: 4px dashed rgb(169, 221, 214);
-    gap: 15px;
+    gap: 10px;
+    background-image: url('../images/favicon.webp');
+  background-repeat: no-repeat; 
+  background-position: right center;
+  background-size: contain;
+
 }
+
+.car-top-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.button-small {
+    height: 25px;
+    width: 25px;
+}
+.car-pic-container {
+    /* position: relative; */
+}
+
+svg {
+    padding: 0;
+    margin-bottom: -20px;
+    /* position: absolute; 
+    bottom: 0; */
+  }
+
+.car-div {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px
+  }
+
+
+  input, button {
+    height: 25px;
+    border-radius: 7px;
+  }
+
+  button {
+    background-color: rgb(241, 172, 172);
+  }
+
+  .car-name {
+    font-size: x-large;
+    color: rgb(21, 141, 125);
+  }

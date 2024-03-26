@@ -152,6 +152,7 @@ function fillCarDiv(car: Car, carDiv: HTMLDivElement): void {
   carDivTopWrapper.appendChild(removeButton);
 
   const carName = document.createElement("div");
+  carName.classList.add("car-name");
   carName.innerHTML = `${car.name}`;
   carDivTopWrapper.appendChild(carName);
 
@@ -160,14 +161,17 @@ function fillCarDiv(car: Car, carDiv: HTMLDivElement): void {
   carDiv.appendChild(carDivBottomWrapper);
 
   const goButton = document.createElement("button");
+  goButton.classList.add("button-small");
   goButton.textContent = "A";
   carDivBottomWrapper.appendChild(goButton);
 
   const stopButton = document.createElement("button");
+  stopButton.classList.add("button-small");
   stopButton.textContent = "B";
   carDivBottomWrapper.appendChild(stopButton);
 
   const carPicContainer = document.createElement("div");
+  carPicContainer.classList.add("car-pic-container");
   carDivBottomWrapper.appendChild(carPicContainer);
 
   const svgElement = document.createElementNS(
@@ -175,13 +179,14 @@ function fillCarDiv(car: Car, carDiv: HTMLDivElement): void {
     "svg"
   );
   svgElement.setAttribute("fill", car.color);
-  svgElement.setAttribute("height", "100px");
+  svgElement.setAttribute("height", "60px");
   svgElement.setAttribute("width", "100px");
   svgElement.setAttribute("version", "1.1");
   svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
   svgElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
   svgElement.setAttribute("viewBox", "0 0 612.001 612.001");
   svgElement.setAttribute("xml:space", "preserve");
+  svgElement.setAttribute("style", "padding: 0;");
   const gElement = document.createElementNS("http://www.w3.org/2000/svg", "g");
   const pathElement = document.createElementNS(
     "http://www.w3.org/2000/svg",
