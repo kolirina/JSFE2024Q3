@@ -1,0 +1,6 @@
+.car-bottom-wrapper {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 4px dashed rgb(169, 221, 214);
+    gap: 15px;
+}
