@@ -1,6 +1,10 @@
 import { getCars, createCar, updateCar, deleteCar } from "../serverInteraction";
 import { Car, Garage } from "../interface";
 import { garageView } from "../index";
+import { createSVGElement } from "./svgCar";
+import getRandomColor from "../randomColor";
+import getRandomName from "../randomName";
+import { renderPagination, nextPage, prevPage } from "../pagination";
 
 export default class GarageView {
   public mainContainer!: HTMLDivElement;
@@ -9,16 +13,25 @@ export default class GarageView {
   private createContainer!: HTMLDivElement;
   private updateContainer!: HTMLDivElement;
   private raceResetGenerateContainer!: HTMLDivElement;
-  private racingTrackContainer!: HTMLDivElement;
+  public racingTrackContainer!: HTMLDivElement;
+  private garageCount!: HTMLDivElement;
 
   private cars: Car[] = [];
   private winners: Car[] = [];
+
+  currentPage: number;
+  totalPages: number;
+  carsPerPage: number;
+
   private garage!: Garage;
 
   public carToUpdate!: Car;
 
   constructor() {
     this.initGame();
+    this.currentPage = 1;
+    this.carsPerPage = 7;
+    this.totalPages = Math.ceil(this.cars.length / this.carsPerPage);
   }
 
   public async initGame(): Promise<void> {
@@ -70,7 +83,7 @@ export default class GarageView {
 
       const updateInput = document.createElement("input");
       updateInput.placeholder = "Choose a car";
-      updateInput.id = "updateCarName"; // Corrected id attribute
+      updateInput.id = "updateCarName";
       this.updateContainer.appendChild(updateInput);
 
       const updateColorInput = document.createElement("input");
@@ -81,7 +94,7 @@ export default class GarageView {
       const updateButton = document.createElement("button");
       updateButton.classList.add("update-button");
       updateButton.textContent = "Update Car";
-      updateButton.id = "updateButton"; // Added id attribute
+      updateButton.id = "updateButton";
       updateButton.type = "submit";
       this.updateContainer.appendChild(updateButton);
 
@@ -103,24 +116,26 @@ export default class GarageView {
 
       const generateCarsButton = document.createElement("button");
       generateCarsButton.classList.add("generate-cars-button");
+      generateCarsButton.id = "generateCarsButton";
       generateCarsButton.textContent = "Generate Cars";
       this.raceResetGenerateContainer.appendChild(generateCarsButton);
 
+      this.garageCount = document.createElement("div");
+      this.garageCount.classList.add("garage-count");
+      this.garageCount.innerHTML = `Garage (${this.garage.cars.length})`;
+      this.mainContainer.appendChild(this.garageCount);
+
+      const pageNum = document.createElement("div");
+      pageNum.classList.add("page-num");
+      pageNum.innerHTML = `Page #`;
+      this.mainContainer.appendChild(pageNum);
       this.racingTrackContainer = document.createElement("div");
       this.racingTrackContainer.classList.add("racing-container");
       this.mainContainer.appendChild(this.racingTrackContainer);
 
-      const garageCount = document.createElement("div");
-      garageCount.classList.add("garage-count");
-      garageCount.innerHTML = `Garage (${this.garage.cars.length})`;
-      this.racingTrackContainer.appendChild(garageCount);
+      this.renderGaragePage();
+      //   fillRacingTrack(this.garage.cars, this.racingTrackContainer);
 
-      const pageNum = document.createElement("div");
-      pageNum.classList.add("page-num");
-      pageNum.innerHTML = `Page #${Math.ceil(this.garage.cars.length / 7)}`;
-      this.racingTrackContainer.appendChild(pageNum);
-
-      fillRacingTrack(this.garage.cars, this.racingTrackContainer);
       this.setupListeners();
     } catch (error) {
       console.error("Error initializing game:", error);
@@ -130,6 +145,7 @@ export default class GarageView {
   private setupListeners(): void {
     const createButton = document.getElementById("createButton");
     const updateButton = document.getElementById("updateButton");
+    const generateCarsButton = document.getElementById("generateCarsButton");
     if (createButton) {
       createButton.addEventListener("click", (event) =>
         this.createCarHandler(event as MouseEvent)
@@ -138,6 +154,11 @@ export default class GarageView {
     if (updateButton) {
       updateButton.addEventListener("click", (event) =>
         this.updateCarHandler(event as MouseEvent)
+      );
+    }
+    if (generateCarsButton) {
+      generateCarsButton.addEventListener("click", (event) =>
+        this.generateCarsHandler(event as MouseEvent)
       );
     }
   }
@@ -210,9 +231,40 @@ export default class GarageView {
       console.log(this);
     }
   }
+
+  public async removeCarHandler(event: MouseEvent, car: Car): Promise<void> {
+    event.preventDefault();
+
+    if (car.id !== undefined) {
+      const id = car.id;
+
+      try {
+        const removedCar = await deleteCar(id);
+        await this.refreshGarage();
+      } catch (error) {
+        console.error("Error updating car:", error);
+      }
+    }
+  }
+
+  private async generateCarsHandler(event: MouseEvent): Promise<void> {
+    event.preventDefault();
+    for (let i = 0; i < 100; i += 1) {
+      const name = getRandomName();
+      const color = getRandomColor();
+      try {
+        const newCar = await createCar({ name, color });
+      } catch (error) {
+        console.error("Error creating car:", error);
+      }
+      await this.refreshGarage();
+    }
+  }
+
   private async refreshGarage(): Promise<void> {
     try {
       this.garage = await getCars();
+      this.garageCount.innerHTML = `Garage (${this.garage.cars.length})`;
       this.clearGarage();
       this.drawGarage();
     } catch (error) {
@@ -225,7 +277,41 @@ export default class GarageView {
   }
 
   private drawGarage(): void {
-    fillRacingTrack(this.garage.cars, this.racingTrackContainer);
+    this.renderGaragePage();
+  }
+  public renderPagination(): void {
+    console.log("render pagination");
+    const pagination = renderPagination(
+      this.currentPage,
+      this.totalPages,
+      () => this.prevPage(),
+      () => this.nextPage()
+    );
+
+    this.racingTrackContainer.appendChild(pagination);
+    pagination.classList.add("pagination");
+  }
+
+  private nextPage(): void {
+    nextPage(this.currentPage, this.totalPages, () => this.renderGaragePage());
+  }
+
+  private prevPage(): void {
+    prevPage(this.currentPage, this.totalPages, () => this.renderGaragePage());
+  }
+
+  public renderGaragePage(): void {
+    const startIndex = (this.currentPage - 1) * this.carsPerPage;
+    console.log(startIndex);
+    const endIndex = startIndex + this.carsPerPage;
+    console.log(endIndex);
+    const currentCars = this.garage.cars.slice(startIndex, endIndex);
+    console.log(this.garage.cars);
+    console.log(currentCars);
+
+    this.clearGarage();
+    fillRacingTrack(currentCars, this.racingTrackContainer);
+    this.renderPagination();
   }
 }
 
@@ -233,13 +319,15 @@ function fillRacingTrack(
   cars: Car[],
   racingTrackContainer: HTMLDivElement
 ): void {
-  for (let i = 0; i < cars.length; i += 1) {
+  racingTrackContainer.innerHTML = "";
+  console.log(cars);
+  cars.forEach((car) => {
     let carDiv = document.createElement("div");
-    racingTrackContainer.appendChild(carDiv);
-    carDiv.id = cars[i].id?.toString() || "";
+    carDiv.id = car.id?.toString() || "";
     carDiv.classList.add("car-div");
-    fillCarDiv(cars[i], carDiv, garageView);
-  }
+    fillCarDiv(car, carDiv, garageView);
+    racingTrackContainer.appendChild(carDiv);
+  });
 }
 
 function fillCarDiv(
@@ -261,6 +349,9 @@ function fillCarDiv(
 
   const removeButton = document.createElement("button");
   removeButton.textContent = "remove";
+  removeButton.addEventListener("click", (event) =>
+    garageView.removeCarHandler(event, car)
+  );
   carDivTopWrapper.appendChild(removeButton);
 
   const carName = document.createElement("div");
@@ -285,32 +376,6 @@ function fillCarDiv(
   const carPicContainer = document.createElement("div");
   carPicContainer.classList.add("car-pic-container");
   carDivBottomWrapper.appendChild(carPicContainer);
-
-  const svgElement = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "svg"
-  );
-  svgElement.setAttribute("fill", car.color);
-  svgElement.setAttribute("height", "60px");
-  svgElement.setAttribute("width", "100px");
-  svgElement.setAttribute("version", "1.1");
-  svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-  svgElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-  svgElement.setAttribute("viewBox", "0 0 612.001 612.001");
-  svgElement.setAttribute("xml:space", "preserve");
-  svgElement.setAttribute("style", "padding: 0;");
-  const gElement = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  const pathElement = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "path"
-  );
-  pathElement.setAttribute(
-    "d",
-    "M589.333,276.033c-11.234-3.756-89.378-20.834-89.378-20.834s-144.86-82.375-162.245-82.375s-136.639,0.053-136.639,0.053 c-29.137,0-53.487,22.203-81.68,47.909c-13.287,12.112-27.953,25.442-44.13,37.299l-60.249,8.011 C6.306,268.872,0,277.018,0,286.643v69.03c0,11.913,9.656,21.571,21.57,21.571h41.401c3.007,34.65,32.153,61.932,67.57,61.932 c35.415,0,64.563-27.283,67.57-61.931h197.687c3.007,34.65,32.153,61.931,67.57,61.931s64.563-27.283,67.57-61.931h34.013 c26.95,0,40.119-11.64,43.426-22.566C616.739,327.03,610.724,283.185,589.333,276.033z M130.541,406.48 c-19.38,0-35.148-15.766-35.148-35.146s15.766-35.148,35.148-35.148c19.38,0,35.146,15.766,35.146,35.148 C165.688,390.714,149.921,406.48,130.541,406.48z M261.008,255.201H143.134c8.526-6.736,16.409-13.886,23.671-20.505 c19.086-17.402,35.57-32.432,55.294-32.432c0,0,17.85-0.008,38.91-0.017V255.201z M289.711,202.236 c14.588-0.005,27.592-0.009,34.116-0.009c16.245,0,82.135,38.264,106.864,52.975h-140.98L289.711,202.236L289.711,202.236z M463.367,406.48 c-19.38,0-35.146-15.766-35.146-35.146s15.766-35.148,35.146-35.148c19.38,0,35.148,15.766,35.148,35.148 C498.515,390.714,482.747,406.48,463.367,406.48z"
-  );
-  gElement.appendChild(pathElement);
-  svgElement.appendChild(gElement);
+  const svgElement = createSVGElement(car);
   carPicContainer.appendChild(svgElement);
 }
-
-// const garageView = new GarageView();

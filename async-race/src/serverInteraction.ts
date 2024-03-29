@@ -17,10 +17,7 @@ export const getCars = async () => {
   const cars = await response.json();
 
   const count = Number(response.headers.get("X-Total-Count"));
-  console.log(cars);
-  console.log(cars);
 
-  console.log(count);
   return { cars, count };
 };
 
@@ -83,7 +80,6 @@ export const deleteCar = async (id: number) => {
 
 export const main = async () => {
   const car = await deleteCar(2);
-  console.log(car);
 };
 
 main();
