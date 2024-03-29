@@ -18,6 +18,8 @@ export const getCars = async () => {
 
   const count = Number(response.headers.get("X-Total-Count"));
   console.log(cars);
+  console.log(cars);
+
   console.log(count);
   return { cars, count };
 };
@@ -44,7 +46,7 @@ export const createCar = async (body: Car) => {
   return car;
 };
 
-const updateCar = async (id: number, body: Car) => {
+export const updateCar = async (id: number, body: Car) => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
     method: "PUT",
     headers: {

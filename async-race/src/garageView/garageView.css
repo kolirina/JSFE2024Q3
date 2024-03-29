@@ -1,3 +1,7 @@
+.main-container {
+    background-color: rgb(162, 165, 241);
+    padding: 15px;
+}
 .racing-container {
     margin-top: 25px;
 }
@@ -5,7 +9,7 @@
 .car-bottom-wrapper {
     display: flex;
     flex-direction: row;
-    border-bottom: 4px dashed rgb(169, 221, 214);
+    border-bottom: 4px dashed rgb(143, 226, 215);
     gap: 10px;
     background-image: url('../images/favicon.webp');
   background-repeat: no-repeat; 
@@ -50,9 +54,14 @@ svg {
 
   button {
     background-color: rgb(241, 172, 172);
+    border: transparent;
+    margin-right: 10px;
+    margin-bottom: 10px;
   }
 
   .car-name {
     font-size: x-large;
-    color: rgb(21, 141, 125);
+    font-weight: bold;
+    color: rgb(217, 247, 136);
+    text-decoration: dotted;
   }

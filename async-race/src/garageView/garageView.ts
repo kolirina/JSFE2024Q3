@@ -1,5 +1,6 @@
-import { getCars } from "../serverInteraction";
+import { getCars, createCar, updateCar, deleteCar } from "../serverInteraction";
 import { Car, Garage } from "../interface";
+import { garageView } from "../index";
 
 export default class GarageView {
   public mainContainer!: HTMLDivElement;
@@ -9,11 +10,12 @@ export default class GarageView {
   private updateContainer!: HTMLDivElement;
   private raceResetGenerateContainer!: HTMLDivElement;
   private racingTrackContainer!: HTMLDivElement;
-  //   private carWrapper: HTMLDivElement;
 
   private cars: Car[] = [];
   private winners: Car[] = [];
   private garage!: Garage;
+
+  public carToUpdate!: Car;
 
   constructor() {
     this.initGame();
@@ -22,8 +24,6 @@ export default class GarageView {
   public async initGame(): Promise<void> {
     try {
       this.garage = await getCars();
-      console.log(this.garage);
-      console.log(this.garage.cars[0]);
 
       this.mainContainer = document.createElement("div");
       this.mainContainer.classList.add("main-container");
@@ -48,16 +48,18 @@ export default class GarageView {
       this.mainContainer.appendChild(this.createContainer);
 
       const createInput = document.createElement("input");
+      createInput.id = "createCarName";
       createInput.placeholder = "Enter car name";
       this.createContainer.appendChild(createInput);
 
       const colorInput = document.createElement("input");
       colorInput.type = "color";
-      colorInput.id = "color";
+      colorInput.id = "createCarColor";
       this.createContainer.appendChild(colorInput);
 
       const createButton = document.createElement("button");
       createButton.classList.add("create-button");
+      createButton.id = "createButton";
       createButton.textContent = "Create Car";
       createButton.type = "submit";
       this.createContainer.appendChild(createButton);
@@ -67,17 +69,19 @@ export default class GarageView {
       this.mainContainer.appendChild(this.updateContainer);
 
       const updateInput = document.createElement("input");
-      updateInput.placeholder = "Enter car name";
+      updateInput.placeholder = "Choose a car";
+      updateInput.id = "updateCarName"; // Corrected id attribute
       this.updateContainer.appendChild(updateInput);
 
       const updateColorInput = document.createElement("input");
       updateColorInput.type = "color";
-      updateColorInput.id = "updateColor";
+      updateColorInput.id = "updateCarColor";
       this.updateContainer.appendChild(updateColorInput);
 
       const updateButton = document.createElement("button");
       updateButton.classList.add("update-button");
       updateButton.textContent = "Update Car";
+      updateButton.id = "updateButton"; // Added id attribute
       updateButton.type = "submit";
       this.updateContainer.appendChild(updateButton);
 
@@ -117,11 +121,111 @@ export default class GarageView {
       this.racingTrackContainer.appendChild(pageNum);
 
       fillRacingTrack(this.garage.cars, this.racingTrackContainer);
-
-      //   this.setupListeners();
+      this.setupListeners();
     } catch (error) {
       console.error("Error initializing game:", error);
     }
+  }
+
+  private setupListeners(): void {
+    const createButton = document.getElementById("createButton");
+    const updateButton = document.getElementById("updateButton");
+    if (createButton) {
+      createButton.addEventListener("click", (event) =>
+        this.createCarHandler(event as MouseEvent)
+      );
+    }
+    if (updateButton) {
+      updateButton.addEventListener("click", (event) =>
+        this.updateCarHandler(event as MouseEvent)
+      );
+    }
+  }
+
+  private async createCarHandler(event: MouseEvent): Promise<void> {
+    event.preventDefault();
+
+    const nameInput = document.querySelector(
+      "#createCarName"
+    ) as HTMLInputElement;
+    const colorInput = document.querySelector(
+      "#createCarColor"
+    ) as HTMLInputElement;
+
+    if (nameInput && colorInput) {
+      const name = nameInput.value;
+      const color = colorInput.value;
+
+      try {
+        const newCar = await createCar({ name, color });
+        await this.refreshGarage();
+      } catch (error) {
+        console.error("Error creating car:", error);
+      }
+    }
+  }
+
+  private async updateCarHandler(event: MouseEvent): Promise<void> {
+    event.preventDefault();
+
+    const nameInput = document.querySelector(
+      "#updateCarName"
+    ) as HTMLInputElement;
+    const colorInput = document.querySelector(
+      "#updateCarColor"
+    ) as HTMLInputElement;
+
+    if (
+      nameInput &&
+      colorInput &&
+      this.carToUpdate &&
+      this.carToUpdate.id !== undefined
+    ) {
+      const name = nameInput.value;
+      const color = colorInput.value;
+      const id = this.carToUpdate.id;
+
+      try {
+        const updatedCar = await updateCar(id, { name, color });
+        await this.refreshGarage();
+      } catch (error) {
+        console.error("Error updating car:", error);
+      }
+    }
+  }
+
+  public async selectCarHandler(event: MouseEvent, car: Car): Promise<void> {
+    event.preventDefault();
+    const updateNameInput = document.querySelector(
+      "#updateCarName"
+    ) as HTMLInputElement;
+    const updateColorInput = document.querySelector(
+      "#updateCarColor"
+    ) as HTMLInputElement;
+
+    if (updateNameInput && updateColorInput) {
+      updateNameInput.value = car.name;
+      updateColorInput.value = car.color;
+      this.carToUpdate = car;
+      console.log(this);
+    }
+  }
+  private async refreshGarage(): Promise<void> {
+    try {
+      this.garage = await getCars();
+      this.clearGarage();
+      this.drawGarage();
+    } catch (error) {
+      console.error("Error refreshing garage:", error);
+    }
+  }
+
+  private clearGarage(): void {
+    this.racingTrackContainer.innerHTML = "";
+  }
+
+  private drawGarage(): void {
+    fillRacingTrack(this.garage.cars, this.racingTrackContainer);
   }
 }
 
@@ -132,19 +236,27 @@ function fillRacingTrack(
   for (let i = 0; i < cars.length; i += 1) {
     let carDiv = document.createElement("div");
     racingTrackContainer.appendChild(carDiv);
-    carDiv.id = cars[i].id.toString();
+    carDiv.id = cars[i].id?.toString() || "";
     carDiv.classList.add("car-div");
-    fillCarDiv(cars[i], carDiv);
+    fillCarDiv(cars[i], carDiv, garageView);
   }
 }
 
-function fillCarDiv(car: Car, carDiv: HTMLDivElement): void {
+function fillCarDiv(
+  car: Car,
+  carDiv: HTMLDivElement,
+  garageView: GarageView
+): void {
   const carDivTopWrapper = document.createElement("div");
   carDivTopWrapper.classList.add("car-top-wrapper");
   carDiv.appendChild(carDivTopWrapper);
 
   const selectButton = document.createElement("button");
   selectButton.textContent = "select";
+  selectButton.id = `selectButton${car.id}`;
+  selectButton.addEventListener("click", (event) =>
+    garageView.selectCarHandler(event, car)
+  );
   carDivTopWrapper.appendChild(selectButton);
 
   const removeButton = document.createElement("button");
@@ -200,3 +312,5 @@ function fillCarDiv(car: Car, carDiv: HTMLDivElement): void {
   svgElement.appendChild(gElement);
   carPicContainer.appendChild(svgElement);
 }
+
+// const garageView = new GarageView();
