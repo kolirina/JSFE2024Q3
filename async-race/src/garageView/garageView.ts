@@ -5,6 +5,7 @@ import { createSVGElement } from "./svgCar";
 import getRandomColor from "../randomColor";
 import getRandomName from "../randomName";
 import { renderPagination, nextPage, prevPage } from "../pagination";
+import { carAnimation, stopAnimation } from "./carAnimation";
 
 export default class GarageView {
   public mainContainer!: HTMLDivElement;
@@ -15,15 +16,17 @@ export default class GarageView {
   private raceResetGenerateContainer!: HTMLDivElement;
   public racingTrackContainer!: HTMLDivElement;
   private garageCount!: HTMLDivElement;
+  public pageNum!: HTMLDivElement;
 
   private cars: Car[] = [];
   private winners: Car[] = [];
+  public totalPages: number;
 
   currentPage: number;
-  totalPages: number;
+
   carsPerPage: number;
 
-  private garage!: Garage;
+  public garage!: Garage;
 
   public carToUpdate!: Car;
 
@@ -31,12 +34,15 @@ export default class GarageView {
     this.initGame();
     this.currentPage = 1;
     this.carsPerPage = 7;
-    this.totalPages = Math.ceil(this.cars.length / this.carsPerPage);
+    this.totalPages = 0;
   }
 
   public async initGame(): Promise<void> {
     try {
       this.garage = await getCars();
+
+      this.totalPages = Math.ceil(this.garage.cars.length / this.carsPerPage);
+      console.log(this.totalPages);
 
       this.mainContainer = document.createElement("div");
       this.mainContainer.classList.add("main-container");
@@ -107,6 +113,36 @@ export default class GarageView {
       const raceButton = document.createElement("button");
       raceButton.classList.add("race-button");
       raceButton.textContent = "Race";
+      raceButton.addEventListener("click", (event) => {
+        try {
+          const startIndex = (this.currentPage - 1) * 7;
+          let carsToRace = [];
+          for (let i = startIndex; i < startIndex + 7; i += 1) {
+            if (i < this.garage.cars.length) {
+              const car = this.garage.cars[i];
+              carsToRace.push(car);
+              const carDivBottomWrapper = document.getElementById(
+                `car-bottom-wrapper${car.id}`
+              );
+              const carPicContainer = document.getElementById(
+                `car-pic-container${car.id}`
+              );
+              if (car.id && carPicContainer && carDivBottomWrapper) {
+                carAnimation(car.id, carDivBottomWrapper, carPicContainer);
+                console.log("гонка");
+              } else {
+                console.error("Не удалось найти элементы для анимации машины");
+              }
+            }
+            console.log(carsToRace);
+          }
+
+          // Здесь вы можете добавить логику для гонки с участием машин из массива carsToRace
+          console.log("Гонка начата");
+        } catch (error) {
+          console.error("Ошибка при запуске гонки:", error);
+        }
+      });
       this.raceResetGenerateContainer.appendChild(raceButton);
 
       const resetButton = document.createElement("button");
@@ -125,10 +161,11 @@ export default class GarageView {
       this.garageCount.innerHTML = `Garage (${this.garage.cars.length})`;
       this.mainContainer.appendChild(this.garageCount);
 
-      const pageNum = document.createElement("div");
-      pageNum.classList.add("page-num");
-      pageNum.innerHTML = `Page #`;
-      this.mainContainer.appendChild(pageNum);
+      this.pageNum = document.createElement("div");
+      this.pageNum.innerHTML = `Page #${this.currentPage}`;
+      this.pageNum.classList.add("page-num");
+
+      this.mainContainer.appendChild(this.pageNum);
       this.racingTrackContainer = document.createElement("div");
       this.racingTrackContainer.classList.add("racing-container");
       this.mainContainer.appendChild(this.racingTrackContainer);
@@ -265,7 +302,9 @@ export default class GarageView {
     try {
       this.garage = await getCars();
       this.garageCount.innerHTML = `Garage (${this.garage.cars.length})`;
+      this.pageNum.innerHTML = `Page #${this.currentPage}`;
       this.clearGarage();
+      this.totalPages = Math.ceil(this.garage.cars.length / this.carsPerPage);
       this.drawGarage();
     } catch (error) {
       console.error("Error refreshing garage:", error);
@@ -293,14 +332,16 @@ export default class GarageView {
   }
 
   private nextPage(): void {
-    nextPage(this.currentPage, this.totalPages, () => this.renderGaragePage());
+    nextPage(this);
   }
 
   private prevPage(): void {
-    prevPage(this.currentPage, this.totalPages, () => this.renderGaragePage());
+    prevPage(this);
   }
 
   public renderGaragePage(): void {
+    console.log("renderGaragePage");
+    console.log(this.currentPage);
     const startIndex = (this.currentPage - 1) * this.carsPerPage;
     console.log(startIndex);
     const endIndex = startIndex + this.carsPerPage;
@@ -361,21 +402,39 @@ function fillCarDiv(
 
   const carDivBottomWrapper = document.createElement("div");
   carDivBottomWrapper.classList.add("car-bottom-wrapper");
+  carDivBottomWrapper.id = `car-bottom-wrapper${car.id}`;
   carDiv.appendChild(carDivBottomWrapper);
 
   const goButton = document.createElement("button");
   goButton.classList.add("button-small");
+  goButton.id = `go-button${car.id}`;
   goButton.textContent = "A";
+  goButton.addEventListener("click", (event) => {
+    if (car.id) {
+      carAnimation(car.id, carDivBottomWrapper, carPicContainer);
+    }
+  });
   carDivBottomWrapper.appendChild(goButton);
 
   const stopButton = document.createElement("button");
   stopButton.classList.add("button-small");
   stopButton.textContent = "B";
+  stopButton.addEventListener("click", (event) => {
+    if (car.id) {
+      handleStopButton(car.id);
+    }
+  });
+
+  async function handleStopButton(id: number) {
+    await stopAnimation(id, carPicContainer);
+  }
+
   carDivBottomWrapper.appendChild(stopButton);
 
   const carPicContainer = document.createElement("div");
   carPicContainer.classList.add("car-pic-container");
   carDivBottomWrapper.appendChild(carPicContainer);
   const svgElement = createSVGElement(car);
+  carPicContainer.id = `car-pic-container${car.id}`;
   carPicContainer.appendChild(svgElement);
 }

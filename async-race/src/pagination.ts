@@ -1,3 +1,4 @@
+import GarageView from "./garageView/garageView";
 export function renderPagination(
   currentPage: number,
   totalPages: number,
@@ -13,6 +14,7 @@ export function renderPagination(
   paginationContainer.appendChild(prevButton);
 
   const pageIndicator = document.createElement("span");
+  pageIndicator.classList.add("page-indicator");
   pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
   paginationContainer.appendChild(pageIndicator);
 
@@ -24,24 +26,18 @@ export function renderPagination(
   return paginationContainer;
 }
 
-export function nextPage(
-  currentPage: number,
-  totalPages: number,
-  renderPage: () => void
-): void {
-  if (currentPage < totalPages) {
-    currentPage++;
-    renderPage();
+export function nextPage(garageView: GarageView): void {
+  if (garageView.currentPage < garageView.totalPages) {
+    garageView.currentPage++;
+    garageView.pageNum.innerHTML = `Page #${garageView.currentPage}`;
+    garageView.renderGaragePage();
   }
 }
 
-export function prevPage(
-  currentPage: number,
-  totalPages: number,
-  renderPage: () => void
-): void {
-  if (currentPage > 1) {
-    currentPage--;
-    renderPage();
+export function prevPage(garageView: GarageView): void {
+  if (garageView.currentPage > 1) {
+    garageView.currentPage--;
+    garageView.renderGaragePage();
+    garageView.pageNum.innerHTML = `Page #${garageView.currentPage}`;
   }
 }

@@ -78,8 +78,36 @@ export const deleteCar = async (id: number) => {
   return car;
 };
 
-export const main = async () => {
-  const car = await deleteCar(2);
+export const getVelocity = async (id: number) => {
+  const response = await fetch(
+    `${baseUrl}${path.engine}?id=${id}&status=started`,
+    {
+      method: "PATCH",
+    }
+  );
+  const engineData = await response.json();
+  const velocity = engineData.velocity;
+  const distance = engineData.distance;
+  const animationTime = distance / velocity;
+
+  return animationTime;
 };
 
-main();
+export const engineSuccess = async (id: number) => {
+  const response = await fetch(
+    `${baseUrl}${path.engine}?id=${id}&status=drive`,
+    {
+      method: "PATCH",
+    }
+  );
+  try {
+    const engineData = await response.json();
+    const engineSuccess = engineData.success;
+    return engineSuccess;
+  } catch (error) {
+    console.error(
+      "Car has been stopped suddenly. It's engine was broken down.",
+      error
+    );
+  }
+};
