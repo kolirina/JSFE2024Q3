@@ -1,3 +1,4 @@
+import { stopAnimation } from "./garageView/carAnimation";
 import { Car } from "./interface";
 const baseUrl = "http://localhost:3000";
 
@@ -100,14 +101,7 @@ export const engineSuccess = async (id: number) => {
       method: "PATCH",
     }
   );
-  try {
-    const engineData = await response.json();
-    const engineSuccess = engineData.success;
-    return engineSuccess;
-  } catch (error) {
-    console.error(
-      "Car has been stopped suddenly. It's engine was broken down.",
-      error
-    );
-  }
+  //  const engineData = await response.json();
+  console.log(response.status);
+  return response.status;
 };

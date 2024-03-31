@@ -49,12 +49,21 @@ async function startAnimation(
         console.log("Машинка достигла правого края контейнера");
       }
     }
-    const success = await engineSuccess(id);
 
-    console.log(success);
-    if (success !== true) {
+    try {
+      const success = await engineSuccess(id);
+      if (success === 200) {
+        animationId = requestAnimationFrame(animate);
+      } else {
+        console.error(
+          "Car has been stopped suddenly. Its engine was broken down."
+        );
+        stopAnimation(id, carPicContainer);
+        console.log("🧵");
+      }
+    } catch (error) {
+      console.error("Error checking engine status:", error);
     }
-    animationId = requestAnimationFrame(animate);
   } else {
     console.error(
       "Не удалось найти элементы carPicContainer или carDivBottomWrapper"
