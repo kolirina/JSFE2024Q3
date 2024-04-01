@@ -5,7 +5,7 @@ import { createSVGElement } from "./svgCar";
 import getRandomColor from "../randomColor";
 import getRandomName from "../randomName";
 import { renderPagination, nextPage, prevPage } from "../pagination";
-import { carAnimation, stopAnimation } from "./carAnimation";
+import { carAnimation, stopAnimation, startRace } from "./carAnimation";
 
 export default class GarageView {
   public mainContainer!: HTMLDivElement;
@@ -113,31 +113,15 @@ export default class GarageView {
       const raceButton = document.createElement("button");
       raceButton.classList.add("race-button");
       raceButton.textContent = "Race";
-      raceButton.addEventListener("click", (event) => {
+      raceButton.addEventListener("click", async (event) => {
         try {
-          const startIndex = (this.currentPage - 1) * 7;
-          let carsToRace = [];
-          for (let i = startIndex; i < startIndex + 7; i += 1) {
-            if (i < this.garage.cars.length) {
-              const car = this.garage.cars[i];
-              carsToRace.push(car);
-              const carDivBottomWrapper = document.getElementById(
-                `car-bottom-wrapper${car.id}`
-              );
-              const carPicContainer = document.getElementById(
-                `car-pic-container${car.id}`
-              );
-              if (car.id && carPicContainer && carDivBottomWrapper) {
-                carAnimation(car.id, carDivBottomWrapper, carPicContainer);
-                console.log("гонка");
-              } else {
-                console.error("Не удалось найти элементы для анимации машины");
-              }
-            }
-            console.log(carsToRace);
-          }
+          const startIndex = (this.currentPage - 1) * this.carsPerPage;
+          const endIndex = startIndex + this.carsPerPage;
+          const carsToRace = this.garage.cars.slice(startIndex, endIndex);
 
-          // Здесь вы можете добавить логику для гонки с участием машин из массива carsToRace
+          // Запускаем гонку для всех машин на текущей странице
+          await startRace(carsToRace);
+
           console.log("Гонка начата");
         } catch (error) {
           console.error("Ошибка при запуске гонки:", error);
@@ -421,12 +405,20 @@ function fillCarDiv(
   stopButton.textContent = "B";
   stopButton.addEventListener("click", (event) => {
     if (car.id) {
-      handleStopButton(car.id);
+      const carDivBottomWrapper = document.getElementById(
+        `car-bottom-wrapper${car.id}`
+      );
+      if (carDivBottomWrapper) {
+        handleStopButton(car.id, carDivBottomWrapper);
+      }
     }
   });
 
-  async function handleStopButton(id: number) {
-    await stopAnimation(id, carPicContainer);
+  async function handleStopButton(
+    id: number,
+    carDivBottomWrapper: HTMLElement
+  ) {
+    await stopAnimation(id, carDivBottomWrapper);
   }
 
   carDivBottomWrapper.appendChild(stopButton);
