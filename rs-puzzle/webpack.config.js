@@ -35,17 +35,18 @@ module.exports = {
   plugins: [
     new DotenvWebpackPlugin(),
     new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, './src/index.html'),
-        filename: 'index.html',
+      template: path.resolve(__dirname, './src/index.html'),
+      filename: 'index.html',
     }),
     new CleanWebpackPlugin(),
     new CopyPlugin({
       patterns: [
-          {
-              from: path.resolve(__dirname, 'src/images'),
-              to: path.resolve(__dirname, 'dist/images'),
-          },
+        {
+          from: path.resolve(__dirname, 'src/images'),
+          to: path.resolve(__dirname, 'dist/images'),
+        },
       ],
   }),
 ],
+devtool: 'source-map',
 };

@@ -1,0 +1,114 @@
+.word-element, .new-container-element {
+    display: inline-block;
+    text-align: center;
+    padding:  5px 10px; 
+    height: 40px;
+    line-height: 40px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: rgb(124, 16, 97);;
+    border-radius: 5px;
+    color: rgb(251, 251, 252);
+    font-size: large;
+  }
+  .word-element:hover {
+    background-color: #1f2191;
+  }
+
+  #word-container {
+    width: 850px;
+    height: 50px;
+    display: flex;
+    justify-content: stretch;
+    align-items: stretch;
+  }
+
+.new-container {
+  width: 850px;
+  display: flex;
+  gap: 5px;
+  height: 60px;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 850px;
+  height: 750px;
+  align-items: stretch;
+  justify-content: stretch;
+  background-color: rgba(14, 44, 100, 0.5);
+  border-radius: 20px;
+  padding: 15px;
+}
+
+.painting-container {
+  width: 850px;
+  height: 700px;
+}
+
+.continue-button {
+  margin: 30px;
+  width: 200px;
+}
+
+  /* CSS for animation */
+  @keyframes moveCard {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  .result-block .word-element {
+    animation: moveCard 0.5s ease;
+
+  }
+  #main-wrapper {
+    display:flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  @media screen and (max-width: 1278px) {
+    #main-wrapper {
+      display:flex;
+      flex-direction: column-reverse;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+
+  @media screen and (max-width: 904px) {
+    .word-element, .new-container-element {
+      padding:  2px 3px; 
+      height: 40px;
+      line-height: 40px;
+      margin: 2px;
+      font-size: medium;
+    }
+  
+    #word-container {
+      width: 720px;
+     }
+  
+  .new-container {
+    width: 720px;
+  }
+  
+  .game-container {
+    width: 720px;
+    height: 710px;
+    padding: 5px;
+  }
+  
+  .painting-container {
+    width: 720px;
+    height: 700px;
+  }
+  }
