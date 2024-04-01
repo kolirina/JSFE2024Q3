@@ -1,8 +1,20 @@
+import { getVelocity, engineSuccess, createWinner } from "../serverInteraction";
+import { Car, Winner } from "../interface";
+import garageView from "./garageView";
 import GarageView from "./garageView";
-import { getVelocity, engineSuccess } from "../serverInteraction";
-import { Car } from "../interface";
 
-let animationId: number | null = null;
+let winners: Winner[] = [];
+let popUp: HTMLDivElement;
+
+popUp = document.createElement("div");
+popUp.id = "popUp";
+popUp.classList.add("hidden");
+document.body.appendChild(popUp);
+document.addEventListener("click", (event) => {
+  if (!popUp.contains(event.target as Node)) {
+    popUp.classList.add("hidden");
+  }
+});
 
 export async function carAnimation(
   id: number,
@@ -18,6 +30,7 @@ export async function carAnimation(
     console.error("Error fetching animationTime:", error);
   }
 }
+
 async function startAnimation(
   id: number,
   animationTime: number,
@@ -28,12 +41,11 @@ async function startAnimation(
     carPicContainer instanceof HTMLElement &&
     carDivBottomWrapper instanceof HTMLElement
   ) {
-    // Устанавливаем идентификатор анимации в атрибут data-animation-id элемента carDivBottomWrapper
     carDivBottomWrapper.dataset.animationId = String(
       requestAnimationFrame(animate)
     );
 
-    const startTime = performance.now(); // Запоминаем время начала анимации
+    const startTime = performance.now();
 
     function animate(timestamp: number) {
       const currentTime = performance.now();
@@ -49,10 +61,9 @@ async function startAnimation(
 
       if (finalPosition >= maxPosition) {
         console.log("Машинка достигла правого края контейнера");
-        return; // Выходим из функции animate, завершая анимацию
+        return;
       }
 
-      // Продолжаем анимацию, вызывая requestAnimationFrame для следующего кадра
       carDivBottomWrapper.dataset.animationId = String(
         requestAnimationFrame(animate)
       );
@@ -68,18 +79,17 @@ export function stopAnimation(
   id: number,
   carDivBottomWrapper: HTMLElement
 ): void {
-  // Получаем идентификатор анимации из атрибута data-animation-id
   const animationId = carDivBottomWrapper.dataset.animationId;
 
-  // Если атрибут существует, отменяем анимацию
   if (animationId) {
     cancelAnimationFrame(Number(animationId));
-    delete carDivBottomWrapper.dataset.animationId; // Удаляем атрибут data-animation-id
+    delete carDivBottomWrapper.dataset.animationId;
     console.log("Анимация остановлена для машины с ID:", id);
   } else {
     console.log("Анимация не найдена для машины с ID:", id);
   }
 }
+
 export async function startRace(cars: Car[]) {
   const validCars = cars.filter((car) => typeof car.id === "number");
   const animationTimes = await Promise.all(
@@ -94,5 +104,45 @@ export async function startRace(cars: Car[]) {
       document.getElementById(`car-pic-container${car.id}`)!
     )
   );
+
   await Promise.all(animationPromises);
+
+  const winnerIndex = animationTimes.indexOf(Math.min(...animationTimes));
+  const winnerCar = validCars[winnerIndex];
+  const winnerTime = Number((animationTimes[winnerIndex] / 1000).toFixed(2));
+  let wins = 1;
+
+  const existingWinnerIndex = winners.findIndex(
+    (winner) => winner.id === winnerCar.id
+  );
+  if (existingWinnerIndex !== -1) {
+    winners[existingWinnerIndex].wins++;
+    if (winners[existingWinnerIndex].time > winnerTime) {
+      winners[existingWinnerIndex].time = winnerTime;
+    }
+  } else {
+    winners.push({ id: winnerCar.id!, wins: 1, time: winnerTime });
+  }
+
+  console.log("Победитель гонки:", winnerCar.name, "время:", winnerTime);
+  setTimeout(() => {
+    popUp.textContent = `${winnerCar.name} finished first in ${winnerTime} seconds`;
+    popUp.classList.remove("hidden");
+  }, winnerTime * 1000);
+  console.log("Обновленный массив победителей:", winners);
+  if (winners.length > 0) {
+    try {
+      await createWinner({
+        id: winnerCar.id!,
+        wins: 1,
+        time: winnerTime,
+      });
+
+      console.log("Информация о победителе успешно отправлена на сервер");
+    } catch (error) {
+      console.error("Error: Insert failed, duplicate id", error);
+    }
+  } else {
+    console.error("Ошибка: Массив победителей пуст");
+  }
 }

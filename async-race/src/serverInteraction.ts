@@ -1,5 +1,5 @@
 import { stopAnimation } from "./garageView/carAnimation";
-import { Car } from "./interface";
+import { Car, Winner } from "./interface";
 const baseUrl = "http://localhost:3000";
 
 const path = {
@@ -22,9 +22,7 @@ export const getCars = async () => {
   return { cars, count };
 };
 
-getCars();
-
-const getCar = async (id: number) => {
+export const getCar = async (id: number) => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`);
   const car = await response.json();
 
@@ -104,4 +102,54 @@ export const engineSuccess = async (id: number) => {
   //  const engineData = await response.json();
   console.log(response.status);
   return response.status;
+};
+
+export const createWinner = async (body: Winner) => {
+  const response = await fetch(`${baseUrl}${path.winners}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  const winner = await response.json();
+
+  return winner;
+};
+
+export const deleteWinner = async (id: number) => {
+  const response = await fetch(`${baseUrl}${path.winners}/:${id}`, {
+    method: "DELETE",
+  });
+  const winner = await response.json();
+
+  return winner;
+};
+
+export const updateWinner = async (
+  id: number,
+  body: {
+    wins: number;
+    time: number;
+  }
+) => {
+  const response = await fetch(`${baseUrl}${path.winners}/:${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  const winner = await response.json();
+
+  return winner;
+};
+
+export const getWinners = async () => {
+  const response = await fetch(`${baseUrl}${path.winners}`);
+  const winners = await response.json();
+
+  const count = Number(response.headers.get("X-Total-Count"));
+
+  return winners;
 };

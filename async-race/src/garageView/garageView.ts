@@ -6,6 +6,7 @@ import getRandomColor from "../randomColor";
 import getRandomName from "../randomName";
 import { renderPagination, nextPage, prevPage } from "../pagination";
 import { carAnimation, stopAnimation, startRace } from "./carAnimation";
+import WinnersView from "../winnersView/winnersView";
 
 export default class GarageView {
   public mainContainer!: HTMLDivElement;
@@ -29,6 +30,8 @@ export default class GarageView {
   public garage!: Garage;
 
   public carToUpdate!: Car;
+
+  // public popUp!: HTMLDivElement;
 
   constructor() {
     this.initGame();
@@ -60,6 +63,14 @@ export default class GarageView {
       const toWinnersButton = document.createElement("button");
       toWinnersButton.classList.add("toWinnersButton");
       toWinnersButton.textContent = "to Winners";
+      toWinnersButton.addEventListener("click", (event) => {
+        const winnersView = new WinnersView();
+        this.hide();
+        winnersView.render();
+        winnersView.show();
+        // this.mainContainer.innerHTML = ""; // Очистить контейнер перед добавлением нового представления
+        // this.mainContainer.appendChild(winnersView); // Добавить новое представление в основной контейнер
+      });
       this.header.appendChild(toWinnersButton);
 
       this.createContainer = document.createElement("div");
@@ -161,6 +172,14 @@ export default class GarageView {
     } catch (error) {
       console.error("Error initializing game:", error);
     }
+  }
+
+  public show(): void {
+    this.mainContainer.style.display = "block";
+  }
+
+  public hide(): void {
+    this.mainContainer.style.display = "none";
   }
 
   private setupListeners(): void {
