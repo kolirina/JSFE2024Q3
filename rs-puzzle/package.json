@@ -13,7 +13,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run ci:format",
+      "pre-commit": "npm test && npm run format",
       "pre-push": "npm run lint && validate-branch-name"
     }
   },
