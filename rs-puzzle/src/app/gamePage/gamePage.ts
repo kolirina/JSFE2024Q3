@@ -47,7 +47,8 @@ export default class GamePage {
       paintingContainer.classList.add('painting-container');
       gameContainer.appendChild(paintingContainer);
 
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < this.gameData.rounds[0].words.length; i++) {
+        console.log(this.gameData.rounds[0].words.length);
         const newContainer = document.createElement('div');
         newContainer.id = `new-container-${i}`;
         newContainer.classList.add('new-container');
