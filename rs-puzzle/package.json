@@ -13,9 +13,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run format",
+      "pre-commit": "npm run ci:format",
       "pre-push": "npm run lint && validate-branch-name"
     }
+  },
+  "validate-branch-name": {
+    "pattern": "^(feat|del|fix)/(RSS-PZ-[0-9]+/_[a-z-]+)$ ",
+    "errorMsg": "Branch name does not match the pattern"
   },
   "author": "",
   "license": "ISC",
