@@ -28,6 +28,8 @@ export default class LoginForm {
     this.form.appendChild(this.nameField.getElement());
     this.form.appendChild(this.passwordField.getElement());
 
+    this.form.addEventListener('keydown', this.handleKeyDown.bind(this));
+
     this.loginButton = document.createElement('button');
     this.loginButton.type = 'submit';
     this.loginButton.textContent = 'Log in';
@@ -66,6 +68,13 @@ export default class LoginForm {
       this.loginButton.disabled = false;
     }
     console.log('handle input');
+  }
+
+  private handleKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && this.loginButton.disabled === false) {
+      event.preventDefault();
+      this.handleSubmit(event);
+    }
   }
 
   private handleSubmit(event: Event): void {
