@@ -2,24 +2,24 @@ import FormField from './formField';
 
 export interface ValidationErrors {
   [key: string]: string[];
-  name: string[];
+  login: string[];
   password: string[];
 }
 
-export function validateForm(nameField: FormField, passwordField: FormField): ValidationErrors {
-  const name = nameField.getValue().trim();
+export function validateForm(loginField: FormField, passwordField: FormField): ValidationErrors {
+  const login = loginField.getValue().trim();
   const password = passwordField.getValue().trim();
 
   const errors: ValidationErrors = {
-    name: [],
+    login: [],
     password: [],
   };
 
-  if (!nameField.validateEnglishAlphabet()) {
-    errors.name.push('Name must contain only English alphabet letters');
+  if (!loginField.validateEnglishAlphabet()) {
+    errors.login.push('Name must contain only English alphabet letters');
   }
-  if (name.length < 3) {
-    errors.name.push('Name should be 3 symbols or longer');
+  if (login.length < 3) {
+    errors.login.push('Name should be 3 symbols or longer');
   }
 
   if (!passwordField.validateEnglishAlphabet()) {
