@@ -1,5 +1,7 @@
 import LoginForm from '../login/login';
 // import handleRoute from '../../router';
+import { IUser } from '../login/login';
+import MainPage from '../main/main';
 
 export default class AboutPage {
   private container: HTMLDivElement;
@@ -10,7 +12,7 @@ export default class AboutPage {
   private link: HTMLAnchorElement;
   private backButton: HTMLButtonElement;
 
-  constructor() {
+  constructor(userData?: IUser) {
     // handleRoute(window.location.pathname);
     this.container = document.createElement('div');
     this.container.id = 'aboutContainer';
@@ -47,9 +49,15 @@ export default class AboutPage {
     this.container.appendChild(this.backButton);
 
     this.backButton.addEventListener('click', () => {
-      const login = new LoginForm();
-      this.hide();
-      login.show();
+      if (userData) {
+        const main = new MainPage(userData);
+        this.hide();
+        main.show();
+      } else {
+        const login = new LoginForm();
+        this.hide();
+        login.show();
+      }
     });
   }
 

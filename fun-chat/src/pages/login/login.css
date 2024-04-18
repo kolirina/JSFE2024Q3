@@ -16,7 +16,7 @@ body {
         width: 350px;
         margin: 0 auto;
         gap: 10px; 
-        font-size: medium;
+        font-size: 13px;
         color: rgb(70, 189, 41);
     }
     
@@ -59,4 +59,8 @@ body {
     
     .hidden {
         display: none;
+    }
+
+    .error-message {
+      font-size: 12px;
     }

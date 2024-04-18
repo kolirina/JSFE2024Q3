@@ -2,30 +2,50 @@ import LoginForm from '../login/login';
 import AboutPage from '../about/about';
 import { IUser } from '../login/login';
 
+interface IFriend {
+  login?: string;
+  isLogined?: boolean;
+}
+
 export default class MainPage {
   // private socket: WebSocket;
   public userData: IUser;
   private users: IUser[] = [];
+  public friendData: IFriend;
+
+  // public friendData: IFriend;
+
   private mainContainer: HTMLDivElement;
 
   private header: HTMLDivElement;
 
   private usersAndMessagesContainer: HTMLDivElement;
 
+  private usersPlusSearch: HTMLDivElement;
+
   private usersContainer: HTMLDivElement;
 
   private userSearchInput: HTMLInputElement;
 
-  //   private messagesContainer: HTMLDivElement;
+  private messagesPlusInput: HTMLDivElement;
+
+  private messagesContainer: HTMLDivElement;
+
+  private messagesInputContainer: HTMLDivElement;
+
   private footer: HTMLDivElement;
 
   public searchText: string;
+
+  private friendsName: HTMLDivElement;
+
+  private friendsStatus: HTMLDivElement;
 
   // public GET_USERS_ID: number;
 
   constructor(userData: IUser) {
     this.userData = userData;
-
+    this.friendData = {};
     this.mainContainer = document.createElement('div');
     this.mainContainer.classList.add('main-container');
     document.body.appendChild(this.mainContainer);
@@ -41,16 +61,21 @@ export default class MainPage {
     appName.innerHTML = 'Fun Chat';
     this.header.appendChild(appName);
 
+    const headerButtonsWrapper = document.createElement('div');
+    headerButtonsWrapper.classList.add('headerButtonsWrapper');
+    this.header.appendChild(headerButtonsWrapper);
+
     const aboutButton = document.createElement('button');
     aboutButton.textContent = 'About';
     aboutButton.classList.add('main-page-button');
+    aboutButton.classList.add('about-main-button');
     aboutButton.addEventListener('click', () => {
       history.pushState(null, '', '/about');
       this.hide();
-      const about = new AboutPage();
+      const about = new AboutPage(this.userData);
       about.show();
     });
-    this.header.appendChild(aboutButton);
+    headerButtonsWrapper.appendChild(aboutButton);
 
     const logOutButton = document.createElement('button');
     logOutButton.textContent = 'Log Out';
@@ -61,24 +86,50 @@ export default class MainPage {
       const login = new LoginForm();
       login.show();
     });
-    this.header.appendChild(logOutButton);
+    headerButtonsWrapper.appendChild(logOutButton);
 
     this.usersAndMessagesContainer = document.createElement('div');
     this.usersAndMessagesContainer.classList.add('users-and-messages-container');
     this.mainContainer.appendChild(this.usersAndMessagesContainer);
 
-    this.usersContainer = document.createElement('div');
-    this.usersContainer.classList.add('users-container');
-    this.usersAndMessagesContainer.appendChild(this.usersContainer);
+    this.usersPlusSearch = document.createElement('div');
+    this.usersPlusSearch.classList.add('usersPlusSearch');
+    this.usersAndMessagesContainer.appendChild(this.usersPlusSearch);
 
     this.userSearchInput = document.createElement('input');
     this.userSearchInput.classList.add('userSearchInput');
-    this.header.appendChild(this.userSearchInput);
+    this.usersPlusSearch.appendChild(this.userSearchInput);
     this.searchText = '';
-    this.usersContainer.innerHTML = '';
-    // this.header.appendChild(this.userSearchInput);
+
     this.userSearchInput.value = this.searchText;
     this.userSearchInput.addEventListener('input', () => this.userSearch(this.users));
+
+    this.usersContainer = document.createElement('div');
+    this.usersContainer.classList.add('users-container');
+    this.usersPlusSearch.appendChild(this.usersContainer);
+    // this.usersContainer.innerHTML = '';
+
+    this.messagesPlusInput = document.createElement('div');
+    this.messagesPlusInput.classList.add('messagesPlusInput');
+    this.usersAndMessagesContainer.appendChild(this.messagesPlusInput);
+
+    const messagesPlusInputHeader = document.createElement('div');
+    messagesPlusInputHeader.classList.add('messagesPlusInputHeader');
+    this.messagesPlusInput.appendChild(messagesPlusInputHeader);
+
+    this.friendsName = document.createElement('div');
+    messagesPlusInputHeader.appendChild(this.friendsName);
+
+    this.friendsStatus = document.createElement('div');
+    messagesPlusInputHeader.appendChild(this.friendsStatus);
+
+    this.messagesContainer = document.createElement('div');
+    this.messagesContainer.classList.add('messagesContainer');
+    this.messagesPlusInput.appendChild(this.messagesContainer);
+
+    this.messagesInputContainer = document.createElement('div');
+    this.messagesInputContainer.classList.add('messagesContainer');
+    this.messagesPlusInput.appendChild(this.messagesInputContainer);
 
     this.footer = document.createElement('div');
     this.footer.classList.add('footer');
@@ -144,7 +195,6 @@ export default class MainPage {
           payload: null,
         })
       );
-
       socket.send(
         JSON.stringify({
           // id: GET_USERS_ID.toString(),
@@ -161,15 +211,41 @@ export default class MainPage {
 
       const message = JSON.parse(event.data);
       console.log('Message from server ', message.type);
-      if (message.type === 'USER_ACTIVE') {
-        users = message.payload.users;
+
+      if (message.type === 'USER_ACTIVE' || message.type === 'USER_INACTIVE') {
+        if (message.type === 'USER_ACTIVE') {
+          const activeUsers: IUser[] = message.payload.users;
+          users = users.concat(activeUsers);
+          // this.renderUsersList(users);
+          console.log(users);
+        }
+        if (message.type === 'USER_INACTIVE') {
+          const inactiveUsers: IUser[] = message.payload.users;
+          users = users.concat(inactiveUsers);
+
+          console.log(users);
+        }
         this.renderUsersList(users);
-        console.log(users);
       }
-      if (message.type === 'USER_INACTIVE') {
-        users = message.payload.users;
-        this.renderUsersList(users);
-        console.log(users);
+
+      if (message.type === 'USER_EXTERNAL_LOGOUT' || message.type === 'USER_EXTERNAL_LOGIN') {
+        users = [];
+        socket.send(
+          JSON.stringify({
+            // id: GET_USERS_ID.toString(),
+            id: 'GET_USERS',
+            type: 'USER_ACTIVE',
+            payload: null,
+          })
+        );
+        socket.send(
+          JSON.stringify({
+            // id: GET_USERS_ID.toString(),
+            id: 'GET_USERS',
+            type: 'USER_INACTIVE',
+            payload: null,
+          })
+        );
       }
     });
 
@@ -183,9 +259,12 @@ export default class MainPage {
   }
 
   public renderUsersList(users: IUser[]) {
+    console.log(users);
     this.usersContainer.innerHTML = '';
     users.forEach((user) => {
+      console.log(users);
       if (user.login !== this.userData.login) {
+        console.log(user.login);
         const userInUsersListContainer = document.createElement('div');
         userInUsersListContainer.classList.add('userInUsersListContainer');
         this.usersContainer.appendChild(userInUsersListContainer);
@@ -207,6 +286,26 @@ export default class MainPage {
         newMessagesinUsersList.classList.add('newMessagesinUsersList');
         newMessagesinUsersList.innerHTML = `${1}`;
         userInUsersListContainer.appendChild(newMessagesinUsersList);
+
+        userInUsersListContainer.addEventListener('click', () => {
+          this.friendData = {
+            login: user.login,
+            isLogined: user.isLogined,
+          };
+          if (this.friendData) {
+            this.friendsName.innerHTML = `${this.friendData.login}`;
+            this.friendsName.classList.add('friendsName');
+            if (this.friendData.isLogined) {
+              this.friendsStatus.innerHTML = 'online';
+              this.friendsStatus.classList.remove('friendStatusOffline');
+              this.friendsStatus.classList.add('friendStatusOnline');
+            } else {
+              this.friendsStatus.innerHTML = 'offline';
+              this.friendsStatus.classList.remove('friendStatusOnline');
+              this.friendsStatus.classList.add('friendStatusOffline');
+            }
+          }
+        });
       }
     });
   }

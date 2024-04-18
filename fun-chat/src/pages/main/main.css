@@ -1,5 +1,7 @@
 
 .main-container {
+    max-width: 750px;
+    width: 100%;
     padding: 10px;
 
     display: flex;
@@ -12,10 +14,14 @@
 }
 
 .header {
+    margin-bottom: 5px;
+    padding: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 12px;
+    border: 1px solid rgb(82, 102, 158);
+    border-radius: 5px;
 }
 
 img {
@@ -25,11 +31,15 @@ img {
 }
 
 .footer {
+    margin-top: 5px;
+    padding: 5px;
     display: flex;
     flex-wrap: nowrap;
     gap: 5px;
-
+    justify-content: space-between;
     font-size: 12px;
+    border: 1px solid rgb(82, 102, 158);
+    border-radius: 5px;
 }
 
 a {
@@ -42,6 +52,12 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.headerButtonsWrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
 }
 
 .main-page-button {
@@ -60,25 +76,38 @@ a {
     transform: scale(1.02);
 }
 
+.users-and-messages-container {
+    display: flex;
+    flex-direction: row;
+}
 
 .userInUsersListContainer {
+    max-height: 20px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    gap: 15px;
     justify-content: space-between;
     align-items: center;
+    padding: 1px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.userInUsersListContainer:hover {
+    background-color: rgb(222, 225, 235);
+    height: fit-content;
 }
 
 .userSearchInput {
-    height: 12px;
+    height: 17px;
     width: 100px;
+    margin: 0px;
     font-size: 12px;
-    border: 1px solid black;
+    border: 1px solid rgb(82, 102, 158);
 }
 
 .userNameinUsersList{
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .online {
@@ -109,3 +138,55 @@ a {
     border-radius: 50%;
     border: 1px solid rgb(82, 102, 158);
 }
+
+.messagesPlusInput {
+    /* min-width: 350px; */
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgb(82, 102, 158);
+    border-radius: 5px;
+}
+
+.messagesPlusInputHeader {
+    margin-left: 2px;
+    margin-right: 2px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+.friendStatusOnline  {
+    font-size: 13px;
+    color: greenyellow;
+}
+
+.friendStatusOffline  {
+    font-size: 13px;
+    color: rgb(255, 61, 47);
+}
+
+.friendsName {
+    font-size: 13px;
+    color: rgb(43, 75, 163);;
+}
+
+.usersPlusSearch {
+
+    margin-right: 5px;
+    padding: 3px;   
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgb(82, 102, 158);
+    border-radius: 5px;
+    }
+
+.users-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}    
