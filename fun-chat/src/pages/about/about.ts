@@ -33,6 +33,7 @@ export default class AboutPage {
 
     this.container.appendChild(this.description);
     this.description.innerHTML = 'Chat with your friends. Make new friends. Have fun!';
+    this.description.classList.add('description');
 
     this.link = document.createElement('a');
 

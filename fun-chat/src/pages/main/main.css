@@ -1,5 +1,6 @@
 
 .main-container {
+    height: calc(100vh - 40px);
     max-width: 750px;
     width: 100%;
     padding: 10px;
@@ -76,7 +77,18 @@ a {
     transform: scale(1.02);
 }
 
+.main-page-button[disabled] {
+    opacity: 0.5; 
+    pointer-events: none;
+  }
+  
+  .main-page-button[disabled]:hover {
+    opacity: 0.5; 
+    cursor: not-allowed; 
+  } 
+
 .users-and-messages-container {
+    height: calc(100vh - 150px);
     display: flex;
     flex-direction: row;
 }
@@ -103,6 +115,7 @@ a {
     width: 100px;
     margin: 0px;
     font-size: 12px;
+    text-align: left;
     border: 1px solid rgb(82, 102, 158);
 }
 
@@ -145,18 +158,24 @@ a {
     padding: 5px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     border: 1px solid rgb(82, 102, 158);
     border-radius: 5px;
+
 }
 
 .messagesPlusInputHeader {
+    height: 17px;
     margin-left: 2px;
     margin-right: 2px;
+    padding: 5px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     font-size: 13px;
+    border: 1px solid rgb(82, 102, 158);
+    border-radius: 5px;
 }
 
 .friendStatusOnline  {
@@ -174,6 +193,22 @@ a {
     color: rgb(43, 75, 163);;
 }
 
+.messagesContainer {
+    height: calc(100vh - 250px);
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 15px;
+    overflow-y: auto;
+   /* justify-self: flex-end; */
+   /* justify-content: flex-end; */
+   
+}
+
+/* .messagesContainer > :first-child {
+    margin-top: auto !important;
+    /* use !important to prevent breakage from child margin settings */
+/* } */ 
+
 .usersPlusSearch {
 
     margin-right: 5px;
@@ -186,7 +221,116 @@ a {
     }
 
 .users-container {
+    /* height: calc(100vh - ); */
     display: flex;
     flex-direction: column;
     gap: 0px;
+    overflow-y: auto;
 }    
+
+.messagesPlusInputNoHeader {
+    display: flex;
+    flex-direction: column;
+     gap: 10px;
+     justify-content: flex-end;
+    /* justify-content: flex-end; */
+}
+
+.messagesInputContainer {
+    /* width: 100%; */
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 3px;
+    display: flex;
+    flex-direction: row;
+   
+    justify-content: space-between;
+    align-items: center;
+     gap: 5px;
+    border: 1px solid rgb(82, 102, 158);
+    border-radius: 5px;
+}
+
+.messageInput {
+    width: 100%;
+    height: 20px;
+    margin: 0px;
+    padding: 5px; 
+    font-size: 12px;
+    text-align: left;
+    border: 1px solid rgb(82, 102, 158);
+    border-radius: 5px;
+}
+
+.messageContainer {
+    max-width: 200px;
+    width: 85%;
+    padding: 3px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(237, 238, 240);
+    border-radius: 7px;
+}
+
+.messageFromMe{
+    align-self: flex-end;
+}
+
+.messageToMe {
+    align-self: flex-start;
+}
+
+.messageContainerHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.from {
+    font-size: 11px;
+    text-align: left;
+}
+
+.when {
+    font-size: 11px;
+    text-align: right;
+}
+
+.messageText {
+    width: 100%;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 12px;
+    text-align: left;
+    background-color: white;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.messageStatus {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.isEdited {
+    font-size: 9px;
+    text-align: left;
+}
+
+.deliveredOrRead {
+    font-size: 9px;
+    text-align: right;
+}
+
+.messagesContainerEmpty {
+   padding-bottom: calc(100vh / 3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+     text-align: center;
+    font-size: 17px;
+    color: rgb(120, 129, 155);
+}
