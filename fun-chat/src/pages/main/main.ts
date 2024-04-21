@@ -2,7 +2,7 @@ import LoginForm from '../login/login';
 import AboutPage from '../about/about';
 import { IUser } from '../login/login';
 
-interface IFriend {
+export interface IFriend {
   login?: string;
   isLogined?: boolean;
 }
@@ -21,13 +21,15 @@ interface IMessage {
 }
 
 export default class MainPage {
-  // private socket: WebSocket;
   public userData: IUser;
+
   private users: IUser[] = [];
+
   public friendData: IFriend;
+
   private messages: IMessage[] = [];
 
-  // public friendData: IFriend;
+  public newMessages: IMessage[] = [];
 
   private mainContainer: HTMLDivElement;
 
@@ -53,6 +55,8 @@ export default class MainPage {
 
   private sendButton: HTMLButtonElement;
 
+  private editButton: HTMLButtonElement;
+
   private footer: HTMLDivElement;
 
   public searchText: string;
@@ -62,13 +66,12 @@ export default class MainPage {
   private friendsStatus: HTMLDivElement;
 
   private socket: WebSocket = new WebSocket('ws://localhost:4000');
-  // public GET_USERS_ID: number;
 
   public messageText: string = '';
 
-  constructor(userData: IUser) {
+  constructor(userData: IUser, friendData?: IFriend) {
     this.userData = userData;
-    this.friendData = {};
+    this.friendData = friendData || {};
     this.mainContainer = document.createElement('div');
     this.mainContainer.classList.add('main-container');
     document.body.appendChild(this.mainContainer);
@@ -95,8 +98,22 @@ export default class MainPage {
     aboutButton.addEventListener('click', () => {
       history.pushState(null, '', '/about');
       this.hide();
-      const about = new AboutPage(this.userData);
+      const about = new AboutPage(this.userData, this.friendData);
+      console.log(this.userData);
+      console.log(this.friendData);
       about.show();
+      this.socket.send(
+        JSON.stringify({
+          id: 'USER_LOGOUT',
+          type: 'USER_LOGOUT',
+          payload: {
+            user: {
+              login: userData.login,
+              password: userData.password,
+            },
+          },
+        })
+      );
     });
     headerButtonsWrapper.appendChild(aboutButton);
 
@@ -104,6 +121,19 @@ export default class MainPage {
     logOutButton.textContent = 'Log Out';
     logOutButton.classList.add('main-page-button');
     logOutButton.addEventListener('click', () => {
+      this.socket.send(
+        JSON.stringify({
+          id: 'USER_LOGOUT',
+          type: 'USER_LOGOUT',
+          payload: {
+            user: {
+              login: userData.login,
+              password: userData.password,
+            },
+          },
+        })
+      );
+
       history.pushState(null, '', '/login');
       this.hide();
       const login = new LoginForm();
@@ -131,7 +161,6 @@ export default class MainPage {
     this.usersContainer = document.createElement('div');
     this.usersContainer.classList.add('users-container');
     this.usersPlusSearch.appendChild(this.usersContainer);
-    // this.usersContainer.innerHTML = '';
 
     this.messagesPlusInput = document.createElement('div');
     this.messagesPlusInput.classList.add('messagesPlusInput');
@@ -166,8 +195,14 @@ export default class MainPage {
     this.messageInput.classList.add('messageInput');
     this.messagesInputContainer.appendChild(this.messageInput);
 
-    this.messageInput.addEventListener('focus', () => {
-      this.sendButton.disabled = false;
+    this.messageInput.addEventListener('input', () => {
+      console.log(this.messageInput.value.trim());
+      console.log(this.messageInput.value);
+      if (this.messageInput.value.trim()) {
+        this.sendButton.disabled = false;
+      } else {
+        this.sendButton.disabled = true;
+      }
     });
 
     this.messageInput.addEventListener('keydown', this.handleKeyDown.bind(this));
@@ -186,7 +221,14 @@ export default class MainPage {
       }
       this.messageInput.value = '';
       this.messageText = '';
+      this.sendButton.disabled = true;
     });
+
+    this.editButton = document.createElement('button');
+    this.editButton.textContent = 'Save changes';
+    this.editButton.classList.add('main-page-button');
+    this.editButton.classList.add('hidden');
+    this.messagesInputContainer.appendChild(this.editButton);
 
     this.footer = document.createElement('div');
     this.footer.classList.add('footer');
@@ -227,14 +269,13 @@ export default class MainPage {
   }
 
   public renderChat(userData: IUser) {
-    // this.socket = new WebSocket('ws://localhost:4000');
     let users: IUser[] = [];
 
     if (this.socket) {
       this.socket.addEventListener('open', (event) => {
         this.socket.send(
           JSON.stringify({
-            id: 'USER',
+            id: Date.now().toString(),
             type: 'USER_LOGIN',
             payload: {
               user: {
@@ -246,7 +287,6 @@ export default class MainPage {
         );
         this.socket.send(
           JSON.stringify({
-            // id: GET_USERS_ID.toString(),
             id: 'GET_USERS',
             type: 'USER_ACTIVE',
             payload: null,
@@ -254,7 +294,6 @@ export default class MainPage {
         );
         this.socket.send(
           JSON.stringify({
-            // id: GET_USERS_ID.toString(),
             id: 'GET_USERS',
             type: 'USER_INACTIVE',
             payload: null,
@@ -262,7 +301,6 @@ export default class MainPage {
         );
       });
 
-      // Listen for messages
       this.socket.addEventListener('message', (event) => {
         console.log('Message from server ', event.data);
 
@@ -275,6 +313,7 @@ export default class MainPage {
             users = users.concat(activeUsers);
             console.log(users);
           }
+
           if (message.type === 'USER_INACTIVE') {
             const inactiveUsers: IUser[] = message.payload.users;
             users = users.concat(inactiveUsers);
@@ -283,12 +322,35 @@ export default class MainPage {
           this.renderUsersList(users);
           console.log(users);
         }
+        //
+        if (message.type === 'ERROR' && message.payload.error === 'incorrect password') {
+          console.log(message.payload.error);
 
-        if (message.type === 'USER_EXTERNAL_LOGOUT' || message.type === 'USER_EXTERNAL_LOGIN') {
+          history.pushState(null, '', '/login');
+          this.hide();
+          const login = new LoginForm();
+          login.showWrongPasswordModal();
+          return;
+        }
+
+        if (message.type === 'ERROR' && message.payload.error === 'a user with this login is already authorized') {
+          console.log(message.payload.error);
+
+          history.pushState(null, '', '/login');
+          this.hide();
+          const login = new LoginForm();
+          login.showAlreadyAuthorizedModal();
+          return;
+        }
+
+        if (
+          message.type === 'USER_EXTERNAL_LOGOUT' ||
+          message.type === 'USER_EXTERNAL_LOGIN' ||
+          message.type === 'MSG_SEND'
+        ) {
           users = [];
           this.socket.send(
             JSON.stringify({
-              // id: GET_USERS_ID.toString(),
               id: 'GET_USERS',
               type: 'USER_ACTIVE',
               payload: null,
@@ -296,32 +358,34 @@ export default class MainPage {
           );
           this.socket.send(
             JSON.stringify({
-              // id: GET_USERS_ID.toString(),
               id: 'GET_USERS',
               type: 'USER_INACTIVE',
               payload: null,
             })
           );
         }
-        if (message.type === 'MSG_SEND' && this.friendData.login) {
+        if (
+          (message.type === 'MSG_SEND' ||
+            message.type === 'MSG_READ' ||
+            message.type === 'MSG_DELETE' ||
+            message.type === 'MSG_EDIT') &&
+          this.friendData.login
+        ) {
           this.messages = [];
           this.getMessageHistory(this.friendData.login);
         }
 
         if (message.type === 'MSG_FROM_USER') {
           this.messages = message.payload.messages;
+
           console.log(this.messages);
+
           this.renderMessageHistory(this.messages);
         }
       });
     }
 
     this.userSearchInput.addEventListener('input', () => this.userSearch(users));
-    // let GET_USERS_ID = 0;
-    // private fillUsersContainer(socket: WebSocket) {
-
-    //   GET_USERS_ID += 1;
-    // }
   }
 
   public renderUsersList(users: IUser[]) {
@@ -344,10 +408,13 @@ export default class MainPage {
         userNameinUsersList.classList.add('userNameinUsersList');
         userNameinUsersList.innerHTML = `${user.login}`;
         userInUsersListContainer.appendChild(userNameinUsersList);
-
         const newMessagesinUsersList = document.createElement('div');
         newMessagesinUsersList.classList.add('newMessagesinUsersList');
-        newMessagesinUsersList.innerHTML = `${1}`;
+
+        const newMessagesFromUser = this.newMessages.filter((newMessage) => newMessage.from === user.login);
+        console.log(this.newMessages);
+        newMessagesinUsersList.innerHTML = `${newMessagesFromUser.length}`;
+
         userInUsersListContainer.appendChild(newMessagesinUsersList);
 
         userInUsersListContainer.addEventListener('click', () => {
@@ -419,13 +486,47 @@ export default class MainPage {
     this.messagesContainer.innerHTML = '';
     this.messagesContainer.classList.remove('messagesContainerEmpty');
     this.messagesContainer.classList.add('messagesContainer');
+    let timeOfUnread = Date.now();
+
     messages.sort((a, b) => {
       return b.datetime - a.datetime;
     });
     messages.forEach((message) => {
+      if (message.to === this.userData.login && message.status.isReaded === false) {
+        this.socket.send(
+          JSON.stringify({
+            id: 'MSG_READ',
+            type: 'MSG_READ',
+            payload: {
+              message: {
+                id: message.id,
+              },
+            },
+          })
+        );
+      }
+
       const messageContainer = document.createElement('div');
       messageContainer.classList.add('messageContainer');
       this.messagesContainer.appendChild(messageContainer);
+
+      messageContainer.addEventListener('contextmenu', (e: MouseEvent) => {
+        if (message.from === this.userData.login) {
+          e.preventDefault();
+          console.log(document.getElementsByClassName('context-menu'));
+          const existingContextMenus = document.getElementsByClassName('context-menu');
+          Array.from(existingContextMenus).forEach((menu) => menu.remove());
+          this.renderMessageContextMenu(message.id, message.text, e.pageX, e.pageY);
+        }
+      });
+
+      if (!message.status.isReaded && message.datetime < timeOfUnread) {
+        const unreadDivider = document.createElement('hr');
+        unreadDivider.classList.add('unread-divider');
+        unreadDivider.textContent = 'New Messages';
+        this.messagesContainer.appendChild(unreadDivider);
+        timeOfUnread = message.datetime;
+      }
 
       const messageContainerHeader = document.createElement('div');
       messageContainerHeader.classList.add('messageContainerHeader');
@@ -477,12 +578,14 @@ export default class MainPage {
       const deliveredOrRead = document.createElement('p');
       deliveredOrRead.classList.add('deliveredOrRead');
       messageStatus.appendChild(deliveredOrRead);
-      deliveredOrRead.innerHTML = 'sent';
-      if (message.status.isDelivered) {
-        deliveredOrRead.innerHTML = 'delivered';
-      }
-      if (message.status.isReaded) {
-        deliveredOrRead.innerHTML = 'read';
+      if (from.innerHTML === 'you') {
+        deliveredOrRead.innerHTML = 'sent';
+        if (message.status.isDelivered) {
+          deliveredOrRead.innerHTML = 'delivered';
+        }
+        if (message.status.isReaded) {
+          deliveredOrRead.innerHTML = 'read';
+        }
       }
     });
   }
@@ -495,6 +598,88 @@ export default class MainPage {
       }
       this.messageInput.value = '';
       this.messageText = '';
+      this.sendButton.disabled = true;
     }
+  }
+
+  private renderMessageContextMenu(messageId: string, messageText: string, mouseX: number, mouseY: number) {
+    const contextMenuContainer = document.createElement('div');
+    contextMenuContainer.classList.add('context-menu');
+
+    contextMenuContainer.style.left = mouseX + 'px';
+    contextMenuContainer.style.top = mouseY + 'px';
+
+    const editOption = document.createElement('div');
+    editOption.textContent = 'Изменить';
+    editOption.classList.add('context-menu-option');
+    editOption.addEventListener('click', () => {
+      this.editMessage(messageId, messageText);
+      contextMenuContainer.remove();
+    });
+    contextMenuContainer.appendChild(editOption);
+
+    const deleteOption = document.createElement('div');
+    deleteOption.textContent = 'Удалить';
+    deleteOption.classList.add('context-menu-option');
+    deleteOption.addEventListener('click', () => {
+      this.deleteMessage(messageId);
+      contextMenuContainer.remove();
+    });
+    contextMenuContainer.appendChild(deleteOption);
+    document.body.appendChild(contextMenuContainer);
+    document.addEventListener('click', (e) => {
+      if (!contextMenuContainer.contains(e.target as Node)) {
+        contextMenuContainer.remove();
+      }
+    });
+  }
+
+  private deleteMessage(messageID: string) {
+    this.socket.send(
+      JSON.stringify({
+        id: 'MSG_DELETE',
+        type: 'MSG_DELETE',
+        payload: {
+          message: {
+            id: messageID,
+          },
+        },
+      })
+    );
+  }
+
+  private editMessage(messageID: string, messageText: string) {
+    this.messageInput.value = messageText;
+    console.log(this.messageInput.value);
+    console.log(messageText);
+    this.editButton.classList.remove('hidden');
+    this.sendButton.classList.add('hidden');
+    this.editButton.addEventListener('click', () => {
+      this.socket.send(
+        JSON.stringify({
+          id: 'MSG_EDIT',
+          type: 'MSG_EDIT',
+          payload: {
+            message: {
+              id: messageID,
+              text: this.messageInput.value,
+            },
+          },
+        })
+      );
+      this.editButton.classList.add('hidden');
+      this.sendButton.classList.remove('hidden');
+      this.messageInput.value = '';
+    });
+  }
+
+  private saveCredentialsToSessionStorage(login: string, password: string): void {
+    sessionStorage.setItem('login', login);
+    sessionStorage.setItem('password', password);
+  }
+
+  private clearCredentialsFromSessionStorage(): void {
+    sessionStorage.removeItem('login');
+    sessionStorage.removeItem('password');
   }
 }

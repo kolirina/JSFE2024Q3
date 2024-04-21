@@ -62,13 +62,6 @@ export default class LoginForm {
     document.body.appendChild(this.form);
 
     this.setupListeners();
-
-    // const userData = retrieveUserData();
-    // if (userData) {
-    //   this.hide();
-    //   const welcomePage = new WelcomePage(userData, GameData);
-    //   welcomePage.show();
-    // }
   }
 
   private setupListeners(): void {
@@ -106,10 +99,6 @@ export default class LoginForm {
       this.clearInputFields();
       this.hide();
       history.pushState(null, '', '/main');
-
-      // const welcomePage = new WelcomePage(userData, this.GameData);
-      // welcomePage.show();
-
       const main = new MainPage(userData);
       main.show();
     }
@@ -154,5 +143,53 @@ export default class LoginForm {
 
   public hide(): void {
     this.form.style.display = 'none';
+  }
+
+  public showAlreadyAuthorizedModal(): void {
+    const modalContainer = document.createElement('div');
+    modalContainer.classList.add('modal-container');
+
+    const modalContent = document.createElement('div');
+    modalContent.classList.add('modal-content');
+    modalContainer.appendChild(modalContent);
+
+    const message = document.createElement('p');
+    message.textContent = 'User with this login is already authorized.';
+    modalContent.appendChild(message);
+
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.classList.add('login-page-button');
+    closeButton.classList.add('modal-button');
+    closeButton.addEventListener('click', () => {
+      modalContainer.remove();
+    });
+    modalContent.appendChild(closeButton);
+
+    document.body.appendChild(modalContainer);
+  }
+
+  public showWrongPasswordModal(): void {
+    const modalContainer = document.createElement('div');
+    modalContainer.classList.add('modal-container');
+
+    const modalContent = document.createElement('div');
+    modalContent.classList.add('modal-content');
+    modalContainer.appendChild(modalContent);
+
+    const message = document.createElement('p');
+    message.textContent = 'Wrong password.';
+    modalContent.appendChild(message);
+
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.classList.add('login-page-button');
+    closeButton.classList.add('modal-button');
+    closeButton.addEventListener('click', () => {
+      modalContainer.remove();
+    });
+    modalContent.appendChild(closeButton);
+
+    document.body.appendChild(modalContainer);
   }
 }

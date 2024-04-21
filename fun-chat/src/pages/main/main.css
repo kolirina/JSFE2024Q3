@@ -153,7 +153,6 @@ a {
 }
 
 .messagesPlusInput {
-    /* min-width: 350px; */
     width: 100%;
     padding: 5px;
     display: flex;
@@ -199,15 +198,9 @@ a {
     flex-direction: column-reverse;
     gap: 15px;
     overflow-y: auto;
-   /* justify-self: flex-end; */
-   /* justify-content: flex-end; */
    
 }
 
-/* .messagesContainer > :first-child {
-    margin-top: auto !important;
-    /* use !important to prevent breakage from child margin settings */
-/* } */ 
 
 .usersPlusSearch {
 
@@ -215,15 +208,16 @@ a {
     padding: 3px;   
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+
     border: 1px solid rgb(82, 102, 158);
     border-radius: 5px;
     }
 
 .users-container {
-    /* height: calc(100vh - ); */
+
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     gap: 0px;
     overflow-y: auto;
 }    
@@ -233,11 +227,11 @@ a {
     flex-direction: column;
      gap: 10px;
      justify-content: flex-end;
-    /* justify-content: flex-end; */
+ 
 }
 
 .messagesInputContainer {
-    /* width: 100%; */
+ 
     margin-left: 2px;
     margin-right: 2px;
     padding: 3px;
@@ -263,6 +257,7 @@ a {
 }
 
 .messageContainer {
+    position: relative;
     max-width: 200px;
     width: 85%;
     padding: 3px;
@@ -334,3 +329,26 @@ a {
     font-size: 17px;
     color: rgb(120, 129, 155);
 }
+
+.context-menu {
+    position: absolute;
+    padding: 5px;
+    z-index: 1000; 
+    background-color: rgb(222, 225, 235, 0.8);
+    border-radius: 7px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.context-menu-option {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 11px;
+  }
+  
+  .context-menu-option:hover {
+    background-color: #f0f0f0; 
+  }
+
+  .hidden {
+    display: none;
+  }
