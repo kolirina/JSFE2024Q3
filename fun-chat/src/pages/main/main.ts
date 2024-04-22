@@ -505,6 +505,10 @@ export default class MainPage {
     this.messagesContainer.innerHTML = '';
     this.messagesContainer.classList.remove('messagesContainerEmpty');
     this.messagesContainer.classList.add('messagesContainer');
+    if (messages.length === 0) {
+      this.messagesContainer.classList.add('messagesContainerEmpty');
+      this.messagesContainer.innerHTML = 'Type tour first message...';
+    }
     let timeOfUnread = Date.now();
 
     messages.sort((a, b) => {
