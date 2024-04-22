@@ -69,6 +69,8 @@ export default class MainPage {
 
   public messageText: string = '';
 
+  private reconnectingModal!: HTMLDivElement;
+
   constructor(userData: IUser, friendData?: IFriend) {
     this.userData = userData;
     this.friendData = friendData || {};
@@ -257,6 +259,8 @@ export default class MainPage {
     year.classList.add('year');
     year.textContent = '2024';
     this.footer.appendChild(year);
+
+    this.createReconnectingModal();
   }
 
   public show(): void {
@@ -301,11 +305,27 @@ export default class MainPage {
         );
       });
 
+      this.socket.onclose = () => {
+        this.showReconnectingModal();
+        console.log('Соединение с сервером потеряно. Пытаюсь восстановить...');
+        this.reconnect();
+      };
+
       this.socket.addEventListener('message', (event) => {
         console.log('Message from server ', event.data);
 
         const message = JSON.parse(event.data);
         console.log('Message from server ', message.type);
+
+        if (message.type === 'USER_LOGIN') {
+          sessionStorage.setItem('login', this.userData.login);
+          sessionStorage.setItem('password', this.userData.password);
+        }
+
+        if (message.type === 'USER_LOGOUT') {
+          sessionStorage.removeItem('login');
+          sessionStorage.removeItem('password');
+        }
 
         if (message.type === 'USER_ACTIVE' || message.type === 'USER_INACTIVE') {
           if (message.type === 'USER_ACTIVE') {
@@ -452,7 +472,6 @@ export default class MainPage {
   }
 
   private sendMessage(friend: string, message: string): void {
-    console.log('sendmessage');
     this.socket.send(
       JSON.stringify({
         id: 'MSG_SEND',
@@ -491,23 +510,36 @@ export default class MainPage {
     messages.sort((a, b) => {
       return b.datetime - a.datetime;
     });
+    let areThereNewMessages = false;
+    let firstReadMessage = false;
+    // let isLineDrawn = false;
+
     messages.forEach((message) => {
       if (message.to === this.userData.login && message.status.isReaded === false) {
-        this.socket.send(
-          JSON.stringify({
-            id: 'MSG_READ',
-            type: 'MSG_READ',
-            payload: {
-              message: {
-                id: message.id,
-              },
-            },
-          })
-        );
+        areThereNewMessages = true;
+        console.log(`this is the new message ${message.datetime}`);
+
+        this.messagesContainer.addEventListener('click', () => this.markMessagesAsRead(message.id));
+        this.messagesContainer.addEventListener('scroll', () => this.markMessagesAsRead(message.id));
+        this.messageInput.addEventListener('input', () => this.markMessagesAsRead(message.id));
       }
 
+      if (
+        areThereNewMessages === true &&
+        (message.status.isReaded === true || message.from === this.userData.login) &&
+        !firstReadMessage
+      ) {
+        console.log(`this is the firstReadMsg ${message.datetime}`);
+        console.log('the case');
+        firstReadMessage = true;
+        const unreadDivider = document.createElement('div');
+        unreadDivider.classList.add('unread-divider');
+        unreadDivider.textContent = 'New Messages';
+        this.messagesContainer.appendChild(unreadDivider);
+      }
       const messageContainer = document.createElement('div');
       messageContainer.classList.add('messageContainer');
+
       this.messagesContainer.appendChild(messageContainer);
 
       messageContainer.addEventListener('contextmenu', (e: MouseEvent) => {
@@ -520,13 +552,13 @@ export default class MainPage {
         }
       });
 
-      if (!message.status.isReaded && message.datetime < timeOfUnread) {
-        const unreadDivider = document.createElement('hr');
-        unreadDivider.classList.add('unread-divider');
-        unreadDivider.textContent = 'New Messages';
-        this.messagesContainer.appendChild(unreadDivider);
-        timeOfUnread = message.datetime;
-      }
+      // if (!message.status.isReaded && message.datetime < timeOfUnread) {
+      //   const unreadDivider = document.createElement('hr');
+      //   unreadDivider.classList.add('unread-divider');
+      //   unreadDivider.textContent = 'New Messages';
+      //   this.messagesContainer.appendChild(unreadDivider);
+      //   timeOfUnread = message.datetime;
+      // }
 
       const messageContainerHeader = document.createElement('div');
       messageContainerHeader.classList.add('messageContainerHeader');
@@ -681,5 +713,77 @@ export default class MainPage {
   private clearCredentialsFromSessionStorage(): void {
     sessionStorage.removeItem('login');
     sessionStorage.removeItem('password');
+  }
+
+  private markMessagesAsRead(id: string) {
+    this.socket.send(
+      JSON.stringify({
+        id: 'MSG_READ',
+        type: 'MSG_READ',
+        payload: {
+          message: {
+            id: `${id}`,
+          },
+        },
+      })
+    );
+    this.messagesContainer.removeEventListener('click', () => this.markMessagesAsRead(id));
+    this.messagesContainer.removeEventListener('scroll', () => this.markMessagesAsRead(id));
+    this.messageInput.removeEventListener('input', () => this.markMessagesAsRead(id));
+  }
+
+  private reconnect(): void {
+    setTimeout(() => {
+      this.socket = new WebSocket('ws://localhost:4000');
+
+      this.socket.onopen = () => {
+        console.log('Соединение восстановлено.');
+        this.hideReconnectingModal();
+        this.autoReauthorize();
+      };
+
+      this.socket.onerror = (error) => {
+        console.error('Ошибка восстановления соединения:', error);
+      };
+    }, 20000);
+  }
+
+  private autoReauthorize(): void {
+    const login = sessionStorage.getItem('login');
+    const password = sessionStorage.getItem('password');
+    if (login && password) {
+      console.log('Автоматическая повторная авторизация...');
+      this.socket.send(
+        JSON.stringify({
+          id: 'USER_LOGIN',
+          type: 'USER_LOGIN',
+          payload: {
+            user: {
+              login: login,
+              password: password,
+            },
+          },
+        })
+      );
+    } else {
+      console.log('Данные пользователя не найдены в sessionStorage.');
+    }
+  }
+
+  private createReconnectingModal(): void {
+    this.reconnectingModal = document.createElement('div');
+    this.reconnectingModal.classList.add('modal');
+    this.reconnectingModal.textContent = 'Reconnecting in 20 seconds...';
+    document.body.appendChild(this.reconnectingModal);
+    this.hideReconnectingModal();
+    console.log('show recon modal');
+  }
+
+  private showReconnectingModal(): void {
+    this.reconnectingModal.style.display = 'block';
+  }
+
+  private hideReconnectingModal(): void {
+    this.reconnectingModal.style.display = 'none';
   }
 }
