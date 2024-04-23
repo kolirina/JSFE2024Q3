@@ -33,8 +33,6 @@ export default class GarageView {
 
   maxCarsAmount: number = 100;
 
-  // public popUp!: HTMLDivElement;
-
   constructor() {
     this.initGame();
     this.currentPage = 1;
@@ -71,8 +69,6 @@ export default class GarageView {
         this.hide();
         winnersView.render();
         winnersView.show();
-        // this.mainContainer.innerHTML = ""; // Очистить контейнер перед добавлением нового представления
-        // this.mainContainer.appendChild(winnersView); // Добавить новое представление в основной контейнер
       });
       this.header.appendChild(toWinnersButton);
 
@@ -132,8 +128,6 @@ export default class GarageView {
           const startIndex = (this.currentPage - 1) * this.carsPerPage;
           const endIndex = startIndex + this.carsPerPage;
           const carsToRace = this.garage.cars.slice(startIndex, endIndex);
-
-          // Запускаем гонку для всех машин на текущей странице
           await startRace(carsToRace);
 
           console.log("Гонка начата");
@@ -169,7 +163,6 @@ export default class GarageView {
       this.mainContainer.appendChild(this.racingTrackContainer);
 
       this.renderGaragePage();
-      //   fillRacingTrack(this.garage.cars, this.racingTrackContainer);
 
       this.setupListeners();
     } catch (error) {

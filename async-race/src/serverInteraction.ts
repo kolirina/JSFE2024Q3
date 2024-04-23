@@ -94,7 +94,6 @@ export const engineSuccess = async (id: number) => {
       method: "PATCH",
     }
   );
-  //  const engineData = await response.json();
   console.log(response.status);
   return response.status;
 };
