@@ -46,7 +46,6 @@ export default class GarageView {
       this.garage = await getCars();
 
       this.totalPages = Math.ceil(this.garage.cars.length / this.carsPerPage);
-      console.log(this.totalPages);
 
       this.mainContainer = document.createElement("div");
       this.mainContainer.classList.add("main-container");
@@ -129,8 +128,6 @@ export default class GarageView {
           const endIndex = startIndex + this.carsPerPage;
           const carsToRace = this.garage.cars.slice(startIndex, endIndex);
           await startRace(carsToRace);
-
-          console.log("Гонка начата");
         } catch (error) {
           console.error("Ошибка при запуске гонки:", error);
         }
@@ -264,7 +261,6 @@ export default class GarageView {
       updateNameInput.value = car.name;
       updateColorInput.value = car.color;
       this.carToUpdate = car;
-      console.log(this);
     }
   }
 
@@ -318,7 +314,6 @@ export default class GarageView {
     this.renderGaragePage();
   }
   public renderPagination(): void {
-    console.log("render pagination");
     const pagination = renderPagination(
       this.currentPage,
       this.totalPages,
@@ -339,16 +334,9 @@ export default class GarageView {
   }
 
   public renderGaragePage(): void {
-    console.log("renderGaragePage");
-    console.log(this.currentPage);
     const startIndex = (this.currentPage - 1) * this.carsPerPage;
-    console.log(startIndex);
     const endIndex = startIndex + this.carsPerPage;
-    console.log(endIndex);
     const currentCars = this.garage.cars.slice(startIndex, endIndex);
-    console.log(this.garage.cars);
-    console.log(currentCars);
-
     this.clearGarage();
     fillRacingTrack(currentCars, this.racingTrackContainer);
     this.renderPagination();
@@ -360,7 +348,6 @@ function fillRacingTrack(
   racingTrackContainer: HTMLDivElement
 ): void {
   racingTrackContainer.innerHTML = "";
-  console.log(cars);
   cars.forEach((car) => {
     let carDiv = document.createElement("div");
     carDiv.id = car.id?.toString() || "";
