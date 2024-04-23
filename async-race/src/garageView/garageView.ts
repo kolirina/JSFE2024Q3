@@ -7,6 +7,7 @@ import getRandomName from "../randomName";
 import { renderPagination, nextPage, prevPage } from "../pagination";
 import { carAnimation, stopAnimation, startRace } from "./carAnimation";
 import WinnersView from "../winnersView/winnersView";
+import { createDiv, createBtn, createInpt } from "../elementCreator";
 
 export default class GarageView {
   public mainContainer!: HTMLDivElement;
@@ -47,81 +48,86 @@ export default class GarageView {
 
       this.totalPages = Math.ceil(this.garage.cars.length / this.carsPerPage);
 
-      this.mainContainer = document.createElement("div");
-      this.mainContainer.classList.add("main-container");
-      document.body.appendChild(this.mainContainer);
+      this.mainContainer = createDiv("main-container", document.body);
 
-      this.header = document.createElement("div");
-      this.header.classList.add("header");
-      this.mainContainer.appendChild(this.header);
+      this.header = createDiv("header", this.mainContainer);
 
-      const toGarageButton = document.createElement("button");
-      toGarageButton.classList.add("toGarageButton");
-      toGarageButton.textContent = "to Garage";
-      this.header.appendChild(toGarageButton);
+      const toGarageButton = createBtn(
+        "toGarageButton",
+        this.header,
+        "to Garage"
+      );
 
-      const toWinnersButton = document.createElement("button");
-      toWinnersButton.classList.add("toWinnersButton");
-      toWinnersButton.textContent = "to Winners";
+      const toWinnersButton = createBtn(
+        "toWinnersButton",
+        this.header,
+        "to Winners"
+      );
       toWinnersButton.addEventListener("click", (event) => {
         const winnersView = new WinnersView();
         this.hide();
         winnersView.render();
         winnersView.show();
       });
-      this.header.appendChild(toWinnersButton);
 
-      this.createContainer = document.createElement("div");
-      this.createContainer.classList.add("create-container");
-      this.mainContainer.appendChild(this.createContainer);
+      this.createContainer = createDiv("create-container", this.mainContainer);
 
-      const createInput = document.createElement("input");
-      createInput.id = "createCarName";
-      createInput.placeholder = "Enter car name";
-      this.createContainer.appendChild(createInput);
+      const createInput = createInpt(
+        this.createContainer,
+        "createCarName",
+        undefined,
+        "Enter car name"
+      );
 
-      const colorInput = document.createElement("input");
-      colorInput.type = "color";
-      colorInput.id = "createCarColor";
-      this.createContainer.appendChild(colorInput);
+      const colorInput = createInpt(
+        this.createContainer,
+        "createCarColor",
+        "color",
+        undefined
+      );
 
-      const createButton = document.createElement("button");
-      createButton.classList.add("create-button");
+      const createButton = createBtn(
+        "create-button",
+        this.createContainer,
+        "Create Car"
+      );
       createButton.id = "createButton";
-      createButton.textContent = "Create Car";
       createButton.type = "submit";
-      this.createContainer.appendChild(createButton);
 
-      this.updateContainer = document.createElement("div");
-      this.updateContainer.classList.add("update-container");
-      this.mainContainer.appendChild(this.updateContainer);
+      this.updateContainer = createDiv("update-container", this.mainContainer);
 
-      const updateInput = document.createElement("input");
-      updateInput.placeholder = "Choose a car";
-      updateInput.id = "updateCarName";
-      this.updateContainer.appendChild(updateInput);
+      const updateInput = createInpt(
+        this.updateContainer,
+        "updateCarName",
+        undefined,
+        "Choose a car"
+      );
 
-      const updateColorInput = document.createElement("input");
-      updateColorInput.type = "color";
-      updateColorInput.id = "updateCarColor";
-      this.updateContainer.appendChild(updateColorInput);
+      const updateColorInput = createInpt(
+        this.updateContainer,
+        "updateCarColor",
+        "color",
+        undefined
+      );
 
-      const updateButton = document.createElement("button");
-      updateButton.classList.add("update-button");
-      updateButton.textContent = "Update Car";
+      const updateButton = createBtn(
+        "update-button",
+        this.updateContainer,
+        "Update Car"
+      );
       updateButton.id = "updateButton";
       updateButton.type = "submit";
-      this.updateContainer.appendChild(updateButton);
 
-      this.raceResetGenerateContainer = document.createElement("div");
-      this.raceResetGenerateContainer.classList.add(
-        "raceResetGenerate-container"
+      this.raceResetGenerateContainer = createDiv(
+        "raceResetGenerate-container",
+        this.mainContainer
       );
-      this.mainContainer.appendChild(this.raceResetGenerateContainer);
 
-      const raceButton = document.createElement("button");
-      raceButton.classList.add("race-button");
-      raceButton.textContent = "Race";
+      const raceButton = createBtn(
+        "race-button",
+        this.raceResetGenerateContainer,
+        "Race"
+      );
       raceButton.addEventListener("click", async (event) => {
         try {
           const startIndex = (this.currentPage - 1) * this.carsPerPage;
@@ -132,32 +138,30 @@ export default class GarageView {
           console.error("Ошибка при запуске гонки:", error);
         }
       });
-      this.raceResetGenerateContainer.appendChild(raceButton);
 
-      const resetButton = document.createElement("button");
-      resetButton.classList.add("reset-button");
-      resetButton.textContent = "Reset";
-      this.raceResetGenerateContainer.appendChild(resetButton);
+      const resetButton = createBtn(
+        "reset-button",
+        this.raceResetGenerateContainer,
+        "Reset"
+      );
 
-      const generateCarsButton = document.createElement("button");
-      generateCarsButton.classList.add("generate-cars-button");
+      const generateCarsButton = createBtn(
+        "generate-cars-button",
+        this.raceResetGenerateContainer,
+        "Generate Cars"
+      );
       generateCarsButton.id = "generateCarsButton";
-      generateCarsButton.textContent = "Generate Cars";
-      this.raceResetGenerateContainer.appendChild(generateCarsButton);
 
-      this.garageCount = document.createElement("div");
-      this.garageCount.classList.add("garage-count");
+      this.garageCount = createDiv("garage-count", this.mainContainer);
       this.garageCount.innerHTML = `Garage (${this.garage.cars.length})`;
-      this.mainContainer.appendChild(this.garageCount);
 
-      this.pageNum = document.createElement("div");
+      this.pageNum = createDiv("page-num", this.mainContainer);
       this.pageNum.innerHTML = `Page #${this.currentPage}`;
-      this.pageNum.classList.add("page-num");
 
-      this.mainContainer.appendChild(this.pageNum);
-      this.racingTrackContainer = document.createElement("div");
-      this.racingTrackContainer.classList.add("racing-container");
-      this.mainContainer.appendChild(this.racingTrackContainer);
+      this.racingTrackContainer = createDiv(
+        "racing-container",
+        this.mainContainer
+      );
 
       this.renderGaragePage();
 
@@ -349,11 +353,9 @@ function fillRacingTrack(
 ): void {
   racingTrackContainer.innerHTML = "";
   cars.forEach((car) => {
-    let carDiv = document.createElement("div");
+    let carDiv = createDiv("car-div", racingTrackContainer);
     carDiv.id = car.id?.toString() || "";
-    carDiv.classList.add("car-div");
     fillCarDiv(car, carDiv, garageView);
-    racingTrackContainer.appendChild(carDiv);
   });
 }
 
@@ -362,49 +364,34 @@ function fillCarDiv(
   carDiv: HTMLDivElement,
   garageView: GarageView
 ): void {
-  const carDivTopWrapper = document.createElement("div");
-  carDivTopWrapper.classList.add("car-top-wrapper");
-  carDiv.appendChild(carDivTopWrapper);
+  const carDivTopWrapper = createDiv("car-top-wrapper", carDiv);
 
-  const selectButton = document.createElement("button");
-  selectButton.textContent = "select";
+  const selectButton = createBtn("selectBtn", carDivTopWrapper, "select");
   selectButton.id = `selectButton${car.id}`;
   selectButton.addEventListener("click", (event) =>
     garageView.selectCarHandler(event, car)
   );
-  carDivTopWrapper.appendChild(selectButton);
 
-  const removeButton = document.createElement("button");
-  removeButton.textContent = "remove";
+  const removeButton = createBtn("cteateBtn", carDivTopWrapper, "remove");
   removeButton.addEventListener("click", (event) =>
     garageView.removeCarHandler(event, car)
   );
-  carDivTopWrapper.appendChild(removeButton);
 
-  const carName = document.createElement("div");
-  carName.classList.add("car-name");
+  const carName = createDiv("car-name", carDivTopWrapper);
   carName.innerHTML = `${car.name}`;
-  carDivTopWrapper.appendChild(carName);
 
-  const carDivBottomWrapper = document.createElement("div");
-  carDivBottomWrapper.classList.add("car-bottom-wrapper");
+  const carDivBottomWrapper = createDiv("car-bottom-wrapper", carDiv);
   carDivBottomWrapper.id = `car-bottom-wrapper${car.id}`;
-  carDiv.appendChild(carDivBottomWrapper);
 
-  const goButton = document.createElement("button");
-  goButton.classList.add("button-small");
+  const goButton = createBtn("button-small", carDivBottomWrapper, "A");
   goButton.id = `go-button${car.id}`;
-  goButton.textContent = "A";
   goButton.addEventListener("click", (event) => {
     if (car.id) {
       carAnimation(car.id, carDivBottomWrapper, carPicContainer);
     }
   });
-  carDivBottomWrapper.appendChild(goButton);
 
-  const stopButton = document.createElement("button");
-  stopButton.classList.add("button-small");
-  stopButton.textContent = "B";
+  const stopButton = createBtn("button-small", carDivBottomWrapper, "B");
   stopButton.addEventListener("click", (event) => {
     if (car.id) {
       const carDivBottomWrapper = document.getElementById(
@@ -423,11 +410,8 @@ function fillCarDiv(
     await stopAnimation(id, carDivBottomWrapper);
   }
 
-  carDivBottomWrapper.appendChild(stopButton);
+  const carPicContainer = createDiv("car-pic-container", carDivBottomWrapper);
 
-  const carPicContainer = document.createElement("div");
-  carPicContainer.classList.add("car-pic-container");
-  carDivBottomWrapper.appendChild(carPicContainer);
   const svgElement = createSVGElement(car);
   carPicContainer.id = `car-pic-container${car.id}`;
   carPicContainer.appendChild(svgElement);

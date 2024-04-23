@@ -2,14 +2,13 @@ import { getVelocity, engineSuccess, createWinner } from "../serverInteraction";
 import { Car, Winner } from "../interface";
 import garageView from "./garageView";
 import GarageView from "./garageView";
+import { createDiv } from "../elementCreator";
 
 let winners: Winner[] = [];
 let popUp: HTMLDivElement;
 
-popUp = document.createElement("div");
+popUp = createDiv("hidden", document.body);
 popUp.id = "popUp";
-popUp.classList.add("hidden");
-document.body.appendChild(popUp);
 document.addEventListener("click", (event) => {
   if (!popUp.contains(event.target as Node)) {
     popUp.classList.add("hidden");
