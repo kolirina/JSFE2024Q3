@@ -8,11 +8,6 @@ const path = {
   winners: "/winners",
 };
 
-// const generateQueryString = (queryParams = []) =>
-//   queryParams.length
-//     ? `?${queryParams.map((x) => `${x.key}=${x.value}`).join("&")}`
-//     : "";
-
 export const getCars = async () => {
   const response = await fetch(`${baseUrl}${path.garage}`);
   const cars = await response.json();
