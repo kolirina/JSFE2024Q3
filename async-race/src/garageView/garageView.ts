@@ -31,6 +31,8 @@ export default class GarageView {
 
   public carToUpdate!: Car;
 
+  maxCarsAmount: number = 100;
+
   // public popUp!: HTMLDivElement;
 
   constructor() {
@@ -38,6 +40,7 @@ export default class GarageView {
     this.currentPage = 1;
     this.carsPerPage = 7;
     this.totalPages = 0;
+    this.maxCarsAmount = 100;
   }
 
   public async initGame(): Promise<void> {
@@ -289,7 +292,7 @@ export default class GarageView {
 
   private async generateCarsHandler(event: MouseEvent): Promise<void> {
     event.preventDefault();
-    for (let i = 0; i < 100; i += 1) {
+    for (let i = 0; i < this.maxCarsAmount; i += 1) {
       const name = getRandomName();
       const color = getRandomColor();
       try {
