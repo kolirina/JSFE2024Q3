@@ -11,6 +11,10 @@ enum HttpMethod {
 
 const baseUrl = "http://localhost:3000";
 
+const jsonHeaders = {
+  "Content-Type": "application/json",
+};
+
 const path = {
   garage: "/garage",
   engine: "/engine",
@@ -36,9 +40,7 @@ export const getCar = async (id: number) => {
 export const createCar = async (body: Car) => {
   const response = await fetch(`${baseUrl}${path.garage}`, {
     method: HttpMethod.POST,
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: jsonHeaders,
     body: JSON.stringify(body),
   });
   const car = await response.json();
@@ -49,9 +51,7 @@ export const createCar = async (body: Car) => {
 export const updateCar = async (id: number, body: Car) => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
     method: HttpMethod.PUT,
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: jsonHeaders,
     body: JSON.stringify(body),
   });
   const car = await response.json();
@@ -62,9 +62,7 @@ export const updateCar = async (id: number, body: Car) => {
 const updateCarParam = async (id: number, body: Car) => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
     method: HttpMethod.PATCH,
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: jsonHeaders,
     body: JSON.stringify(body),
   });
   const car = await response.json();
@@ -110,9 +108,7 @@ export const engineSuccess = async (id: number) => {
 export const createWinner = async (body: Winner) => {
   const response = await fetch(`${baseUrl}${path.winners}`, {
     method: HttpMethod.POST,
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: jsonHeaders,
     body: JSON.stringify(body),
   });
   const winner = await response.json();
@@ -138,9 +134,7 @@ export const updateWinner = async (
 ) => {
   const response = await fetch(`${baseUrl}${path.winners}/:${id}`, {
     method: HttpMethod.PUT,
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: jsonHeaders,
     body: JSON.stringify(body),
   });
   const winner = await response.json();
