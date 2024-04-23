@@ -188,5 +188,5 @@ export default function getRandomName() {
   const randomBrandIndex = Math.floor(Math.random() * carBrands.length);
   const randomModelIndex = Math.floor(Math.random() * carModels.length);
 
-  return carBrands[randomBrandIndex] + " " + carModels[randomModelIndex];
+  return `${carBrands[randomBrandIndex]} ${carModels[randomModelIndex]}`;
 }
