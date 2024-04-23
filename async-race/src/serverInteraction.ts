@@ -1,5 +1,14 @@
 import { stopAnimation } from "./garageView/carAnimation";
 import { Car, Winner } from "./interface";
+
+enum HttpMethod {
+  GET = "GET",
+  POST = "POST",
+  PUT = "PUT",
+  PATCH = "PATCH",
+  DELETE = "DELETE",
+}
+
 const baseUrl = "http://localhost:3000";
 
 const path = {
@@ -26,7 +35,7 @@ export const getCar = async (id: number) => {
 
 export const createCar = async (body: Car) => {
   const response = await fetch(`${baseUrl}${path.garage}`, {
-    method: "POST",
+    method: HttpMethod.POST,
     headers: {
       "Content-Type": "application/json",
     },
@@ -39,7 +48,7 @@ export const createCar = async (body: Car) => {
 
 export const updateCar = async (id: number, body: Car) => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
-    method: "PUT",
+    method: HttpMethod.PUT,
     headers: {
       "Content-Type": "application/json",
     },
@@ -52,7 +61,7 @@ export const updateCar = async (id: number, body: Car) => {
 
 const updateCarParam = async (id: number, body: Car) => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
-    method: "PATCH",
+    method: HttpMethod.PATCH,
     headers: {
       "Content-Type": "application/json",
     },
@@ -65,7 +74,7 @@ const updateCarParam = async (id: number, body: Car) => {
 
 export const deleteCar = async (id: number) => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
-    method: "DELETE",
+    method: HttpMethod.DELETE,
   });
   const car = await response.json();
 
@@ -76,7 +85,7 @@ export const getVelocity = async (id: number) => {
   const response = await fetch(
     `${baseUrl}${path.engine}?id=${id}&status=started`,
     {
-      method: "PATCH",
+      method: HttpMethod.PATCH,
     }
   );
   const engineData = await response.json();
@@ -91,7 +100,7 @@ export const engineSuccess = async (id: number) => {
   const response = await fetch(
     `${baseUrl}${path.engine}?id=${id}&status=drive`,
     {
-      method: "PATCH",
+      method: HttpMethod.PATCH,
     }
   );
   console.log(response.status);
@@ -100,7 +109,7 @@ export const engineSuccess = async (id: number) => {
 
 export const createWinner = async (body: Winner) => {
   const response = await fetch(`${baseUrl}${path.winners}`, {
-    method: "POST",
+    method: HttpMethod.POST,
     headers: {
       "Content-Type": "application/json",
     },
@@ -113,7 +122,7 @@ export const createWinner = async (body: Winner) => {
 
 export const deleteWinner = async (id: number) => {
   const response = await fetch(`${baseUrl}${path.winners}/:${id}`, {
-    method: "DELETE",
+    method: HttpMethod.DELETE,
   });
   const winner = await response.json();
 
@@ -128,7 +137,7 @@ export const updateWinner = async (
   }
 ) => {
   const response = await fetch(`${baseUrl}${path.winners}/:${id}`, {
-    method: "PUT",
+    method: HttpMethod.PUT,
     headers: {
       "Content-Type": "application/json",
     },
