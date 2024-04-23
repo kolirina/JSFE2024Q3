@@ -1,14 +1,14 @@
 #winners-table {
     width: 100%;
-    border-collapse: collapse;
     margin-top: 20px;
-  }
+    border-collapse: collapse;
+      }
   
   #winners-table th {
-    background-color: #f2f2f2;
-    color: #333;
     padding: 10px;
     text-align: left;
+    color: #333;
+    background-color: #f2f2f2;
   }
   
   #winners-table td {

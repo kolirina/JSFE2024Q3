@@ -1,7 +1,7 @@
-.main-container {
+.main-container { 
+  padding: 15px;
     background-color: rgb(162, 165, 241);
-    padding: 15px;
-}
+   }
 
 body {
     background-color: rgb(162, 165, 241);
@@ -15,7 +15,6 @@ body {
     display: flex;
     flex-direction: row;
     border-bottom: 4px dashed rgb(143, 226, 215);
-    /* gap: 10px; */
     background-image: url('../images/favicon.webp');
   background-repeat: no-repeat; 
   background-position: right center;
@@ -26,19 +25,12 @@ body {
 .car-top-wrapper {
     display: flex;
     flex-direction: row;
-    /* gap: 10px; */
 }
 
-/* .button-small {
-    height: 25px;
-    width: 25px;
-} */
-
 svg {
-    padding: 0;
-    margin-bottom: -20px;
-    /* position: absolute; 
-    bottom: 0; */
+     margin-bottom: -20px;
+     adding: 0;
+   
   }
 
 .car-div {
@@ -59,15 +51,15 @@ svg {
   }
 
   button {
+margin-right: 5px;
+ padding-top: 5px;
+  padding-right: 20px;
+    margin-bottom: 10px;
+    padding-left: 20px; 
+    padding-bottom: 5px;
     background-color: rgb(241, 172, 172);
     border:transparent;
-    margin-right: 5px;
-    margin-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    transition: scale 0.5s;
+        transition: scale 0.5s;
       }
 
   button:hover {
@@ -87,9 +79,9 @@ svg {
   }
 
   .page-indicator {
+      padding-right: 15px;
     padding-left: 10px;
-    padding-right: 15px;
-  }
+    }
 
   .hidden {
     display: none;
@@ -98,11 +90,11 @@ svg {
   #popUp {
     position: fixed;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 20px;
-    border-radius: 10px;
+    left: 50%;  
     z-index: 999; 
-    color: white;
-  }
+    padding: 20px;
+          color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+       border-radius: 10px;
+   transform: translate(-50%, -50%);
+   }
