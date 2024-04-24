@@ -71,6 +71,13 @@ export default class MainPage {
 
   private reconnectingModal!: HTMLDivElement;
 
+  private editMessageId: string = '';
+
+  private scrollEventHandler: (id: string) => (event: Event) => void;
+
+  public userScrolling: boolean = false;
+  public IdOfNewMessageUserScrolling: string = '';
+
   constructor(userData: IUser, friendData?: IFriend) {
     this.userData = userData;
     this.friendData = friendData || {};
@@ -198,8 +205,8 @@ export default class MainPage {
     this.messagesInputContainer.appendChild(this.messageInput);
 
     this.messageInput.addEventListener('input', () => {
-      console.log(this.messageInput.value.trim());
-      console.log(this.messageInput.value);
+      // console.log(this.messageInput.value.trim());
+      // console.log(this.messageInput.value);
       if (this.messageInput.value.trim()) {
         this.sendButton.disabled = false;
       } else {
@@ -215,8 +222,8 @@ export default class MainPage {
     this.sendButton.disabled = true;
     this.messagesInputContainer.appendChild(this.sendButton);
     this.sendButton.addEventListener('click', () => {
-      console.log(this.friendData.login);
-      console.log(this.messageText);
+      // console.log(this.friendData.login);
+      // console.log(this.messageText);
       this.messageText = this.messageInput.value;
       if (this.friendData.login && this.messageText) {
         this.sendMessage(this.friendData.login, this.messageText);
@@ -230,6 +237,18 @@ export default class MainPage {
     this.editButton.textContent = 'Save changes';
     this.editButton.classList.add('main-page-button');
     this.editButton.classList.add('hidden');
+    this.editButton.addEventListener('click', () => {
+      this.onEditButtonClick();
+    });
+
+    this.scrollEventHandler = (id: string) => (event) => {
+      console.log('scroll');
+      if (this.userScrolling) {
+        this.markMessagesAsRead(id);
+        this.userScrolling = false;
+      }
+    };
+
     this.messagesInputContainer.appendChild(this.editButton);
 
     this.footer = document.createElement('div');
@@ -312,7 +331,7 @@ export default class MainPage {
       };
 
       this.socket.addEventListener('message', (event) => {
-        console.log('Message from server ', event.data);
+        // console.log('Message from server ', event.data);
 
         const message = JSON.parse(event.data);
         console.log('Message from server ', message.type);
@@ -521,11 +540,28 @@ export default class MainPage {
     messages.forEach((message) => {
       if (message.to === this.userData.login && message.status.isReaded === false) {
         areThereNewMessages = true;
+        let clickListenerAdded = false;
         console.log(`this is the new message ${message.datetime}`);
+        if (!clickListenerAdded) {
+          this.messagesContainer.addEventListener('click', () => this.markMessagesAsRead(message.id));
+          this.sendButton.addEventListener('click', () => this.markMessagesAsRead(message.id));
+          this.messageInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !this.sendButton.disabled) {
+              this.markMessagesAsRead(message.id);
+            }
+          });
+          clickListenerAdded = true;
+        }
 
-        this.messagesContainer.addEventListener('click', () => this.markMessagesAsRead(message.id));
-        this.messagesContainer.addEventListener('scroll', () => this.markMessagesAsRead(message.id));
-        this.messageInput.addEventListener('input', () => this.markMessagesAsRead(message.id));
+        this.messagesContainer.addEventListener('scroll', () => {
+          console.log(this.userScrolling);
+          if (!this.userScrolling) {
+            // Проверяем состояние флага
+            console.log('user scroll');
+            this.userScrolling = true;
+            this.markMessagesAsRead(message.id);
+          }
+        });
       }
 
       if (
@@ -555,14 +591,6 @@ export default class MainPage {
           this.renderMessageContextMenu(message.id, message.text, e.pageX, e.pageY);
         }
       });
-
-      // if (!message.status.isReaded && message.datetime < timeOfUnread) {
-      //   const unreadDivider = document.createElement('hr');
-      //   unreadDivider.classList.add('unread-divider');
-      //   unreadDivider.textContent = 'New Messages';
-      //   this.messagesContainer.appendChild(unreadDivider);
-      //   timeOfUnread = message.datetime;
-      // }
 
       const messageContainerHeader = document.createElement('div');
       messageContainerHeader.classList.add('messageContainerHeader');
@@ -627,7 +655,7 @@ export default class MainPage {
   }
 
   private handleKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Enter' && this.sendButton.disabled === false) {
+    if (event.key === 'Enter' && this.sendButton.disabled === false && !this.sendButton.classList.contains('hidden')) {
       this.messageText = this.messageInput.value;
       if (this.friendData.login && this.messageText) {
         this.sendMessage(this.friendData.login, this.messageText);
@@ -650,6 +678,7 @@ export default class MainPage {
     editOption.classList.add('context-menu-option');
     editOption.addEventListener('click', () => {
       this.editMessage(messageId, messageText);
+      console.log(`вешаю editmessage на это сообщение: ${messageText}`);
       contextMenuContainer.remove();
     });
     contextMenuContainer.appendChild(editOption);
@@ -685,28 +714,34 @@ export default class MainPage {
   }
 
   private editMessage(messageID: string, messageText: string) {
+    this.messageInput.removeEventListener('keydown', this.handleKeyDown.bind(this));
     this.messageInput.value = messageText;
     console.log(this.messageInput.value);
     console.log(messageText);
     this.editButton.classList.remove('hidden');
     this.sendButton.classList.add('hidden');
-    this.editButton.addEventListener('click', () => {
-      this.socket.send(
-        JSON.stringify({
-          id: 'MSG_EDIT',
-          type: 'MSG_EDIT',
-          payload: {
-            message: {
-              id: messageID,
-              text: this.messageInput.value,
-            },
+    this.editMessageId = messageID;
+  }
+
+  private onEditButtonClick() {
+    this.messageInput.removeEventListener('keydown', this.handleKeyDown.bind(this));
+    this.socket.send(
+      JSON.stringify({
+        id: 'MSG_EDIT',
+        type: 'MSG_EDIT',
+        payload: {
+          message: {
+            id: this.editMessageId,
+            text: this.messageInput.value,
           },
-        })
-      );
-      this.editButton.classList.add('hidden');
-      this.sendButton.classList.remove('hidden');
-      this.messageInput.value = '';
-    });
+        },
+      })
+    );
+    this.messageInput.value = '';
+    this.editMessageId = '';
+    this.editButton.classList.add('hidden');
+    this.sendButton.classList.remove('hidden');
+    this.messageInput.addEventListener('keydown', this.handleKeyDown.bind(this));
   }
 
   private saveCredentialsToSessionStorage(login: string, password: string): void {
@@ -732,8 +767,13 @@ export default class MainPage {
       })
     );
     this.messagesContainer.removeEventListener('click', () => this.markMessagesAsRead(id));
-    this.messagesContainer.removeEventListener('scroll', () => this.markMessagesAsRead(id));
-    this.messageInput.removeEventListener('input', () => this.markMessagesAsRead(id));
+    this.messagesContainer.removeEventListener('scroll', () => this.scrollEventHandler(id));
+    this.sendButton.removeEventListener('click', () => this.markMessagesAsRead(id));
+    this.messageInput.removeEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !this.sendButton.disabled) {
+        this.markMessagesAsRead(id);
+      }
+    });
   }
 
   private reconnect(): void {
